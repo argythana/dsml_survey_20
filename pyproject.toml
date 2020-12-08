@@ -8,6 +8,9 @@ authors = ["thanarg1979 <thanarg1979@yahoo.gr>"]
 python = "^3.8"
 pandas = "^1.1.5"
 jupyterlab = "^2.2.9"
+numpy = "^1.19.4"
+matplotlib = "^3.3.3"
+seaborn = "^0.11.0"
 
 [tool.poetry.dev-dependencies]
 
