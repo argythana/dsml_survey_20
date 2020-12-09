@@ -11,6 +11,11 @@ jupyterlab = "^2.2.9"
 numpy = "^1.19.4"
 matplotlib = "^3.3.3"
 seaborn = "^0.11.0"
+bokeh = "^2.2.3"
+holoviews = "^1.14.0"
+bqplot = "^0.12.19"
+ipympl = "^0.5.8"
+statsmodels = "^0.12.1"
 
 [tool.poetry.dev-dependencies]
 

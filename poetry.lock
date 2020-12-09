@@ -67,6 +67,39 @@ six = ">=1.9.0"
 webencodings = "*"
 
 [[package]]
+name = "bokeh"
+version = "2.2.3"
+description = "Interactive plots and applications in the browser from Python"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+Jinja2 = ">=2.7"
+numpy = ">=1.11.3"
+packaging = ">=16.8"
+pillow = ">=7.1.0"
+python-dateutil = ">=2.1"
+PyYAML = ">=3.10"
+tornado = ">=5.1"
+typing_extensions = ">=3.7.4"
+
+[[package]]
+name = "bqplot"
+version = "0.12.19"
+description = "Interactive plotting for the Jupyter notebook, using d3.js and ipywidgets."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+ipywidgets = ">=7.5.0"
+numpy = ">=1.10.4"
+pandas = "*"
+traitlets = ">=4.3.0"
+traittypes = ">=0.0.6"
+
+[[package]]
 name = "certifi"
 version = "2020.12.5"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -100,6 +133,26 @@ description = "Cross-platform colored terminal text."
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[[package]]
+name = "colorcet"
+version = "2.0.2"
+description = "Collection of perceptually uniform colormaps"
+category = "main"
+optional = false
+python-versions = ">=2.7"
+
+[package.dependencies]
+param = ">=1.7.0"
+pyct = ">=0.4.4"
+
+[package.extras]
+all = ["bokeh", "flake8", "holoviews", "matplotlib", "nbsite", "nbsmoke (>=0.2.6)", "numpy", "param (>=1.7.0)", "pyct (>=0.4.4)", "pytest (>=2.8.5)", "pytest-mpl", "setuptools (>=30.3.0)", "sphinx-ioam-theme", "wheel"]
+build = ["param (>=1.7.0)", "pyct (>=0.4.4)", "setuptools (>=30.3.0)", "wheel"]
+doc = ["numpy", "holoviews", "matplotlib", "bokeh", "nbsite", "sphinx-ioam-theme"]
+examples = ["numpy", "holoviews", "matplotlib", "bokeh"]
+tests = ["flake8", "nbsmoke (>=0.2.6)", "pytest (>=2.8.5)"]
+tests_extra = ["flake8", "nbsmoke (>=0.2.6)", "pytest (>=2.8.5)", "pytest-mpl"]
 
 [[package]]
 name = "cycler"
@@ -137,6 +190,35 @@ optional = false
 python-versions = ">=2.7"
 
 [[package]]
+name = "holoviews"
+version = "1.14.0"
+description = "Stop plotting your data - annotate your data and let it visualize itself."
+category = "main"
+optional = false
+python-versions = ">=2.7"
+
+[package.dependencies]
+colorcet = "*"
+numpy = ">=1.0"
+pandas = "*"
+panel = ">=0.8.0"
+param = ">=1.9.3,<2.0"
+pyviz-comms = ">=0.7.3"
+
+[package.extras]
+all = ["pillow", "deepdiff", "keyring", "mock", "ipython (>=5.4.0)", "dash (>=1.16)", "awscli", "scipy", "nbsmoke (>=0.2.0)", "twine", "plotly (>=4.0)", "rfc3986", "path.py", "ffmpeg", "bokeh (>=1.1.0)", "matplotlib (>=2.2)", "cftime", "streamz (>=0.5.0)", "shapely", "flake8 (==3.6.0)", "datashader (>=0.11.1)", "netcdf4", "jsonschema (==2.6.0)", "nbconvert (==5.3.1)", "dask", "nose", "ipython (==5.4.1)", "notebook", "pyarrow (<1.0)", "nbconvert (<6)", "coveralls", "matplotlib (>=2.2,<3.1)", "xarray (>=0.10.4)", "scikit-image", "spatialpandas", "ibis-framework (>=1.3)", "networkx"]
+basic_tests = ["nose", "mock", "flake8 (==3.6.0)", "coveralls", "path.py", "matplotlib (>=2.2,<3.1)", "nbsmoke (>=0.2.0)", "nbconvert (<6)", "twine", "rfc3986", "keyring", "matplotlib (>=2.1)", "bokeh (>=1.1.0)", "pandas", "ipython (>=5.4.0)", "notebook"]
+build = ["param (>=1.7.0)", "setuptools (>=30.3.0)", "pyct (>=0.4.4)", "python (<3.8)"]
+doc = ["ipython (>=5.4.0)", "notebook", "matplotlib (>=2.2)", "bokeh (>=1.1.0)", "networkx", "pillow", "xarray (>=0.10.4)", "plotly (>=4.0)", "dash (>=1.16)", "streamz (>=0.5.0)", "datashader (>=0.11.1)", "ffmpeg", "cftime", "netcdf4", "dask", "scipy", "shapely", "scikit-image", "spatialpandas", "pyarrow (<1.0)", "ibis-framework (>=1.3)", "nbsite (>0.5.2)", "sphinx", "sphinx-holoviz-theme", "mpl-sample-data (>=3.1.3)", "awscli", "pscript", "graphviz", "bokeh (>2.2)", "nbconvert (<6.0)"]
+examples = ["ipython (>=5.4.0)", "notebook", "matplotlib (>=2.2)", "bokeh (>=1.1.0)", "networkx", "pillow", "xarray (>=0.10.4)", "plotly (>=4.0)", "dash (>=1.16)", "streamz (>=0.5.0)", "datashader (>=0.11.1)", "ffmpeg", "cftime", "netcdf4", "dask", "scipy", "shapely", "scikit-image", "spatialpandas", "pyarrow (<1.0)", "ibis-framework (>=1.3)"]
+extras = ["ipython (>=5.4.0)", "notebook", "matplotlib (>=2.2)", "bokeh (>=1.1.0)", "networkx", "pillow", "xarray (>=0.10.4)", "plotly (>=4.0)", "dash (>=1.16)", "streamz (>=0.5.0)", "datashader (>=0.11.1)", "ffmpeg", "cftime", "netcdf4", "dask", "scipy", "shapely", "scikit-image", "spatialpandas", "pyarrow (<1.0)", "ibis-framework (>=1.3)", "pscript (==0.7.1)"]
+nbtests = ["ipython (>=5.4.0)", "notebook", "matplotlib (>=2.2)", "bokeh (>=1.1.0)", "nose", "awscli", "deepdiff", "nbconvert (==5.3.1)", "jsonschema (==2.6.0)", "ipython (==5.4.1)"]
+notebook = ["ipython (>=5.4.0)", "notebook"]
+recommended = ["ipython (>=5.4.0)", "notebook", "matplotlib (>=2.2)", "bokeh (>=1.1.0)"]
+tests = ["nose", "mock", "flake8 (==3.6.0)", "coveralls", "path.py", "matplotlib (>=2.2,<3.1)", "nbsmoke (>=0.2.0)", "nbconvert (<6)", "twine", "rfc3986", "keyring"]
+unit_tests = ["ipython (>=5.4.0)", "notebook", "matplotlib (>=2.2)", "bokeh (>=1.1.0)", "networkx", "pillow", "xarray (>=0.10.4)", "plotly (>=4.0)", "dash (>=1.16)", "streamz (>=0.5.0)", "datashader (>=0.11.1)", "ffmpeg", "cftime", "netcdf4", "dask", "scipy", "shapely", "scikit-image", "spatialpandas", "pyarrow (<1.0)", "ibis-framework (>=1.3)", "nose", "mock", "flake8 (==3.6.0)", "coveralls", "path.py", "matplotlib (>=2.2,<3.1)", "nbsmoke (>=0.2.0)", "nbconvert (<6)", "twine", "rfc3986", "keyring"]
+
+[[package]]
 name = "idna"
 version = "2.10"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -161,6 +243,19 @@ traitlets = ">=4.1.0"
 
 [package.extras]
 test = ["pytest (!=5.3.4)", "pytest-cov", "flaky", "nose"]
+
+[[package]]
+name = "ipympl"
+version = "0.5.8"
+description = "Matplotlib Jupyter Extension"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+ipykernel = ">=4.7"
+ipywidgets = ">=7.5.0"
+matplotlib = ">=2.0.0"
 
 [[package]]
 name = "ipython"
@@ -200,6 +295,24 @@ description = "Vestigial utilities from IPython"
 category = "main"
 optional = false
 python-versions = "*"
+
+[[package]]
+name = "ipywidgets"
+version = "7.5.1"
+description = "IPython HTML widgets for Jupyter"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+ipykernel = ">=4.5.1"
+ipython = {version = ">=4.0.0", markers = "python_version >= \"3.3\""}
+nbformat = ">=4.2.0"
+traitlets = ">=4.3.1"
+widgetsnbextension = ">=3.5.0,<3.6.0"
+
+[package.extras]
+test = ["pytest (>=3.6.0)", "pytest-cov", "mock"]
 
 [[package]]
 name = "jedi"
@@ -342,6 +455,17 @@ description = "A fast implementation of the Cassowary constraint solver"
 category = "main"
 optional = false
 python-versions = ">=3.6"
+
+[[package]]
+name = "markdown"
+version = "3.3.3"
+description = "Python implementation of Markdown."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+testing = ["coverage", "pyyaml"]
 
 [[package]]
 name = "markupsafe"
@@ -523,6 +647,43 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
+name = "panel"
+version = "0.10.2"
+description = "A high level app and dashboarding solution for Python."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+bokeh = ">=2.2.2"
+markdown = "*"
+param = ">=1.9.3"
+pyct = ">=0.4.4"
+pyviz-comms = ">=0.7.4"
+requests = "*"
+tqdm = "*"
+
+[package.extras]
+all = ["altair", "channels", "codecov", "datashader", "django", "flake8", "folium", "graphviz", "holoviews (>=1.13.2)", "hvplot", "ipyleaflet", "ipympl", "ipython (>=7.0)", "ipyvolume", "ipywidgets", "ipywidgets-bokeh", "jupyter-bokeh", "lxml", "matplotlib", "nbconvert (<6.0)", "nbsite (>=0.6.1)", "nbsmoke (>=0.2.0)", "notebook (>=5.4)", "pandas", "parameterized", "phantomjs", "pillow", "plotly", "pytest", "pytest-cov", "pyvista", "scikit-learn", "scipy", "selenium", "sphinx-holoviz-theme", "streamz", "twine", "vega-datasets", "vtk"]
+build = ["param (>=1.9.2)", "pyct (>=0.4.4)", "setuptools (>=30.3.0)", "bokeh (>=2.0.0)", "pyviz-comms (>=0.6.0)", "nodejs (>=10.13.0)"]
+doc = ["notebook (>=5.4)", "holoviews (>=1.13.2)", "matplotlib", "pillow", "plotly", "nbsite (>=0.6.1)", "nbconvert (<6.0)", "sphinx-holoviz-theme", "selenium", "phantomjs", "graphviz", "lxml"]
+examples = ["hvplot", "plotly", "altair", "streamz", "vega-datasets", "vtk", "scikit-learn", "datashader", "jupyter-bokeh", "django", "channels", "pyvista", "ipywidgets", "ipywidgets-bokeh", "ipyvolume", "ipyleaflet"]
+recommended = ["notebook (>=5.4)", "holoviews (>=1.13.2)", "matplotlib", "pillow", "plotly"]
+tests = ["flake8", "parameterized", "pytest", "scipy", "nbsmoke (>=0.2.0)", "pytest-cov", "codecov", "folium", "ipympl", "twine", "pandas", "ipython (>=7.0)"]
+
+[[package]]
+name = "param"
+version = "1.10.0"
+description = "Make your Python code clearer and more reliable by declaring Parameters."
+category = "main"
+optional = false
+python-versions = ">=2.7"
+
+[package.extras]
+all = ["flake8", "nose"]
+tests = ["nose", "flake8"]
+
+[[package]]
 name = "parso"
 version = "0.7.1"
 description = "A Python Parser"
@@ -532,6 +693,18 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.extras]
 testing = ["docopt", "pytest (>=3.0.7)"]
+
+[[package]]
+name = "patsy"
+version = "0.5.1"
+description = "A Python package for describing statistical models and for building design matrices."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+numpy = ">=1.4"
+six = "*"
 
 [[package]]
 name = "pexpect"
@@ -607,6 +780,23 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
+name = "pyct"
+version = "0.4.8"
+description = "Python package common tasks for users (e.g. copy examples, fetch data, ...)"
+category = "main"
+optional = false
+python-versions = ">=2.7"
+
+[package.dependencies]
+param = ">=1.7.0"
+
+[package.extras]
+build = ["setuptools", "param (>=1.7.0)"]
+cmd = ["pyyaml", "requests"]
+doc = ["nbsite", "sphinx-ioam-theme"]
+tests = ["flake8", "pytest"]
+
+[[package]]
 name = "pygments"
 version = "2.7.3"
 description = "Pygments is a syntax highlighting package written in Python."
@@ -650,6 +840,22 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "pyviz-comms"
+version = "0.7.6"
+description = "Bidirectional communication for the PyViz ecosystem."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+param = "*"
+
+[package.extras]
+all = ["flake8", "nose", "param (>=1.7.0)", "setuptools"]
+build = ["param (>=1.7.0)", "setuptools"]
+tests = ["flake8", "nose"]
+
+[[package]]
 name = "pywin32"
 version = "300"
 description = "Python for Window Extensions"
@@ -664,6 +870,14 @@ description = "Python bindings for the winpty library"
 category = "main"
 optional = false
 python-versions = "*"
+
+[[package]]
+name = "pyyaml"
+version = "5.3.1"
+description = "YAML parser and emitter for Python"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "pyzmq"
@@ -737,6 +951,25 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
+name = "statsmodels"
+version = "0.12.1"
+description = "Statistical computations and models for Python"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+numpy = ">=1.15"
+pandas = ">=0.21"
+patsy = ">=0.5"
+scipy = ">=1.1"
+
+[package.extras]
+build = ["cython (>=0.29)"]
+develop = ["cython (>=0.29)"]
+docs = ["sphinx", "nbconvert", "jupyter-client", "ipykernel", "matplotlib", "nbformat", "numpydoc", "pandas-datareader"]
+
+[[package]]
 name = "terminado"
 version = "0.9.1"
 description = "Tornado websocket backend for the Xterm.js Javascript terminal emulator library."
@@ -769,6 +1002,17 @@ optional = false
 python-versions = ">= 3.5"
 
 [[package]]
+name = "tqdm"
+version = "4.54.1"
+description = "Fast, Extensible Progress Meter"
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
+
+[package.extras]
+dev = ["py-make (>=0.1.0)", "twine", "argopt", "pydoc-markdown", "wheel"]
+
+[[package]]
 name = "traitlets"
 version = "5.0.5"
 description = "Traitlets Python configuration system"
@@ -781,6 +1025,28 @@ ipython-genutils = "*"
 
 [package.extras]
 test = ["pytest"]
+
+[[package]]
+name = "traittypes"
+version = "0.2.1"
+description = "Scipy trait types"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+traitlets = ">=4.2.2"
+
+[package.extras]
+test = ["numpy", "pandas", "xarray", "pytest"]
+
+[[package]]
+name = "typing-extensions"
+version = "3.7.4.3"
+description = "Backported and Experimental Type Hints for Python 3.5+"
+category = "main"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "urllib3"
@@ -811,10 +1077,21 @@ category = "main"
 optional = false
 python-versions = "*"
 
+[[package]]
+name = "widgetsnbextension"
+version = "3.5.1"
+description = "IPython HTML widgets for Jupyter"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+notebook = ">=4.4.1"
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "09ad1524bfb51673131f341f893a326e8f9931f8465dffe8656023f59b8153b2"
+content-hash = "695753df9fb8dc2b8fb6fc611ab1db9d49b2cf6484e9f27cf6f43da7039f06ec"
 
 [metadata.files]
 appnope = [
@@ -854,6 +1131,13 @@ backcall = [
 bleach = [
     {file = "bleach-3.2.1-py2.py3-none-any.whl", hash = "sha256:9f8ccbeb6183c6e6cddea37592dfb0167485c1e3b13b3363bc325aa8bda3adbd"},
     {file = "bleach-3.2.1.tar.gz", hash = "sha256:52b5919b81842b1854196eaae5ca29679a2f2e378905c346d3ca8227c2c66080"},
+]
+bokeh = [
+    {file = "bokeh-2.2.3.tar.gz", hash = "sha256:c4a3f97afe5f525019dd58ee8c4e3d43f53fe1b1ac264ccaae9b02c07b2abc17"},
+]
+bqplot = [
+    {file = "bqplot-0.12.19-py2.py3-none-any.whl", hash = "sha256:03315ddecb4c4cfa0a1697f1c911a35bbeabd81dcb7e9c0e92b9ee654eb375d9"},
+    {file = "bqplot-0.12.19.tar.gz", hash = "sha256:90acc454d89a887125643a972bc59e3f251acdfbf98398799e35d11a34769649"},
 ]
 certifi = [
     {file = "certifi-2020.12.5-py2.py3-none-any.whl", hash = "sha256:719a74fb9e33b9bd44cc7f3a8d94bc35e4049deebe19ba7d8e108280cfd59830"},
@@ -903,6 +1187,10 @@ colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
     {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
 ]
+colorcet = [
+    {file = "colorcet-2.0.2-py2.py3-none-any.whl", hash = "sha256:ce0a037642a7aab24ab687864bc93ef92564b08d28fe8edaa7f26079c214340e"},
+    {file = "colorcet-2.0.2.tar.gz", hash = "sha256:514813790a74b578c3eaff76b2102274c2ba8b0239c9504586df685223007dee"},
+]
 cycler = [
     {file = "cycler-0.10.0-py2.py3-none-any.whl", hash = "sha256:1d8a5ae1ff6c5cf9b93e8811e581232ad8920aeec647c37316ceac982b08cb2d"},
     {file = "cycler-0.10.0.tar.gz", hash = "sha256:cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8"},
@@ -919,6 +1207,10 @@ entrypoints = [
     {file = "entrypoints-0.3-py2.py3-none-any.whl", hash = "sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19"},
     {file = "entrypoints-0.3.tar.gz", hash = "sha256:c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"},
 ]
+holoviews = [
+    {file = "holoviews-1.14.0-py2.py3-none-any.whl", hash = "sha256:6b5ec4a5264044accf810d88579d24b7449eb58692ce6d623844f161b84fb70c"},
+    {file = "holoviews-1.14.0.tar.gz", hash = "sha256:ef60e87653a3fa34c2a96a6e5421689e09b3362fc2b6a127026231a2e675c170"},
+]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
     {file = "idna-2.10.tar.gz", hash = "sha256:b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6"},
@@ -927,6 +1219,10 @@ ipykernel = [
     {file = "ipykernel-5.3.4-py3-none-any.whl", hash = "sha256:d6fbba26dba3cebd411382bc484f7bc2caa98427ae0ddb4ab37fe8bfeb5c7dd3"},
     {file = "ipykernel-5.3.4.tar.gz", hash = "sha256:9b2652af1607986a1b231c62302d070bc0534f564c393a5d9d130db9abbbe89d"},
 ]
+ipympl = [
+    {file = "ipympl-0.5.8-py2.py3-none-any.whl", hash = "sha256:d510a3eb5ecc707fd3ab553fdfcda0ef0f7229e0f97341584161f1da7604287a"},
+    {file = "ipympl-0.5.8.tar.gz", hash = "sha256:0e2f2e540a2dfea61524b7993fc8552c9236b1aaa3826e1f382c75cb2fa5c382"},
+]
 ipython = [
     {file = "ipython-7.19.0-py3-none-any.whl", hash = "sha256:c987e8178ced651532b3b1ff9965925bfd445c279239697052561a9ab806d28f"},
     {file = "ipython-7.19.0.tar.gz", hash = "sha256:cbb2ef3d5961d44e6a963b9817d4ea4e1fa2eb589c371a470fed14d8d40cbd6a"},
@@ -934,6 +1230,10 @@ ipython = [
 ipython-genutils = [
     {file = "ipython_genutils-0.2.0-py2.py3-none-any.whl", hash = "sha256:72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8"},
     {file = "ipython_genutils-0.2.0.tar.gz", hash = "sha256:eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8"},
+]
+ipywidgets = [
+    {file = "ipywidgets-7.5.1-py2.py3-none-any.whl", hash = "sha256:13ffeca438e0c0f91ae583dc22f50379b9d6b28390ac7be8b757140e9a771516"},
+    {file = "ipywidgets-7.5.1.tar.gz", hash = "sha256:e945f6e02854a74994c596d9db83444a1850c01648f1574adf144fbbabe05c97"},
 ]
 jedi = [
     {file = "jedi-0.17.2-py2.py3-none-any.whl", hash = "sha256:98cc583fa0f2f8304968199b01b6b4b94f469a1f4a74c1560506ca2a211378b5"},
@@ -1004,6 +1304,10 @@ kiwisolver = [
     {file = "kiwisolver-1.3.1-pp36-pypy36_pp73-manylinux2010_x86_64.whl", hash = "sha256:33449715e0101e4d34f64990352bce4095c8bf13bed1b390773fc0a7295967b3"},
     {file = "kiwisolver-1.3.1-pp36-pypy36_pp73-win32.whl", hash = "sha256:401a2e9afa8588589775fe34fc22d918ae839aaaf0c0e96441c0fdbce6d8ebe6"},
     {file = "kiwisolver-1.3.1.tar.gz", hash = "sha256:950a199911a8d94683a6b10321f9345d5a3a8433ec58b217ace979e18f16e248"},
+]
+markdown = [
+    {file = "Markdown-3.3.3-py3-none-any.whl", hash = "sha256:c109c15b7dc20a9ac454c9e6025927d44460b85bd039da028d85e2b6d0bcc328"},
+    {file = "Markdown-3.3.3.tar.gz", hash = "sha256:5d9f2b5ca24bc4c7a390d22323ca4bad200368612b5aaa7796babf971d2b2f18"},
 ]
 markupsafe = [
     {file = "MarkupSafe-1.1.1-cp27-cp27m-macosx_10_6_intel.whl", hash = "sha256:09027a7803a62ca78792ad89403b1b7a73a01c8cb65909cd876f7fcebd79b161"},
@@ -1160,9 +1464,21 @@ pandas = [
 pandocfilters = [
     {file = "pandocfilters-1.4.3.tar.gz", hash = "sha256:bc63fbb50534b4b1f8ebe1860889289e8af94a23bff7445259592df25a3906eb"},
 ]
+panel = [
+    {file = "panel-0.10.2-py2.py3-none-any.whl", hash = "sha256:1d91cef18552b9e578f7b8fa35a2aed687161f008245e44206bc74414f12b392"},
+    {file = "panel-0.10.2.tar.gz", hash = "sha256:b5eeec277524c3146b4f6fc5f0e9ba61755e9c088d50312ecf5e6058f9efb59e"},
+]
+param = [
+    {file = "param-1.10.0-py2.py3-none-any.whl", hash = "sha256:aa646715659c41e16b550dd758b6f8d759be61dd87fc857ec294a9ae56bf4886"},
+    {file = "param-1.10.0.tar.gz", hash = "sha256:a284c1b42aff6367e8eea2f649d4f3f70a9f16c6f17d8ad672a31ff36089f995"},
+]
 parso = [
     {file = "parso-0.7.1-py2.py3-none-any.whl", hash = "sha256:97218d9159b2520ff45eb78028ba8b50d2bc61dcc062a9682666f2dc4bd331ea"},
     {file = "parso-0.7.1.tar.gz", hash = "sha256:caba44724b994a8a5e086460bb212abc5a8bc46951bf4a9a1210745953622eb9"},
+]
+patsy = [
+    {file = "patsy-0.5.1-py2.py3-none-any.whl", hash = "sha256:5465be1c0e670c3a965355ec09e9a502bf2c4cbe4875e8528b0221190a8a5d40"},
+    {file = "patsy-0.5.1.tar.gz", hash = "sha256:f115cec4201e1465cd58b9866b0b0e7b941caafec129869057405bfe5b5e3991"},
 ]
 pexpect = [
     {file = "pexpect-4.8.0-py2.py3-none-any.whl", hash = "sha256:0b48a55dcb3c05f3329815901ea4fc1537514d6ba867a152b581d69ae3710937"},
@@ -1222,6 +1538,10 @@ pycparser = [
     {file = "pycparser-2.20-py2.py3-none-any.whl", hash = "sha256:7582ad22678f0fcd81102833f60ef8d0e57288b6b5fb00323d101be910e35705"},
     {file = "pycparser-2.20.tar.gz", hash = "sha256:2d475327684562c3a96cc71adf7dc8c4f0565175cf86b6d7a404ff4c771f15f0"},
 ]
+pyct = [
+    {file = "pyct-0.4.8-py2.py3-none-any.whl", hash = "sha256:222e104d561b28cfdb56667d2ba10e5290b4466db66d0af38ab935577af85390"},
+    {file = "pyct-0.4.8.tar.gz", hash = "sha256:23d7525b5a1567535c093aea4b9c33809415aa5f018dd77f6eb738b1226df6f7"},
+]
 pygments = [
     {file = "Pygments-2.7.3-py3-none-any.whl", hash = "sha256:f275b6c0909e5dafd2d6269a656aa90fa58ebf4a74f8fcf9053195d226b24a08"},
     {file = "Pygments-2.7.3.tar.gz", hash = "sha256:ccf3acacf3782cbed4a989426012f1c535c9a90d3a7fc3f16d231b9372d2b716"},
@@ -1240,6 +1560,10 @@ python-dateutil = [
 pytz = [
     {file = "pytz-2020.4-py2.py3-none-any.whl", hash = "sha256:5c55e189b682d420be27c6995ba6edce0c0a77dd67bfbe2ae6607134d5851ffd"},
     {file = "pytz-2020.4.tar.gz", hash = "sha256:3e6b7dd2d1e0a59084bcee14a17af60c5c562cdc16d828e8eba2e683d3a7e268"},
+]
+pyviz-comms = [
+    {file = "pyviz_comms-0.7.6-py2.py3-none-any.whl", hash = "sha256:34061314830765a14fe2f445b83b83021d2a1207eccbecc8835c3219a72b6ba5"},
+    {file = "pyviz_comms-0.7.6.tar.gz", hash = "sha256:cd9649a9ea9dfcb9b34d78f9a64e1870aa8b6b94de546e2c99c6bb53d64ab5d1"},
 ]
 pywin32 = [
     {file = "pywin32-300-cp35-cp35m-win32.whl", hash = "sha256:1c204a81daed2089e55d11eefa4826c05e604d27fe2be40b6bf8db7b6a39da63"},
@@ -1264,6 +1588,19 @@ pywinpty = [
     {file = "pywinpty-0.5.7-cp37-cp37m-win_amd64.whl", hash = "sha256:dd22c8efacf600730abe4a46c1388355ce0d4ab75dc79b15d23a7bd87bf05b48"},
     {file = "pywinpty-0.5.7-cp38-cp38-win_amd64.whl", hash = "sha256:8fc5019ff3efb4f13708bd3b5ad327589c1a554cb516d792527361525a7cb78c"},
     {file = "pywinpty-0.5.7.tar.gz", hash = "sha256:2d7e9c881638a72ffdca3f5417dd1563b60f603e1b43e5895674c2a1b01f95a0"},
+]
+pyyaml = [
+    {file = "PyYAML-5.3.1-cp27-cp27m-win32.whl", hash = "sha256:74809a57b329d6cc0fdccee6318f44b9b8649961fa73144a98735b0aaf029f1f"},
+    {file = "PyYAML-5.3.1-cp27-cp27m-win_amd64.whl", hash = "sha256:240097ff019d7c70a4922b6869d8a86407758333f02203e0fc6ff79c5dcede76"},
+    {file = "PyYAML-5.3.1-cp35-cp35m-win32.whl", hash = "sha256:4f4b913ca1a7319b33cfb1369e91e50354d6f07a135f3b901aca02aa95940bd2"},
+    {file = "PyYAML-5.3.1-cp35-cp35m-win_amd64.whl", hash = "sha256:cc8955cfbfc7a115fa81d85284ee61147059a753344bc51098f3ccd69b0d7e0c"},
+    {file = "PyYAML-5.3.1-cp36-cp36m-win32.whl", hash = "sha256:7739fc0fa8205b3ee8808aea45e968bc90082c10aef6ea95e855e10abf4a37b2"},
+    {file = "PyYAML-5.3.1-cp36-cp36m-win_amd64.whl", hash = "sha256:69f00dca373f240f842b2931fb2c7e14ddbacd1397d57157a9b005a6a9942648"},
+    {file = "PyYAML-5.3.1-cp37-cp37m-win32.whl", hash = "sha256:d13155f591e6fcc1ec3b30685d50bf0711574e2c0dfffd7644babf8b5102ca1a"},
+    {file = "PyYAML-5.3.1-cp37-cp37m-win_amd64.whl", hash = "sha256:73f099454b799e05e5ab51423c7bcf361c58d3206fa7b0d555426b1f4d9a3eaf"},
+    {file = "PyYAML-5.3.1-cp38-cp38-win32.whl", hash = "sha256:06a0d7ba600ce0b2d2fe2e78453a470b5a6e000a985dd4a4e54e436cc36b0e97"},
+    {file = "PyYAML-5.3.1-cp38-cp38-win_amd64.whl", hash = "sha256:95f71d2af0ff4227885f7a6605c37fd53d3a106fcab511b8860ecca9fcf400ee"},
+    {file = "PyYAML-5.3.1.tar.gz", hash = "sha256:b8eac752c5e14d3eca0e6dd9199cd627518cb5ec06add0de9d32baeee6fe645d"},
 ]
 pyzmq = [
     {file = "pyzmq-20.0.0-cp35-cp35m-macosx_10_9_intel.whl", hash = "sha256:523d542823cabb94065178090e05347bd204365f6e7cb260f0071c995d392fc2"},
@@ -1337,6 +1674,23 @@ six = [
     {file = "six-1.15.0-py2.py3-none-any.whl", hash = "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"},
     {file = "six-1.15.0.tar.gz", hash = "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"},
 ]
+statsmodels = [
+    {file = "statsmodels-0.12.1-cp36-cp36m-macosx_10_13_x86_64.whl", hash = "sha256:3b482ab9759b89cc1c4777b71c1ccf272e868a7551fc6b74da300557407d8379"},
+    {file = "statsmodels-0.12.1-cp36-cp36m-manylinux1_i686.whl", hash = "sha256:33c6cbed74f075b8816cec37e5c7853ed31dcacebfdbbc3af898b4907911544e"},
+    {file = "statsmodels-0.12.1-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:142eacd5a1bd8728358ff48101ee0e51ca3d42a93f6e5cb61fcfacf613977bcf"},
+    {file = "statsmodels-0.12.1-cp36-none-win32.whl", hash = "sha256:ef3a54b3594f4c49c295388de1fdd840a8c63a857a5252125aaf92a03ea1e3a6"},
+    {file = "statsmodels-0.12.1-cp36-none-win_amd64.whl", hash = "sha256:830d59d94841332429edf735430180031ad5dc660de26728d723e347f414c59d"},
+    {file = "statsmodels-0.12.1-cp37-cp37m-macosx_10_13_x86_64.whl", hash = "sha256:aa964ca1d65f066b9b096c94fe298aab1441e11731ce6b154ffb5f8d4a4e9ccf"},
+    {file = "statsmodels-0.12.1-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:7614ef58ebb96cc0d4c45150116f5252a2f1e0bd15e809700776163e5a246b8c"},
+    {file = "statsmodels-0.12.1-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:588c0f7e29403161ca952dcdad3d67970583742e9f11f66c7c5b08ac97a0408c"},
+    {file = "statsmodels-0.12.1-cp37-none-win32.whl", hash = "sha256:7be4c6d43f1f3a6b28614a4b18fdcf202bd305faf15f4c558e901cbe099ca9ea"},
+    {file = "statsmodels-0.12.1-cp37-none-win_amd64.whl", hash = "sha256:e5e426fb962f41d58a07a7d2f7daf32f83e911ff578368caddbcdd1886887ed1"},
+    {file = "statsmodels-0.12.1-cp38-cp38-macosx_10_13_x86_64.whl", hash = "sha256:3582c0a497a9cda473470b4dd59ecd103739e3cfef1eb2e20d48dd1a2239f2e4"},
+    {file = "statsmodels-0.12.1-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:02679bf39d35a2aceb2d9f6d332b4e1cda1797157df792fe867b45f2a14d20d3"},
+    {file = "statsmodels-0.12.1-cp38-none-win32.whl", hash = "sha256:a652d8bfb4ec430b706a69e3fcbdac1cdf930823e3f9b8468e3e179d47097bbb"},
+    {file = "statsmodels-0.12.1-cp38-none-win_amd64.whl", hash = "sha256:74c6c863d6f8a1f021d42f965b1b97eeea05293d3b18e3690c46eac0cf6d64d9"},
+    {file = "statsmodels-0.12.1.tar.gz", hash = "sha256:a271b4ccec190148dccda25f0cbdcbf871f408fc1394a10a7dc1af4a62b91c8e"},
+]
 terminado = [
     {file = "terminado-0.9.1-py3-none-any.whl", hash = "sha256:c55f025beb06c2e2669f7ba5a04f47bb3304c30c05842d4981d8f0fc9ab3b4e3"},
     {file = "terminado-0.9.1.tar.gz", hash = "sha256:3da72a155b807b01c9e8a5babd214e052a0a45a975751da3521a1c3381ce6d76"},
@@ -1388,9 +1742,22 @@ tornado = [
     {file = "tornado-6.1-cp39-cp39-win_amd64.whl", hash = "sha256:548430be2740e327b3fe0201abe471f314741efcb0067ec4f2d7dcfb4825f3e4"},
     {file = "tornado-6.1.tar.gz", hash = "sha256:33c6e81d7bd55b468d2e793517c909b139960b6c790a60b7991b9b6b76fb9791"},
 ]
+tqdm = [
+    {file = "tqdm-4.54.1-py2.py3-none-any.whl", hash = "sha256:d4f413aecb61c9779888c64ddf0c62910ad56dcbe857d8922bb505d4dbff0df1"},
+    {file = "tqdm-4.54.1.tar.gz", hash = "sha256:38b658a3e4ecf9b4f6f8ff75ca16221ae3378b2e175d846b6b33ea3a20852cf5"},
+]
 traitlets = [
     {file = "traitlets-5.0.5-py3-none-any.whl", hash = "sha256:69ff3f9d5351f31a7ad80443c2674b7099df13cc41fc5fa6e2f6d3b0330b0426"},
     {file = "traitlets-5.0.5.tar.gz", hash = "sha256:178f4ce988f69189f7e523337a3e11d91c786ded9360174a3d9ca83e79bc5396"},
+]
+traittypes = [
+    {file = "traittypes-0.2.1-py2.py3-none-any.whl", hash = "sha256:1340af133810b6eee1a2eb2e988f862b0d12b6c2d16f282aaf3207b782134c2e"},
+    {file = "traittypes-0.2.1.tar.gz", hash = "sha256:be6fa26294733e7489822ded4ae25da5b4824a8a7a0e0c2dccfde596e3489bd6"},
+]
+typing-extensions = [
+    {file = "typing_extensions-3.7.4.3-py2-none-any.whl", hash = "sha256:dafc7639cde7f1b6e1acc0f457842a83e722ccca8eef5270af2d74792619a89f"},
+    {file = "typing_extensions-3.7.4.3-py3-none-any.whl", hash = "sha256:7cb407020f00f7bfc3cb3e7881628838e69d8f3fcab2f64742a5e76b2f841918"},
+    {file = "typing_extensions-3.7.4.3.tar.gz", hash = "sha256:99d4073b617d30288f569d3f13d2bd7548c3a7e4c8de87db09a9d29bb3a4a60c"},
 ]
 urllib3 = [
     {file = "urllib3-1.26.2-py2.py3-none-any.whl", hash = "sha256:d8ff90d979214d7b4f8ce956e80f4028fc6860e4431f731ea4a8c08f23f99473"},
@@ -1403,4 +1770,8 @@ wcwidth = [
 webencodings = [
     {file = "webencodings-0.5.1-py2.py3-none-any.whl", hash = "sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78"},
     {file = "webencodings-0.5.1.tar.gz", hash = "sha256:b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923"},
+]
+widgetsnbextension = [
+    {file = "widgetsnbextension-3.5.1-py2.py3-none-any.whl", hash = "sha256:bd314f8ceb488571a5ffea6cc5b9fc6cba0adaf88a9d2386b93a489751938bcd"},
+    {file = "widgetsnbextension-3.5.1.tar.gz", hash = "sha256:079f87d87270bce047512400efd70238820751a11d2d8cb137a5a5bdbaf255c7"},
 ]
