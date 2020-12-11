@@ -8,3 +8,11 @@ jupyter labextension install --no-build bqplot@0.5.19
 jupyter labextension install --no-build jupyter-matplotlib@0.7.4
 jupyter lab build --dev-build=False --minimize=False
 ```
+
+### Panos only
+
+```
+jupyter labextension install --no-build @axlair/jupyterlab_vim
+jupyter labextension install --no-build jupyterlab_vim-system-clipboard-support
+jupyter lab build --dev-build=False --minimize=False
+```
