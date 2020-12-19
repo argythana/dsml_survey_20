@@ -18,6 +18,7 @@ ipympl = "^0.5.8"
 statsmodels = "^0.12.1"
 scikit-learn = "^0.23.2"
 xarray = "^0.16.2"
+pyarrow = "^2.0.0"
 
 [tool.poetry.dev-dependencies]
 
