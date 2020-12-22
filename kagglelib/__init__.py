@@ -58,6 +58,7 @@ def load_numbeo_df() -> pd.DataFrame:
         names=["country", "numbeo"],
         index_col="country",
     )
+    df.numbeo = df.numbeo * 12
     df = df.assign(year=2020)
     return df
 
