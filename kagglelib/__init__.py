@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import pathlib
 
-from typing import List
 from typing import Union
 
 import pandas as pd
@@ -10,13 +9,6 @@ import pandas as pd
 
 ROOT = pathlib.Path(__file__).parent.parent
 DATA = ROOT / "data"
-
-
-__all__: List[str] = [
-    "load_usd_eur_df",
-    "load_eurostat_df",
-    "get_usd_eur_rate",
-]
 
 
 def load_usd_eur_df() -> pd.DataFrame:
