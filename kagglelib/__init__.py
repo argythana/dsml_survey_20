@@ -210,3 +210,15 @@ def load_kaggle_df() -> pd.DataFrame:
     df = df[KAGGLE_VALIDATION_COLS.keys()]
     df = df.rename(columns=KAGGLE_VALIDATION_COLS)
     return df
+
+
+def load_mean_salary_comparison_df():
+    eurostat = load_eurostat_df()
+    oecd = load_oecd_df()
+    ilo = load_ilo_df()
+    numbeo = load_numbeo_df()
+    df = pd.concat([eurostat.eurostat, oecd.oecd, ilo.ilo, numbeo.numbeo], axis="columns")
+    df.index.name = "country"
+    df = df.assign(external_mean=df.bfill(axis=1).iloc[:, 0])
+    df = df.reset_index(drop=False)
+    return df
