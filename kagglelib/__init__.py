@@ -197,15 +197,15 @@ def load_kaggle_df() -> pd.DataFrame:
         '$100,000 or more ($USD)': 1000000,
     })
 
+    # create salary upper bound thresholds for comparison operations.
+    df['salary_threshold'] = df['Q24'].map(SALARY_THRESHOLDS)
+
     # Reformat salary bins by removing symbols and "," from salary ranges.
     df.Q24 = df.Q24.replace({
         '$0-999': '0-999',
         '> $500,000': '500,000-999,999',
         '300,000-500,000': '300,000-499,999',
     }).str.replace(',', '')
-
-    # create salary upper bound thresholds for comparison operations.
-    df['salary_threshold'] = df['Q24'].map(SALARY_THRESHOLDS)
 
     df = df[KAGGLE_VALIDATION_COLS.keys()]
     df = df.rename(columns=KAGGLE_VALIDATION_COLS)
