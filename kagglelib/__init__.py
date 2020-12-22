@@ -156,7 +156,7 @@ def load_kaggle_df() -> pd.DataFrame:
     # Refine Company employment size values
     df.Q20 = df.Q20.replace({
         '10,000 or more employees': '10000+',
-    }).str.replace(' employees', '').replace(',', '')
+    }).str.replace(' employees', '').str.replace(',', '')
 
     # Convert salaries to numbers:
     df.Q24 = df.Q24.replace({
