@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import pathlib
 
 from typing import Union
@@ -11,6 +12,7 @@ ROOT = pathlib.Path(__file__).parent.parent
 DATA = ROOT / "data"
 
 
+@functools.lru_cache(maxsize=1)
 def load_usd_eur_df() -> pd.DataFrame:
     df = pd.read_csv(
         DATA / "ecb_usd_euro_avg_exch_rate_filtered.csv",
@@ -22,12 +24,14 @@ def load_usd_eur_df() -> pd.DataFrame:
     return df
 
 
+@functools.lru_cache(maxsize=1)
 def get_usd_eur_rate(year: int) -> Union[int, str, float]:
     df = load_usd_eur_df()
     rate = df.at[year, "rate"]
     return rate
 
 
+@functools.lru_cache(maxsize=1)
 def load_eurostat_df() -> pd.DataFrame:
     usd_eur = get_usd_eur_rate(2019)
     df = pd.read_csv(
@@ -40,6 +44,7 @@ def load_eurostat_df() -> pd.DataFrame:
     return df
 
 
+@functools.lru_cache(maxsize=1)
 def load_oecd_df() -> pd.DataFrame:
     df = pd.read_csv(
         DATA / 'oecd_ann_avg_wage_2019.csv',
@@ -51,6 +56,7 @@ def load_oecd_df() -> pd.DataFrame:
     return df
 
 
+@functools.lru_cache(maxsize=1)
 def load_numbeo_df() -> pd.DataFrame:
     df = pd.read_csv(
         DATA / "numbeo.csv",
@@ -63,6 +69,7 @@ def load_numbeo_df() -> pd.DataFrame:
     return df
 
 
+@functools.lru_cache(maxsize=1)
 def load_ilo_df() -> pd.DataFrame:
     df = pd.read_csv(
         DATA / "ilo_mean_nom_wage_usd.csv",
@@ -77,6 +84,7 @@ def load_ilo_df() -> pd.DataFrame:
     return df
 
 
+@functools.lru_cache(maxsize=1)
 def load_orig_kaggle_df() -> pd.DataFrame:
     df = pd.read_csv(
         DATA / "kaggle_survey_2020_responses.csv",
@@ -86,6 +94,7 @@ def load_orig_kaggle_df() -> pd.DataFrame:
     return df
 
 
+@functools.lru_cache(maxsize=1)
 def load_questions_df() -> pd.DataFrame:
     orig = load_orig_kaggle_df()
     questions_df = orig.loc[0].reset_index(drop=True)
@@ -138,6 +147,7 @@ SALARY_THRESHOLDS = {
 }
 
 
+@functools.lru_cache(maxsize=1)
 def load_kaggle_df() -> pd.DataFrame:
     orig = load_orig_kaggle_df()
 
@@ -213,6 +223,7 @@ def load_kaggle_df() -> pd.DataFrame:
     return df
 
 
+@functools.lru_cache(maxsize=1)
 def load_mean_salary_comparison_df():
     eurostat = load_eurostat_df()
     oecd = load_oecd_df()
@@ -234,6 +245,7 @@ def get_threshold(value: float, offset: int = 1):
     return thresholds[index]
 
 
+@functools.lru_cache(maxsize=1)
 def load_thresholds_df(
     low_salary_percentage: float = 0.33,
     low_salary_high_exp_offset: int = 2,
