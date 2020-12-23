@@ -241,6 +241,13 @@ def load_thresholds_df(
 ) -> pd.DataFrame:
     df = load_mean_salary_comparison_df()
     df = df[["country", "avg_salary"]]
+    df = df.append(
+        dict(
+            country="Other",
+            avg_salary=1000,
+        ),
+        ignore_index=True
+    )
     df = df.assign(
         too_low_salary=(low_salary_percentage * df.avg_salary).apply(get_threshold),
         low_salary_high_exp=df.avg_salary.apply(lambda x: get_threshold(x, low_salary_high_exp_offset)),
