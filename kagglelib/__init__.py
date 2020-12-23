@@ -254,3 +254,54 @@ def load_thresholds_df(
         high_salary_low_exp=high_salary_low_exp_threshold,
     )
     return df
+
+
+def load_data_scientists_df(df=None, filtered=True):
+    if df is None:
+        demo = load_kaggle_df()
+        thresholds = load_thresholds_df()
+        df = pd.merge(demo, thresholds, how="inner", on="country")
+    # Basic conditions
+    low_exp_bins =  ['0', '< 1', '1-2']
+    high_exp_bins =  ['10-20', '20+']
+    is_high_exp = (
+        df.code_exp.isin(high_exp_bins)
+        | df.ml_exp.isin(high_exp_bins)
+    )
+    is_low_exp = (
+        df.code_exp.isin(low_exp_bins)
+        & (
+            df.ml_exp.isin(low_exp_bins)
+            | df.ml_exp.isna()
+        )
+    )
+    is_too_low_salary = (df.salary_threshold <= df.too_low_salary)
+    is_data_scientist = (df.role == "Data Scientist")
+    # complex conditions
+    is_too_young_for_experience = (
+        (df.age <= '24')
+        & (
+            (df.code_exp == '20+')
+            | (df.ml_exp == '20+')
+        )
+    )
+    is_too_young_for_salary = (
+        (df.age <= '24')
+        & df.salary_threshold >= df.high_salary_low_exp
+    )
+    is_low_salary_high_exp = is_high_exp & (df.salary_threshold < df.low_salary_high_exp)
+    is_high_salary_low_exp = is_low_exp & (df.salary_threshold >= df.high_salary_low_exp)
+    # Create dataframe
+    if filtered:
+        conditions = (
+            is_data_scientist
+            & ~is_too_young_for_experience
+            & ~is_too_young_for_salary
+            & ~is_too_low_salary
+            & ~is_low_salary_high_exp
+            & ~is_high_salary_low_exp
+        )
+    else:
+        conditions = is_data_scientist
+    ds = df[conditions].reset_index(drop=True)
+    return ds
