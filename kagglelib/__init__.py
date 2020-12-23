@@ -144,6 +144,14 @@ def load_kaggle_df() -> pd.DataFrame:
     # The first row is the "questions". Not real data, so drop it.
     df = orig.loc[1:].reset_index(drop=True)
 
+    # Remove those who only answered "demographic" questions
+    temp_df = df.iloc[:, 7:]
+    only_answer_demographic = (
+        (temp_df == 'None')
+        | temp_df.isnull()
+    ).all(axis=1)
+    df = df[~only_answer_demographic].reset_index(drop=True)
+
     # Column 1: "Time from Start to Finish (seconds)" contains integers.
     # Let's cast it and rename it to something more convenient
     df = df.rename(columns={'Time from Start to Finish (seconds)': 'duration'})
