@@ -101,6 +101,45 @@ def load_questions_df() -> pd.DataFrame:
     return questions_df
 
 
+@functools.lru_cache(maxsize=1)
+def load_mean_salary_comparison_df():
+    eurostat = load_eurostat_df()
+    oecd = load_oecd_df()
+    ilo = load_ilo_df()
+    numbeo = load_numbeo_df()
+    df = pd.concat([eurostat.eurostat, oecd.oecd, ilo.ilo, numbeo.numbeo], axis="columns")
+    df.index.name = "country"
+    df = df.assign(avg_salary=df.bfill(axis=1).iloc[:, 0])
+    df = df.reset_index(drop=False)
+    return df
+
+
+def get_threshold(value: float, offset: int = 1):
+    thresholds = list(SALARY_THRESHOLDS.values())
+    for i, threshold in enumerate(thresholds):
+        if value <= threshold:
+            break
+    index = max(0, i - offset)
+    return thresholds[index]
+
+
+@functools.lru_cache(maxsize=1)
+def load_thresholds_df(
+    low_salary_percentage: float = 0.33,
+    low_salary_high_exp_offset: int = 2,
+    high_salary_low_exp_threshold: int = 500000,
+) -> pd.DataFrame:
+    df = load_mean_salary_comparison_df()
+    df = df[["country", "avg_salary"]]
+    df = df.append(dict(country="Other", avg_salary=3500), ignore_index=True)
+    df = df.assign(
+        too_low_salary=(low_salary_percentage * df.avg_salary).apply(get_threshold),
+        low_salary_high_exp=df.avg_salary.apply(lambda x: get_threshold(x, low_salary_high_exp_offset)),
+        high_salary_low_exp=high_salary_low_exp_threshold,
+    )
+    return df
+
+
 # Select useful columns for data validity exploration
 KAGGLE_VALIDATION_COLS = {
     'Q1': 'age',
@@ -220,51 +259,6 @@ def load_kaggle_df() -> pd.DataFrame:
 
     df = df[KAGGLE_VALIDATION_COLS.keys()]
     df = df.rename(columns=KAGGLE_VALIDATION_COLS)
-    return df
-
-
-@functools.lru_cache(maxsize=1)
-def load_mean_salary_comparison_df():
-    eurostat = load_eurostat_df()
-    oecd = load_oecd_df()
-    ilo = load_ilo_df()
-    numbeo = load_numbeo_df()
-    df = pd.concat([eurostat.eurostat, oecd.oecd, ilo.ilo, numbeo.numbeo], axis="columns")
-    df.index.name = "country"
-    df = df.assign(avg_salary=df.bfill(axis=1).iloc[:, 0])
-    df = df.reset_index(drop=False)
-    return df
-
-
-def get_threshold(value: float, offset: int = 1):
-    thresholds = list(SALARY_THRESHOLDS.values())
-    for i, threshold in enumerate(thresholds):
-        if value <= threshold:
-            break
-    index = max(0, i - offset)
-    return thresholds[index]
-
-
-@functools.lru_cache(maxsize=1)
-def load_thresholds_df(
-    low_salary_percentage: float = 0.33,
-    low_salary_high_exp_offset: int = 2,
-    high_salary_low_exp_threshold: int = 500000,
-) -> pd.DataFrame:
-    df = load_mean_salary_comparison_df()
-    df = df[["country", "avg_salary"]]
-    df = df.append(
-        dict(
-            country="Other",
-            avg_salary=1000,
-        ),
-        ignore_index=True
-    )
-    df = df.assign(
-        too_low_salary=(low_salary_percentage * df.avg_salary).apply(get_threshold),
-        low_salary_high_exp=df.avg_salary.apply(lambda x: get_threshold(x, low_salary_high_exp_offset)),
-        high_salary_low_exp=high_salary_low_exp_threshold,
-    )
     return df
 
 
