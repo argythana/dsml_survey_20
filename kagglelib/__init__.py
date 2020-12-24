@@ -140,6 +140,7 @@ def load_thresholds_df(
     return df
 
 
+
 # Select useful columns for data validity exploration
 KAGGLE_VALIDATION_COLS = {
     'Q1': 'age',
@@ -483,3 +484,11 @@ def load_role_df(df: pd.DataFrame, role: str) -> pd.DataFrame:
         raise ValueError(f"Unknown role: {role}")
     df = df[df.role == role]
     return df
+
+
+def value_counts(series):
+    df = pd.DataFrame({
+        "values": series.value_counts().sort_values(),
+        "(%)": (series.value_counts(True).sort_values() * 100).round(2),
+    })
+    return df.sort_index()
