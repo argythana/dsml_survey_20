@@ -486,9 +486,13 @@ def load_role_df(df: pd.DataFrame, role: str) -> pd.DataFrame:
     return df
 
 
-def value_counts(series):
+def value_counts(series, sort_index=False):
     df = pd.DataFrame({
         "values": series.value_counts().sort_values(),
         "(%)": (series.value_counts(True).sort_values() * 100).round(2),
     })
-    return df.sort_index()
+    if sort_index:
+        df = df.sort_index()
+    else:
+        df = df.sort_values(by="values", ascending=False)
+    return df
