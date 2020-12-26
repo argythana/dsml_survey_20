@@ -497,3 +497,9 @@ def value_counts(series: pd.Series, sort_index: bool = False) -> pd.DataFrame:
         df = df.sort_values(by="counts", ascending=False)
     df.index.name = series.name
     return df
+
+
+def keep_demo_cols(df: pd.DataFrame) -> pd.DataFrame:
+    columns_to_keep = [col for col in df.columns if not col.startswith("Q")]
+    df = df[columns_to_keep]
+    return df
