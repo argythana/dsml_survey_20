@@ -394,8 +394,7 @@ def plot_value_count_comparison(
     df = df.set_index(column).drop(columns="% diff").stack().reset_index()
     y_label = "Percentage" if perc else "Number"
     df.columns = [column, "source", y_label]
-    plot = hv.Bars(data=df, kdims=[column, "source"], vdims=[y_label], label="asdf")
-    plot = plot.relabel(title)
+    plot = hv.Bars(data=df, kdims=[column, "source"], vdims=[y_label], label=title)
     plot = plot.opts(
         width=900,
         height=600,
