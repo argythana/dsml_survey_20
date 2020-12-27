@@ -13,6 +13,69 @@ import pandas as pd
 ROOT = pathlib.Path(__file__).parent.parent
 DATA = ROOT / "data"
 
+# Dictionaries of useful CONSTANTS
+SALARY_THRESHOLDS = {
+    "$0-999": 1000,
+    "1,000-1,999": 2000,
+    "2,000-2,999": 3000,
+    "3,000-3,999": 4000,
+    "4,000-4,999": 5000,
+    "5,000-7,499": 7500,
+    "7,500-9,999": 10000,
+    "10,000-14,999": 15000,
+    "15,000-19,999": 20000,
+    "20,000-24,999": 25000,
+    "25,000-29,999": 30000,
+    "30,000-39,999": 40000,
+    "40,000-49,999": 50000,
+    "50,000-59,999": 60000,
+    "60,000-69,999": 70000,
+    "70,000-79,999": 80000,
+    "80,000-89,999": 90000,
+    "90,000-99,999": 100000,
+    "100,000-124,999": 125000,
+    "125,000-149,999": 150000,
+    "150,000-199,999": 200000,
+    "200,000-249,999": 250000,
+    "250,000-299,999": 300000,
+    "300,000-500,000": 500000,
+    "> $500,000": 1000000,
+}
+
+_KAGGLE_ROLES = set(
+    [
+        "Business Analyst",
+        "Currently not employed",
+        "DBA/Database Engineer",
+        "Data Analyst",
+        "Data Engineer",
+        "Data Scientist",
+        "Machine Learning Engineer",
+        "Other",
+        "Product/Project Manager",
+        "Research Scientist",
+        "Software Engineer",
+        "Statistician",
+        "Student",
+    ]
+)
+
+_KAGGLE_RENAMES = {
+    "Time from Start to Finish (seconds)": "duration",
+    "Q1": "age",
+    "Q2": "gender",
+    "Q3": "country",
+    "Q4": "education",
+    "Q5": "role",
+    "Q6": "code_exp",
+    "Q15": "ml_exp",
+    "Q20": "employees",
+    "Q21": "team_ds",
+    "Q22": "company_ml_use",
+    "Q24": "salary",
+    "Q25": "spend_ds",
+}
+
 
 @functools.lru_cache(maxsize=1)
 def load_usd_eur_df() -> pd.DataFrame:
@@ -140,70 +203,6 @@ def load_thresholds_df(
         high_salary_low_exp=high_salary_low_exp_threshold,
     )
     return df
-
-
-SALARY_THRESHOLDS = {
-    "$0-999": 1000,
-    "1,000-1,999": 2000,
-    "2,000-2,999": 3000,
-    "3,000-3,999": 4000,
-    "4,000-4,999": 5000,
-    "5,000-7,499": 7500,
-    "7,500-9,999": 10000,
-    "10,000-14,999": 15000,
-    "15,000-19,999": 20000,
-    "20,000-24,999": 25000,
-    "25,000-29,999": 30000,
-    "30,000-39,999": 40000,
-    "40,000-49,999": 50000,
-    "50,000-59,999": 60000,
-    "60,000-69,999": 70000,
-    "70,000-79,999": 80000,
-    "80,000-89,999": 90000,
-    "90,000-99,999": 100000,
-    "100,000-124,999": 125000,
-    "125,000-149,999": 150000,
-    "150,000-199,999": 200000,
-    "200,000-249,999": 250000,
-    "250,000-299,999": 300000,
-    "300,000-500,000": 500000,
-    "> $500,000": 1000000,
-}
-
-_KAGGLE_ROLES = set(
-    [
-        "Business Analyst",
-        "Currently not employed",
-        "DBA/Database Engineer",
-        "Data Analyst",
-        "Data Engineer",
-        "Data Scientist",
-        "Machine Learning Engineer",
-        "Other",
-        "Product/Project Manager",
-        "Research Scientist",
-        "Software Engineer",
-        "Statistician",
-        "Student",
-    ]
-)
-
-
-_KAGGLE_RENAMES = {
-    "Time from Start to Finish (seconds)": "duration",
-    "Q1": "age",
-    "Q2": "gender",
-    "Q3": "country",
-    "Q4": "education",
-    "Q5": "role",
-    "Q6": "code_exp",
-    "Q15": "ml_exp",
-    "Q20": "employees",
-    "Q21": "team_ds",
-    "Q22": "company_ml_use",
-    "Q24": "salary",
-    "Q25": "spend_ds",
-}
 
 
 @functools.lru_cache(maxsize=1)
