@@ -354,7 +354,7 @@ def keep_demo_cols(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def get_value_count_comparison_df(
+def get_value_count_df(
     df1: pd.DataFrame,
     df2: pd.DataFrame,
     column: str,
@@ -387,7 +387,7 @@ def plot_value_count_comparison(
 ) -> hv.Layout:
     if title is None:
         title = column
-    df = get_value_count_comparison_df(df1=df1, df2=df2, column=column, perc=perc, label1=label1, label2=label2)
+    df = get_value_count_df(df1=df1, df2=df2, column=column, perc=perc, label1=label1, label2=label2)
     # Create table
     table = hv.Table(df)
     # Stack dataframe for Bars plot
