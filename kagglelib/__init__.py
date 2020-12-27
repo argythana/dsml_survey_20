@@ -358,10 +358,13 @@ def keep_demo_cols(df: pd.DataFrame) -> pd.DataFrame:
 def get_value_count_comparison_df(
     df1: pd.DataFrame, df2: pd.DataFrame, column: str, label1="original", label2="filtered"
 ):
+    vc1 = df1.age.value_counts(True) * 100
+    vc2 = df2.age.value_counts(True) * 100
     df = pd.DataFrame(
         {
-            label1: (df1.age.value_counts(True).sort_index() * 100).round(2),
-            label2: (df2.age.value_counts(True).sort_index() * 100).round(2),
+            label1: (vc1.sort_index()).round(2),
+            label2: (vc2.sort_index()).round(2),
+            "% diff": ((vc2 - vc1) / vc1 * 100).round(2),
         }
     )
     df = df.reset_index(drop=False).rename(columns={"index": column})
@@ -382,7 +385,7 @@ def plot_value_count_comparison(
     # Create table
     table = hv.Table(df)
     # Stack dataframe for Bars plot
-    df = df.set_index("age").stack().reset_index()
+    df = df.set_index("age").drop(columns="% diff").stack().reset_index()
     df.columns = [column, "source", "percentage"]
     plot = hv.Bars(data=df, kdims=["age", "source"], vdims=["percentage"], label="asdf")
     plot = plot.relabel(title)
@@ -390,7 +393,7 @@ def plot_value_count_comparison(
         width=900,
         height=600,
         fontsize=12,
-        fontscale=1.4,
+        fontscale=1.,
         xrotation=90,
         xlabel=f"{label1.capitalize()} VS {label2.capitalize()}",
         show_grid=True,
