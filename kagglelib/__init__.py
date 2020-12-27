@@ -21,7 +21,7 @@ def load_usd_eur_df() -> pd.DataFrame:
         header=None,
         skiprows=5,
         names=["year", "rate"],
-        index_col="year"
+        index_col="year",
     )
     return df
 
@@ -49,7 +49,7 @@ def load_eurostat_df() -> pd.DataFrame:
 @functools.lru_cache(maxsize=1)
 def load_oecd_df() -> pd.DataFrame:
     df = pd.read_csv(
-        DATA / 'oecd_ann_avg_wage_2019.csv',
+        DATA / "oecd_ann_avg_wage_2019.csv",
         header=0,
         names=["country", "oecd"],
         index_col="country",
@@ -142,22 +142,21 @@ def load_thresholds_df(
     return df
 
 
-
 # Select useful columns for data validity exploration
 KAGGLE_VALIDATION_COLS = {
-    'Q1': 'age',
-    'Q2': 'gender',
-    'Q3': 'country',
-    'Q4': 'education',
-    'Q5': 'role',
-    'Q6': 'code_exp',
-    'Q15': 'ml_exp',
-    'Q20': 'employees',
-    'Q21': 'team_ds',
-    'Q22': 'company_ml_use',
-    'Q25': 'spend_ds',
-    'Q24': 'salary',
-    'salary_threshold': 'salary_threshold',
+    "Q1": "age",
+    "Q2": "gender",
+    "Q3": "country",
+    "Q4": "education",
+    "Q5": "role",
+    "Q6": "code_exp",
+    "Q15": "ml_exp",
+    "Q20": "employees",
+    "Q21": "team_ds",
+    "Q22": "company_ml_use",
+    "Q25": "spend_ds",
+    "Q24": "salary",
+    "salary_threshold": "salary_threshold",
 }
 
 SALARY_THRESHOLDS = {
@@ -198,67 +197,71 @@ def load_kaggle_df() -> pd.DataFrame:
 
     # Remove those who only answered "demographic" questions
     temp_df = df.iloc[:, 7:]
-    only_answer_demographic = (
-        (temp_df == 'None')
-        | temp_df.isnull()
-    ).all(axis=1)
+    only_answer_demographic = ((temp_df == "None") | temp_df.isnull()).all(axis=1)
     df = df[~only_answer_demographic].reset_index(drop=True)
 
     # Column 1: "Time from Start to Finish (seconds)" contains integers.
     # Let's cast it and rename it to something more convenient
-    df = df.rename(columns={'Time from Start to Finish (seconds)': 'duration'})
+    df = df.rename(columns={"Time from Start to Finish (seconds)": "duration"})
     df = df.assign(duration=df.duration.apply(int))
 
     # Reformat country names to align with Official datasets' names
     # There are two different choices for 'South Korea' in Kaggle dataset.
     # Both choices refer to the country in the southern part of the Peninsula.
-    df.Q3 = df.Q3.replace({
-        'Russia': 'Russian Federation',
-        'United States of America': 'United States',
-        'United Kingdom of Great Britain and Northern Ireland': 'United Kingdom',
-        'Iran, Islamic Republic of...': 'Iran',
-        'Republic of Korea': 'Korea, Republic of',
-        'South Korea': 'Korea, Republic of'
-    })
+    df.Q3 = df.Q3.replace(
+        {
+            "Russia": "Russian Federation",
+            "United States of America": "United States",
+            "United Kingdom of Great Britain and Northern Ireland": "United Kingdom",
+            "Iran, Islamic Republic of...": "Iran",
+            "Republic of Korea": "Korea, Republic of",
+            "South Korea": "Korea, Republic of",
+        }
+    )
 
     # Columns about experience have different ranges and different format.
     # Modify format to be similar and DNRY
     # This way, we minimize errors that may be caused by human typing,
     # e.g. executive summary p. 10, machine learning experience class from 10-20 years is reference as 10-15 years
-    df.Q6 = df.Q6.replace({
-        '< 1 year': '< 1',
-        'I have never written code': '0'
-    }).str.replace(' years', '')
-    df.Q15 = df.Q15.replace({
-        'Under 1 year': '< 1',
-        '20 or more years': '20+',
-        'I do not use machine learning methods': '0'
-    }).str.replace(' years', '')
+    df.Q6 = df.Q6.replace({"< 1 year": "< 1", "I have never written code": "0"}).str.replace(" years", "")
+    df.Q15 = df.Q15.replace(
+        {"Under 1 year": "< 1", "20 or more years": "20+", "I do not use machine learning methods": "0"}
+    ).str.replace(" years", "")
 
     # Refine Company employment size values
-    df.Q20 = df.Q20.replace({
-        '10,000 or more employees': '10000+',
-    }).str.replace(' employees', '').str.replace(',', '')
+    df.Q20 = (
+        df.Q20.replace(
+            {
+                "10,000 or more employees": "10000+",
+            }
+        )
+        .str.replace(" employees", "")
+        .str.replace(",", "")
+    )
 
     # convert spend_ds to numbers:
-    df.Q25 = df.Q25.replace({
-        '$0 ($USD)': 0,
-        '$1-$99': 100,
-        '$100-$999': 1000,
-        '$1000-$9,999': 10000,
-        '$10,000-$99,999': 100000,
-        '$100,000 or more ($USD)': 1000000,
-    })
+    df.Q25 = df.Q25.replace(
+        {
+            "$0 ($USD)": 0,
+            "$1-$99": 100,
+            "$100-$999": 1000,
+            "$1000-$9,999": 10000,
+            "$10,000-$99,999": 100000,
+            "$100,000 or more ($USD)": 1000000,
+        }
+    )
 
     # create salary upper bound thresholds for comparison operations.
-    df['salary_threshold'] = df['Q24'].map(SALARY_THRESHOLDS)
+    df["salary_threshold"] = df["Q24"].map(SALARY_THRESHOLDS)
 
     # Reformat salary bins by removing symbols and "," from salary ranges.
-    df.Q24 = df.Q24.replace({
-        '$0-999': '0-999',
-        '> $500,000': '500,000-999,999',
-        '300,000-500,000': '300,000-499,999',
-    }).str.replace(',', '')
+    df.Q24 = df.Q24.replace(
+        {
+            "$0-999": "0-999",
+            "> $500,000": "500,000-999,999",
+            "300,000-500,000": "300,000-499,999",
+        }
+    ).str.replace(",", "")
 
     df = df[KAGGLE_VALIDATION_COLS.keys()]
     df = df.rename(columns=KAGGLE_VALIDATION_COLS)
@@ -271,33 +274,15 @@ def load_data_scientists_df(df=None, filtered=True):
         thresholds = load_thresholds_df()
         df = pd.merge(demo, thresholds, how="inner", on="country")
     # Basic conditions
-    low_exp_bins =  ['0', '< 1', '1-2']
-    high_exp_bins =  ['10-20', '20+']
-    is_high_exp = (
-        df.code_exp.isin(high_exp_bins)
-        | df.ml_exp.isin(high_exp_bins)
-    )
-    is_low_exp = (
-        df.code_exp.isin(low_exp_bins)
-        & (
-            df.ml_exp.isin(low_exp_bins)
-            | df.ml_exp.isna()
-        )
-    )
-    is_too_low_salary = (df.salary_threshold <= df.too_low_salary)
-    is_data_scientist = (df.role == "Data Scientist")
+    low_exp_bins = ["0", "< 1", "1-2"]
+    high_exp_bins = ["10-20", "20+"]
+    is_high_exp = df.code_exp.isin(high_exp_bins) | df.ml_exp.isin(high_exp_bins)
+    is_low_exp = df.code_exp.isin(low_exp_bins) & (df.ml_exp.isin(low_exp_bins) | df.ml_exp.isna())
+    is_too_low_salary = df.salary_threshold <= df.too_low_salary
+    is_data_scientist = df.role == "Data Scientist"
     # complex conditions
-    is_too_young_for_experience = (
-        (df.age <= '24')
-        & (
-            (df.code_exp == '20+')
-            | (df.ml_exp == '20+')
-        )
-    )
-    is_too_young_for_salary = (
-        (df.age <= '24')
-        & df.salary_threshold >= df.high_salary_low_exp
-    )
+    is_too_young_for_experience = (df.age <= "24") & ((df.code_exp == "20+") | (df.ml_exp == "20+"))
+    is_too_young_for_salary = (df.age <= "24") & df.salary_threshold >= df.high_salary_low_exp
     is_low_salary_high_exp = is_high_exp & (df.salary_threshold < df.low_salary_high_exp)
     is_high_salary_low_exp = is_low_exp & (df.salary_threshold >= df.high_salary_low_exp)
     # Create dataframe
@@ -316,37 +301,39 @@ def load_data_scientists_df(df=None, filtered=True):
     return ds
 
 
-_KAGGLE_ROLES = set([
-    'Business Analyst',
-    'Currently not employed',
-    'DBA/Database Engineer',
-    'Data Analyst',
-    'Data Engineer',
-    'Data Scientist',
-    'Machine Learning Engineer',
-    'Other',
-    'Product/Project Manager',
-    'Research Scientist',
-    'Software Engineer',
-    'Statistician',
-    'Student'
-])
+_KAGGLE_ROLES = set(
+    [
+        "Business Analyst",
+        "Currently not employed",
+        "DBA/Database Engineer",
+        "Data Analyst",
+        "Data Engineer",
+        "Data Scientist",
+        "Machine Learning Engineer",
+        "Other",
+        "Product/Project Manager",
+        "Research Scientist",
+        "Software Engineer",
+        "Statistician",
+        "Student",
+    ]
+)
 
 
 _KAGGLE_RENAMES = {
-    'Time from Start to Finish (seconds)': 'duration',
-    'Q1': 'age',
-    'Q2': 'gender',
-    'Q3': 'country',
-    'Q4': 'education',
-    'Q5': 'role',
-    'Q6': 'code_exp',
-    'Q15': 'ml_exp',
-    'Q20': 'employees',
-    'Q21': 'team_ds',
-    'Q22': 'company_ml_use',
-    'Q24': 'salary',
-    'Q25': 'spend_ds',
+    "Time from Start to Finish (seconds)": "duration",
+    "Q1": "age",
+    "Q2": "gender",
+    "Q3": "country",
+    "Q4": "education",
+    "Q5": "role",
+    "Q6": "code_exp",
+    "Q15": "ml_exp",
+    "Q20": "employees",
+    "Q21": "team_ds",
+    "Q22": "company_ml_use",
+    "Q24": "salary",
+    "Q25": "spend_ds",
 }
 
 
@@ -366,54 +353,60 @@ def load_udf() -> pd.DataFrame:
     # Align country names to the Official datasets' names
     # There are two different choices for 'Korea' in Kaggle dataset.
     # We assume that both choices refer to the country in the southern part of the Peninsula.
-    df.country = df.country.replace({
-        'Russia': 'Russian Federation',
-        'United States of America': 'United States',
-        'United Kingdom of Great Britain and Northern Ireland': 'United Kingdom',
-        'Iran, Islamic Republic of...': 'Iran',
-        'Republic of Korea': 'Korea, Republic of',
-        'South Korea': 'Korea, Republic of'
-    })
+    df.country = df.country.replace(
+        {
+            "Russia": "Russian Federation",
+            "United States of America": "United States",
+            "United Kingdom of Great Britain and Northern Ireland": "United Kingdom",
+            "Iran, Islamic Republic of...": "Iran",
+            "Republic of Korea": "Korea, Republic of",
+            "South Korea": "Korea, Republic of",
+        }
+    )
 
     # Columns about experience have different ranges and different format.
     # Modify format to be similar and DNRY
     # This way, we minimize errors that may be caused by human typing,
     # e.g. in the executive summary p. 10, machine learning experience class from 10-20 years is referenced as 10-15 years
-    df.code_exp = df.code_exp.replace({
-        '< 1 year': '< 1',
-        'I have never written code': '0'
-    }).str.replace(' years', '')
-    df.ml_exp = df.ml_exp.replace({
-        'Under 1 year': '< 1',
-        '20 or more years': '20+',
-        'I do not use machine learning methods': '0'
-    }).str.replace(' years', '')
+    df.code_exp = df.code_exp.replace({"< 1 year": "< 1", "I have never written code": "0"}).str.replace(" years", "")
+    df.ml_exp = df.ml_exp.replace(
+        {"Under 1 year": "< 1", "20 or more years": "20+", "I do not use machine learning methods": "0"}
+    ).str.replace(" years", "")
 
     # Refine Company employment size values
-    df.employees = df.employees.replace({
-        '10,000 or more employees': '10000+',
-    }).str.replace(' employees', '').str.replace(',', '')
+    df.employees = (
+        df.employees.replace(
+            {
+                "10,000 or more employees": "10000+",
+            }
+        )
+        .str.replace(" employees", "")
+        .str.replace(",", "")
+    )
 
     # create salary upper bound thresholds for comparison operations.
     df = df.assign(salary_threshold=df.salary.map(SALARY_THRESHOLDS))
 
     # Reformat salary bins by removing symbols and "," from salary ranges.
-    df.salary = df.salary.replace({
-        '$0-999': '0-999',
-        '> $500,000': '500,000-999,999',
-        '300,000-500,000': '300,000-499,999',
-    }).str.replace(',', '')
+    df.salary = df.salary.replace(
+        {
+            "$0-999": "0-999",
+            "> $500,000": "500,000-999,999",
+            "300,000-500,000": "300,000-499,999",
+        }
+    ).str.replace(",", "")
 
     # convert spend_ds ranges to upper bounds (i.e. integers):
-    df.spend_ds = df.spend_ds.replace({
-        '$0 ($USD)': 0,
-        '$1-$99': 100,
-        '$100-$999': 1000,
-        '$1000-$9,999': 10000,
-        '$10,000-$99,999': 100000,
-        '$100,000 or more ($USD)': 1000000,
-    })
-
+    df.spend_ds = df.spend_ds.replace(
+        {
+            "$0 ($USD)": 0,
+            "$1-$99": 100,
+            "$100-$999": 1000,
+            "$1000-$9,999": 10000,
+            "$10,000-$99,999": 100000,
+            "$100,000 or more ($USD)": 1000000,
+        }
+    )
 
     # Merge df with the threshold values
     thresholds = load_thresholds_df()
@@ -427,46 +420,30 @@ def filter_df(df: pd.DataFrame, print_filters=False) -> pd.DataFrame:
     # Q7 is the first non-demographic question
     # While 5 are the "threshold" columns which were appended at the end
     temp_df = df.iloc[:, 7:-5]
-    only_answer_demographic = (
-        (temp_df == 'None')
-        | temp_df.isnull()
-    ).all(axis=1)
+    only_answer_demographic = ((temp_df == "None") | temp_df.isnull()).all(axis=1)
     # Basic conditions
-    low_exp_bins =  ['0', '< 1', '1-2']
-    is_low_exp = (
-        df.code_exp.isin(low_exp_bins)
-        & (
-            df.ml_exp.isin(low_exp_bins)
-            | df.ml_exp.isna()
-        )
-    )
-    high_exp_bins =  ['10-20', '20+']
-    is_high_exp = (
-        df.code_exp.isin(high_exp_bins)
-        | df.ml_exp.isin(high_exp_bins)
-    )
-    is_too_low_salary = (df.salary_threshold <= df.too_low_salary)
+    low_exp_bins = ["0", "< 1", "1-2"]
+    is_low_exp = df.code_exp.isin(low_exp_bins) & (df.ml_exp.isin(low_exp_bins) | df.ml_exp.isna())
+    high_exp_bins = ["10-20", "20+"]
+    is_high_exp = df.code_exp.isin(high_exp_bins) | df.ml_exp.isin(high_exp_bins)
+    is_too_low_salary = df.salary_threshold <= df.too_low_salary
     # complex conditions
-    is_too_young_for_experience = (
-        (df.age <= '24')
-        & (
-            (df.code_exp == '20+')
-            | (df.ml_exp == '20+')
-        )
-    )
-    is_too_young_for_salary = (df.age <= '24') & (df.salary_threshold >= df.high_salary_low_exp)
+    is_too_young_for_experience = (df.age <= "24") & ((df.code_exp == "20+") | (df.ml_exp == "20+"))
+    is_too_young_for_salary = (df.age <= "24") & (df.salary_threshold >= df.high_salary_low_exp)
     is_low_salary_high_exp = is_high_exp & (df.salary_threshold < df.low_salary_high_exp)
     is_high_salary_low_exp = is_low_exp & (df.salary_threshold >= df.high_salary_low_exp)
 
     if print_filters:
-        print(f"""
+        print(
+            f"""
         Too young for experience   : {is_too_young_for_experience.sum()}
         Too young for salary       : {is_too_young_for_salary.sum()}
         Too low salary             : {is_too_low_salary.sum()}
         Too low salary high exp    : {is_low_salary_high_exp.sum()}
         Too high salary low exp    : {is_high_salary_low_exp.sum()}
         only_answered_demographics : {only_answer_demographic.sum()}
-        """)
+        """
+        )
 
     # Create dataframe
     conditions = (
@@ -489,10 +466,12 @@ def load_role_df(df: pd.DataFrame, role: str) -> pd.DataFrame:
 
 
 def value_counts(series: pd.Series, sort_index: bool = False) -> pd.DataFrame:
-    df = pd.DataFrame({
-        "counts": series.value_counts().sort_values(),
-        "(%)": (series.value_counts(True).sort_values() * 100).round(2),
-    })
+    df = pd.DataFrame(
+        {
+            "counts": series.value_counts().sort_values(),
+            "(%)": (series.value_counts(True).sort_values() * 100).round(2),
+        }
+    )
     if sort_index:
         df = df.sort_index()
     else:
@@ -507,16 +486,27 @@ def keep_demo_cols(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def get_value_count_comparison_df(df1: pd.DataFrame, df2: pd.DataFrame, column: str, label1="original", label2="filtered"):
-    df = pd.DataFrame({
-        label1: (df1.age.value_counts(True).sort_index() * 100).round(2),
-        label2: (df2.age.value_counts(True).sort_index() * 100).round(2),
-    })
+def get_value_count_comparison_df(
+    df1: pd.DataFrame, df2: pd.DataFrame, column: str, label1="original", label2="filtered"
+):
+    df = pd.DataFrame(
+        {
+            label1: (df1.age.value_counts(True).sort_index() * 100).round(2),
+            label2: (df2.age.value_counts(True).sort_index() * 100).round(2),
+        }
+    )
     df = df.reset_index(drop=False).rename(columns={"index": column})
     return df
 
 
-def plot_value_count_comparison(df1: pd.DataFrame, df2: pd.DataFrame, column: str, label1="original", label2="filtered", title: Optional[str] = None) -> hv.Layout:
+def plot_value_count_comparison(
+    df1: pd.DataFrame,
+    df2: pd.DataFrame,
+    column: str,
+    label1="original",
+    label2="filtered",
+    title: Optional[str] = None,
+) -> hv.Layout:
     if title is None:
         title = column
     df = get_value_count_comparison_df(df1=df1, df2=df2, column=column, label1=label1, label2=label2)
