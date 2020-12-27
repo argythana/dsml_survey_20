@@ -389,22 +389,23 @@ def stack_value_count_df(df: pd.DataFrame):
     return df
 
 
-def plot_value_count_comparison(
-    df1: pd.DataFrame,
-    df2: pd.DataFrame,
-    column: str,
-    perc: bool = True,
-    label1: str = "original",
-    label2: str = "filtered",
+def check_df_is_stacked(df: pd.DataFrame) -> None:
+    if len(df) > 50:
+        raise ValueError(f"You probably don't want to create a Bar plot with 50+ bins: {len(df)}")
+    if len(df.columns) != 3 or set(df.columns[-2:]).difference(("source", "Number", "Percentage")):
+        raise ValueError(f"The df does not seem to be comparing value_counts: {df.columns}")
+
+
+def hv_plot_value_count_comparison(
+    df: pd.DataFrame,
     title: Optional[str] = None,
 ) -> hv.Layout:
+    check_df_is_stacked(df)
+    column = df.columns[0]
     if title is None:
         title = column
-    df = get_value_count_df(df1=df1, df2=df2, column=column, perc=perc, label1=label1, label2=label2)
-    # Create table
-    table = hv.Table(df)
+    source1, source2 = df["source"].unique()
     # Stack dataframe for Bars plot
-    df = stack_value_count_df(df)
     plot = hv.Bars(data=df, kdims=[column, "source"], vdims=[df.columns[-1]], label=title)
     plot = plot.opts(
         width=900,
@@ -412,11 +413,11 @@ def plot_value_count_comparison(
         fontsize=12,
         fontscale=1.0,
         xrotation=90,
-        xlabel=f"{label1.capitalize()} VS {label2.capitalize()}",
+        xlabel=f"{source1.capitalize()} VS {source2.capitalize()}",
         show_grid=True,
         show_legend=True,
         show_title=True,
         tools=["hover"],
     )
-    layout = table + plot
+    layout = plot
     return layout
