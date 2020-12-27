@@ -355,7 +355,12 @@ def keep_demo_cols(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def get_value_count_comparison_df(
-    df1: pd.DataFrame, df2: pd.DataFrame, column: str, perc=True, label1="original", label2="filtered"
+    df1: pd.DataFrame,
+    df2: pd.DataFrame,
+    column: str,
+    perc: bool = True,
+    label1: str = "original",
+    label2: str = "filtered",
 ):
     if perc==True:
         multiplier=100
@@ -378,9 +383,9 @@ def plot_value_count_comparison(
     df1: pd.DataFrame,
     df2: pd.DataFrame,
     column: str,
-    perc=True,
-    label1="original",
-    label2="filtered",
+    perc: bool = True,
+    label1: str = "original",
+    label2: str = "filtered",
     title: Optional[str] = None,
 ) -> hv.Layout:
     if title is None:
