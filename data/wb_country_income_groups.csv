@@ -57,7 +57,7 @@ Djibouti,Lower middle income
 Dominica,Upper middle income
 Dominican Republic,Upper middle income
 Ecuador,Upper middle income
-"Egypt, Arab Rep.",Lower middle income
+Egypt,Lower middle income
 El Salvador,Lower middle income
 Equatorial Guinea,Upper middle income
 Eritrea,Low income
@@ -90,7 +90,7 @@ Hungary,High income
 Iceland,High income
 India,Lower middle income
 Indonesia,Upper middle income
-"Iran, Islamic Rep.",Upper middle income
+Iran,Upper middle income
 Iraq,Upper middle income
 Ireland,High income
 Isle of Man,High income
@@ -103,7 +103,7 @@ Kazakhstan,Upper middle income
 Kenya,Lower middle income
 Kiribati,Lower middle income
 "Korea, Dem. People's Rep.",Low income
-"Korea, Rep.",High income
+"Korea, Republic of",High income
 Kosovo,Upper middle income
 Kuwait,High income
 Kyrgyz Republic,Lower middle income
@@ -189,7 +189,7 @@ Suriname,Upper middle income
 Sweden,High income
 Switzerland,High income
 Syrian Arab Republic,Low income
-"Taiwan, China",High income
+Taiwan,High income
 Tajikistan,Low income
 Tanzania,Lower middle income
 Thailand,Upper middle income
@@ -211,7 +211,7 @@ Uruguay,High income
 Uzbekistan,Lower middle income
 Vanuatu,Lower middle income
 "Venezuela, RB",Upper middle income
-Vietnam,Lower middle income
+Viet Nam,Lower middle income
 Virgin Islands (U.S.),High income
 West Bank and Gaza,Lower middle income
 "Yemen, Rep.",Low income
