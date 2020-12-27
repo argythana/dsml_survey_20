@@ -193,13 +193,16 @@ def load_questions_df() -> pd.DataFrame:
 
 @functools.lru_cache(maxsize=1)
 def load_mean_salary_comparison_df():
+    income_group = load_world_bank_groups()
     eurostat = load_eurostat_df()
     oecd = load_oecd_df()
     ilo = load_ilo_df()
     numbeo = load_numbeo_df()
-    df = pd.concat([eurostat.eurostat, oecd.oecd, ilo.ilo, numbeo.numbeo], axis="columns")
+    df = pd.concat(
+        [income_group.income_group, eurostat.eurostat, oecd.oecd, ilo.ilo, numbeo.numbeo], axis="columns"
+    )
     df.index.name = "country"
-    df = df.assign(avg_salary=df.bfill(axis=1).iloc[:, 0])
+    df = df.assign(avg_salary=df.bfill(axis=1).iloc[:, 1])
     df = df.reset_index(drop=False)
     return df
 
@@ -220,7 +223,7 @@ def load_thresholds_df(
     high_salary_low_exp_threshold: int = 500000,
 ) -> pd.DataFrame:
     df = load_mean_salary_comparison_df()
-    df = df[["country", "avg_salary"]]
+    df = df[["country", "income_group", "avg_salary"]]
     df = df.append(dict(country="Other", avg_salary=3500), ignore_index=True)
     df = df.assign(
         too_low_salary=(low_salary_percentage * df.avg_salary).apply(get_threshold),
