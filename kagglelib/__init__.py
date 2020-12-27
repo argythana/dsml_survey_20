@@ -400,7 +400,7 @@ def plot_value_count_comparison(
         width=900,
         height=600,
         fontsize=12,
-        fontscale=1.,
+        fontscale=1.0,
         xrotation=90,
         xlabel=f"{label1.capitalize()} VS {label2.capitalize()}",
         show_grid=True,
