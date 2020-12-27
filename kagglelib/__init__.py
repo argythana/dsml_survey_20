@@ -9,12 +9,26 @@ from typing import Union
 
 import holoviews as hv
 import pandas as pd
+import seaborn as sns
+
+from holoviews import opts as hv_opts
 
 
 ROOT = pathlib.Path(__file__).parent.parent
 DATA = ROOT / "data"
 
 # Dictionaries of useful CONSTANTS
+MPL_RC = {
+    "font.size": 12.0,
+    "legend.fontsize": 18,
+    "legend.title_fontsize": 25,
+    "axes.labelsize": 25,
+    "axes.titlesize": 35,
+    "xtick.labelsize": 16,
+    "ytick.labelsize": 16,
+}
+
+
 SALARY_THRESHOLDS = {
     "$0-999": 1000,
     "1,000-1,999": 2000,
@@ -421,3 +435,42 @@ def hv_plot_value_count_comparison(
     )
     layout = plot
     return layout
+
+
+def sns_plot_value_count_comparison(
+    df: pd.DataFrame,
+    title: Optional[str] = None,
+) -> None:
+    check_df_is_stacked(df)
+    column = df.columns[0]
+    if title is None:
+        title = column
+    with sns.plotting_context("notebook", rc=MPL_RC):
+        plot = sns.catplot(
+            data=df,
+            kind="bar",
+            x=df.columns[0],
+            y=df.columns[-1],
+            hue=df.columns[1],
+            palette="dark",
+            alpha=0.6,
+            height=8,
+            aspect=2.0,
+            legend=False,
+        )
+        # plot.despine(left=True)
+        plot.ax.legend(loc="best", title="Source")
+        plot.ax.set_title(title)
+        # plot.set_axis_labels(x_label, y_label)
+
+        # adapted from: https://stackoverflow.com/questions/39444665/add-data-labels-to-seaborn-factor-plot
+        for i, bar in enumerate(plot.ax.patches):
+            h = bar.get_height()
+            plot.ax.text(
+                x=bar.get_x() + bar.get_width() / 2,
+                y=h + 0.35,
+                s=f"{h:.1f}",  # the label
+                ha="center",
+                va="center",
+                # fontweight='bold',
+            )
