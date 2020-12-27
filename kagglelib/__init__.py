@@ -355,10 +355,14 @@ def keep_demo_cols(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def get_value_count_comparison_df(
-    df1: pd.DataFrame, df2: pd.DataFrame, column: str, label1="original", label2="filtered"
+    df1: pd.DataFrame, df2: pd.DataFrame, column: str, perc=True, label1="original", label2="filtered"
 ):
-    vc1 = df1[column].value_counts(True) * 100
-    vc2 = df2[column].value_counts(True) * 100
+    if perc==True:
+        multiplier=100
+    else:
+        multiplier=1
+    vc1 = df1[column].value_counts(perc) * multiplier
+    vc2 = df2[column].value_counts(perc) * multiplier
     df = pd.DataFrame(
         {
             label1: (vc1.sort_index()).round(2),
@@ -374,19 +378,24 @@ def plot_value_count_comparison(
     df1: pd.DataFrame,
     df2: pd.DataFrame,
     column: str,
+    perc=True,
     label1="original",
     label2="filtered",
     title: Optional[str] = None,
 ) -> hv.Layout:
     if title is None:
         title = column
-    df = get_value_count_comparison_df(df1=df1, df2=df2, column=column, label1=label1, label2=label2)
+    df = get_value_count_comparison_df(df1=df1, df2=df2, column=column, perc=perc, label1=label1, label2=label2)
     # Create table
     table = hv.Table(df)
     # Stack dataframe for Bars plot
     df = df.set_index(column).drop(columns="% diff").stack().reset_index()
-    df.columns = [column, "source", "percentage"]
-    plot = hv.Bars(data=df, kdims=[column, "source"], vdims=["percentage"], label="asdf")
+    if perc==True:
+        y_label="percentage"
+    else:
+        y_label="Number"
+    df.columns = [column, "source", y_label]
+    plot = hv.Bars(data=df, kdims=[column, "source"], vdims=[y_label], label="asdf")
     plot = plot.relabel(title)
     plot = plot.opts(
         width=900,
