@@ -110,6 +110,15 @@ def get_usd_eur_rate(year: int) -> Union[int, str, float]:
     rate = df.at[year, "rate"]
     return rate
 
+@functools.lru_cache(maxsize=1)
+def get_world_bank_groups() -> pd.DataFrame:
+    df = pd.read_csv(
+        DATA / "wb_country_income_groups.csv",
+        header=0,
+        names=["country", "group"],
+        index_col="country",
+    )
+    return df
 
 @functools.lru_cache(maxsize=1)
 def load_eurostat_df() -> pd.DataFrame:
