@@ -362,10 +362,7 @@ def get_value_count_comparison_df(
     label1: str = "original",
     label2: str = "filtered",
 ):
-    if perc==True:
-        multiplier=100
-    else:
-        multiplier=1
+    multiplier = 100 if perc else 1
     vc1 = df1[column].value_counts(perc) * multiplier
     vc2 = df2[column].value_counts(perc) * multiplier
     df = pd.DataFrame(
@@ -395,10 +392,7 @@ def plot_value_count_comparison(
     table = hv.Table(df)
     # Stack dataframe for Bars plot
     df = df.set_index(column).drop(columns="% diff").stack().reset_index()
-    if perc==True:
-        y_label="percentage"
-    else:
-        y_label="Number"
+    y_label = "Percentage" if perc else "Number"
     df.columns = [column, "source", y_label]
     plot = hv.Bars(data=df, kdims=[column, "source"], vdims=[y_label], label="asdf")
     plot = plot.relabel(title)
