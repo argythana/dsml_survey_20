@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import functools
+import math
 import pathlib
 
 from typing import Optional
@@ -376,6 +377,18 @@ def get_value_count_df(
     return df
 
 
+def stack_value_count_df(df: pd.DataFrame):
+    if len(df) > 50:
+        raise ValueError(f"You probably don't want to create a Bar plot with 50+ bins: {len(df)}")
+    if len(df.columns) != 4 or list(df.columns[-3:]) != ["original", "filtered", "% diff"]:
+        raise ValueError(f"The df does not seem to be comparing value_counts: {df.columns}")
+    column: str = df.columns[0]
+    y_label = "Percentage" if math.isclose(100, df["original"].sum(), abs_tol=0.5) else "Number"
+    df = df.drop(columns="% diff").set_index(column).stack().reset_index()
+    df.columns = [column, "source", y_label]
+    return df
+
+
 def plot_value_count_comparison(
     df1: pd.DataFrame,
     df2: pd.DataFrame,
@@ -391,10 +404,8 @@ def plot_value_count_comparison(
     # Create table
     table = hv.Table(df)
     # Stack dataframe for Bars plot
-    df = df.set_index(column).drop(columns="% diff").stack().reset_index()
-    y_label = "Percentage" if perc else "Number"
-    df.columns = [column, "source", y_label]
-    plot = hv.Bars(data=df, kdims=[column, "source"], vdims=[y_label], label=title)
+    df = stack_value_count_df(df)
+    plot = hv.Bars(data=df, kdims=[column, "source"], vdims=[df.columns[-1]], label=title)
     plot = plot.opts(
         width=900,
         height=600,
