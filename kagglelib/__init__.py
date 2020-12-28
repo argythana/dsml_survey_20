@@ -36,21 +36,6 @@ from .third_party import load_mean_salary_comparison_df
 
 
 
-def value_counts(series: pd.Series, sort_index: bool = False) -> pd.DataFrame:
-    df = pd.DataFrame(
-        {
-            "counts": series.value_counts().sort_values(),
-            "(%)": (series.value_counts(True).sort_values() * 100).round(2),
-        }
-    )
-    if sort_index:
-        df = df.sort_index()
-    else:
-        df = df.sort_values(by="counts", ascending=False)
-    df.index.name = series.name
-    return df
-
-
 def get_value_count_df(
     df1: pd.DataFrame,
     df2: pd.DataFrame,
