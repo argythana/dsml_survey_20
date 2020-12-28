@@ -2,7 +2,7 @@ country,monthly_earnings
 Switzerland,6198.84
 Singapore,3663.43
 Denmark,3611.41
-United States,3558.85
+USA,3558.85
 Australia,3491.73
 Norway,3290.86
 Qatar,3254.89
@@ -16,7 +16,7 @@ New Zealand,2797.05
 Germany,2786.83
 Japan,2710.36
 United Arab Emirates,2630.59
-United Kingdom,2534.73
+UK,2534.73
 Israel,2503.92
 Canada,2484.5
 France,2417.53
@@ -71,7 +71,7 @@ Kosovo,465.9
 India,447.99
 Morocco,447.64
 Argentina,443.41
-Russian Federation,438.07
+Russia,438.07
 Peru,426.04
 Kazakhstan,415.36
 Viet Nam,414.47
