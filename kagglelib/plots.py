@@ -9,6 +9,7 @@ from typing import Dict
 from typing import Optional
 
 from .paths import DATA
+from .kaggle import REVERSE_SALARY_THRESHOLDS
 
 
 SMALL_FONT = 12
@@ -104,4 +105,51 @@ def sns_plot_value_count_comparison(
                 ha="center",
                 va="center",
                 # fontweight='bold',
+            )
+
+
+def sns_plot_salary_medians(
+    df: pd.DataFrame, title: Optional[str] = None, rc: Optional[Dict[str, Any]] = None
+) -> None:
+    with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
+        plot = sns.catplot(
+            data=df,
+            kind="bar",
+            x="salary",
+            y="country",
+            hue="variable",
+            orient="h",
+            palette="dark",
+            alpha=0.8,
+            height=8,
+            aspect=2.8,
+            legend=False,
+        )
+        ticks = sorted(df.salary.unique(), reverse=True)
+        #plot.ax.xticks(ticks, rotation="vertical")
+        plt.xticks(ticks, rotation="vertical")
+        #plt.xlim((0, 170000))
+        plot.ax.xaxis.set_ticklabels([REVERSE_SALARY_THRESHOLDS[sal] for sal in ticks])
+        plot.ax.grid(axis="x")
+        #plot.despine()
+        plot.ax.set_axisbelow(True)
+        plot.ax.set_box_aspect(12/len(plot.ax.patches))
+        plot.ax.legend(loc="center left", title="", bbox_to_anchor=(1.04,0.5))
+        plot.ax.legend(loc="best", title="")
+        plot.ax.set_title(title)
+
+        for i, bar in enumerate(plot.ax.patches):
+            h = bar.get_height()
+            w = bar.get_width()
+            y = bar.get_y()
+            plot.ax.annotate(
+                text=f"${w:.0f}",
+                xy=(w, y + h / 2),
+                xycoords="data",
+                ha='left',
+                #va='center',
+                va='center_baseline',
+                # offset text 4pts to the left
+                xytext=(4, 0),
+                textcoords="offset points"
             )
