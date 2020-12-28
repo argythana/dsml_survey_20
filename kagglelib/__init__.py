@@ -13,22 +13,14 @@ import seaborn as sns
 
 from holoviews import opts as hv_opts
 
+from .plots import hv_plot_value_count_comparison
+from .plots import sns_plot_value_count_comparison
+
 
 ROOT = pathlib.Path(__file__).parent.parent
 DATA = ROOT / "data"
 
 # Dictionaries of useful CONSTANTS
-MPL_RC = {
-    "font.size": 12.0,
-    "legend.fontsize": 18,
-    "legend.title_fontsize": 25,
-    "axes.labelsize": 25,
-    "axes.titlesize": 35,
-    "xtick.labelsize": 16,
-    "ytick.labelsize": 16,
-}
-
-
 SALARY_THRESHOLDS = {
     "$0-999": 1000,
     "1,000-1,999": 2000,
@@ -413,76 +405,3 @@ def stack_value_count_df(df: pd.DataFrame):
     df = df.drop(columns="% diff").set_index(column).stack().reset_index()
     df.columns = [column, "source", y_label]
     return df
-
-
-def check_df_is_stacked(df: pd.DataFrame) -> None:
-    if len(df) > 50:
-        raise ValueError(f"You probably don't want to create a Bar plot with 50+ bins: {len(df)}")
-    if len(df.columns) != 3 or set(df.columns[-2:]).difference(("source", "Number", "Percentage")):
-        raise ValueError(f"The df does not seem to be comparing value_counts: {df.columns}")
-
-
-def hv_plot_value_count_comparison(
-    df: pd.DataFrame,
-    title: Optional[str] = None,
-) -> hv.Layout:
-    check_df_is_stacked(df)
-    column = df.columns[0]
-    if title is None:
-        title = column
-    source1, source2 = df["source"].unique()
-    # Stack dataframe for Bars plot
-    plot = hv.Bars(data=df, kdims=[column, "source"], vdims=[df.columns[-1]], label=title)
-    plot = plot.opts(
-        width=900,
-        height=600,
-        fontsize=12,
-        fontscale=1.0,
-        xrotation=90,
-        xlabel=f"{source1.capitalize()} VS {source2.capitalize()}",
-        show_grid=True,
-        show_legend=True,
-        show_title=True,
-        tools=["hover"],
-    )
-    layout = plot
-    return layout
-
-
-def sns_plot_value_count_comparison(
-    df: pd.DataFrame,
-    title: Optional[str] = None,
-) -> None:
-    check_df_is_stacked(df)
-    column = df.columns[0]
-    if title is None:
-        title = column
-    with sns.plotting_context("notebook", rc=MPL_RC):
-        plot = sns.catplot(
-            data=df,
-            kind="bar",
-            x=df.columns[0],
-            y=df.columns[-1],
-            hue=df.columns[1],
-            palette="dark",
-            alpha=0.6,
-            height=8,
-            aspect=2.0,
-            legend=False,
-        )
-        # plot.despine(left=True)
-        plot.ax.legend(loc="best", title="Source")
-        plot.ax.set_title(title)
-        # plot.set_axis_labels(x_label, y_label)
-
-        # adapted from: https://stackoverflow.com/questions/39444665/add-data-labels-to-seaborn-factor-plot
-        for i, bar in enumerate(plot.ax.patches):
-            h = bar.get_height()
-            plot.ax.text(
-                x=bar.get_x() + bar.get_width() / 2,
-                y=h + 0.35,
-                s=f"{h:.1f}",  # the label
-                ha="center",
-                va="center",
-                # fontweight='bold',
-            )
