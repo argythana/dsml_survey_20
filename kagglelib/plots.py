@@ -4,6 +4,8 @@ import seaborn as sns
 import pandas as pd
 
 
+from typing import Any
+from typing import Dict
 from typing import Optional
 
 from .paths import DATA
@@ -60,15 +62,21 @@ def hv_plot_value_count_comparison(
     return layout
 
 
+def get_mpl_rc(rc: Dict[str, Any]) -> Dict[str, Any]:
+    mpl_rc = MPL_RC.copy()
+    if rc is not None:
+        mpl_rc.update(**rc)
+    return mpl_rc
+
+
 def sns_plot_value_count_comparison(
-    df: pd.DataFrame,
-    title: Optional[str] = None,
+    df: pd.DataFrame, title: Optional[str] = None, rc: Optional[Dict[str, Any]] = None
 ) -> None:
     check_df_is_stacked(df)
     column = df.columns[0]
     if title is None:
         title = column
-    with sns.plotting_context("notebook", rc=MPL_RC):
+    with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
         plot = sns.catplot(
             data=df,
             kind="bar",
