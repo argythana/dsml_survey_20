@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import functools
 import math
-import pathlib
 
 from typing import Optional
 from typing import Union
@@ -13,12 +12,10 @@ import seaborn as sns
 
 from holoviews import opts as hv_opts
 
+from .paths import DATA
 from .plots import hv_plot_value_count_comparison
 from .plots import sns_plot_value_count_comparison
 
-
-ROOT = pathlib.Path(__file__).parent.parent
-DATA = ROOT / "data"
 
 # Dictionaries of useful CONSTANTS
 SALARY_THRESHOLDS = {
