@@ -21,6 +21,7 @@ from .kaggle import load_udf
 from .kaggle import filter_df
 from .kaggle import load_role_df
 from .kaggle import keep_demo_cols
+from .kaggle import load_salary_medians_df
 from .paths import DATA
 from .plots import hv_plot_value_count_comparison
 from .plots import sns_plot_value_count_comparison

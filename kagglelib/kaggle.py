@@ -5,6 +5,8 @@ import pandas as pd
 from .paths import DATA
 from .third_party import load_mean_salary_comparison_df
 
+from typing import List
+
 
 SALARY_THRESHOLDS = {
     "$0-999": 1000,
@@ -33,6 +35,7 @@ SALARY_THRESHOLDS = {
     "300,000-500,000": 500000,
     "> $500,000": 1000000,
 }
+REVERSE_SALARY_THRESHOLDS = {v: k for (k, v) in SALARY_THRESHOLDS.items()}
 
 _KAGGLE_ROLES = set(
     [
@@ -242,4 +245,54 @@ def load_role_df(df: pd.DataFrame, role: str) -> pd.DataFrame:
 def keep_demo_cols(df: pd.DataFrame) -> pd.DataFrame:
     columns_to_keep = [col for col in df.columns if not col.startswith("Q")]
     df = df[columns_to_keep]
+    return df
+
+
+def load_salary_medians_df(
+    unfiltered: pd.DataFrame,
+    filtered: pd.DataFrame,
+    countries: List[str],
+    label1: str = "Filtered",
+    label2: str = "Unfiltered",
+) -> pd.DataFrame:
+    df = pd.concat(
+        objs=[
+            (
+                unfiltered[unfiltered.country.isin(countries)]
+                .groupby("country")
+                .salary_threshold.median()
+                .to_frame()
+                .rename(columns={"salary_threshold": "unfiltered_threshold"})
+            ),
+            (
+                filtered[filtered.country.isin(countries)]
+                .groupby("country")
+                .salary_threshold.median()
+                .to_frame()
+                .rename(columns={"salary_threshold": "filtered_threshold"})
+            ),
+        ],
+        axis="columns",
+    )
+    df = df.assign(
+        unfiltered=df.unfiltered_threshold.map(REVERSE_SALARY_THRESHOLDS),
+        filtered=df.filtered_threshold.map(REVERSE_SALARY_THRESHOLDS),
+    )
+    # melt dataframe and add the respective labels
+    df = (
+        df.reset_index()[["country", "unfiltered_threshold", "filtered_threshold"]]
+        .melt(id_vars="country")
+        .rename(columns={"value": "salary"})
+        .replace({"unfiltered_threshold": label1, "filtered_threshold": label2})
+    )
+    df = df.assign(label=df.salary.map(REVERSE_SALARY_THRESHOLDS))
+    df = df.sort_values("salary", ascending=True)
+    # Some countries, e.g. Russia, have an even number of partcipatnts,
+    # Therefore the median is e.g. 22500 while we only have 20000 and 25000 in `SALARY_THRESHODLS`
+    # Therefore we round up these values to the next threshold
+    nan_labels = df.label.isna()
+    if nan_labels.any():
+        func = lambda v: get_threshold(v, offset=0)
+        df.loc[nan_labels, "salary"] = df.loc[nan_labels, "salary"].apply(func)
+        df.loc[nan_labels, "label"] = df.loc[nan_labels, "salary"].map(REVERSE_SALARY_THRESHOLDS)
     return df
