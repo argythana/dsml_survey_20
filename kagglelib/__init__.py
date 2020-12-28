@@ -251,9 +251,8 @@ def load_udf() -> pd.DataFrame:
     # We assume that both choices refer to the country in the southern part of the Peninsula.
     df.country = df.country.replace(
         {
-            "Russia": "Russian Federation",
-            "United States of America": "United States",
-            "United Kingdom of Great Britain and Northern Ireland": "United Kingdom",
+            "United States of America": "USA",
+            "United Kingdom of Great Britain and Northern Ireland": "UK",
             "Iran, Islamic Republic of...": "Iran",
             "Republic of Korea": "Korea, Republic of",
             "South Korea": "Korea, Republic of",
