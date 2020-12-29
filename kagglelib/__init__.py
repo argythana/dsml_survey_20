@@ -60,13 +60,10 @@ def get_value_count_df(
     return df
 
 
-def stack_value_count_df(df: pd.DataFrame):
-    if len(df) > 50:
-        raise ValueError(f"You probably don't want to create a Bar plot with 50+ bins: {len(df)}")
-    if len(df.columns) != 4 or list(df.columns[-3:]) != ["original", "filtered", "% diff"]:
-        raise ValueError(f"The df does not seem to be comparing value_counts: {df.columns}")
+def stack_value_count_df(df: pd.DataFrame, y_label: Optional[str] = None):
     column: str = df.columns[0]
-    y_label = "Percentage" if math.isclose(100, df["original"].sum(), abs_tol=0.5) else "Number"
-    df = df.drop(columns="% diff").set_index(column).stack().reset_index()
+    if "% diff" in df.columns:
+        df = df.drop(columns="% diff")
+    df = df.set_index(column).stack().reset_index()
     df.columns = [column, "source", y_label]
     return df

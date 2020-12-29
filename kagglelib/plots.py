@@ -33,8 +33,6 @@ MPL_RC = {
 def check_df_is_stacked(df: pd.DataFrame) -> None:
     if len(df) > 50:
         raise ValueError(f"You probably don't want to create a Bar plot with 50+ bins: {len(df)}")
-    if len(df.columns) != 3 or set(df.columns[-2:]).difference(("source", "Number", "Percentage")):
-        raise ValueError(f"The df does not seem to be comparing value_counts: {df.columns}")
 
 
 def hv_plot_value_count_comparison(
