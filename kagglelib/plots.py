@@ -86,7 +86,7 @@ def _annotate_bar(bar, ax, fmt) -> None:
     )
 
 
-def _annotate_vertical_bar(bar, ax, fmt) -> None:
+def _annotate_horizontal_bar(bar, ax, fmt) -> None:
     h = bar.get_height()
     w = bar.get_width()
     y = bar.get_y()
@@ -122,7 +122,7 @@ def sns_plot_value_count_comparison(
     annotate_func = _annotate_bar
     if orientation in {"horizontal", "h"}:
         x, y = y, x
-        annotate_func = _annotate_vertical_bar
+        annotate_func = _annotate_horizontal_bar
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
         plot = sns.catplot(
             data=df,
