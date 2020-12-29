@@ -106,7 +106,7 @@ def _annotate_horizontal_bar(bar, ax, fmt) -> None:
 def sns_plot_value_count_comparison(
     df: pd.DataFrame,
     title: Optional[str] = None,
-    order: Optional[list] = None,
+    order_by_labels: bool = True,
     fmt: Optional[str] = None,
     rc: Optional[Dict[str, Any]] = None,
     orientation: str = "vertical",
@@ -135,7 +135,7 @@ def sns_plot_value_count_comparison(
             x=x,
             y=y,
             hue=df.columns[1],
-            order=order,
+            order=order if order_by_labels else None,
             palette="dark",
             alpha=0.6,
             height=8,
