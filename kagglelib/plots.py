@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 
+from textwrap import wrap
 
 from typing import Any
 from typing import Dict
@@ -129,7 +130,11 @@ def sns_plot_salary_medians(
         #plot.ax.xticks(ticks, rotation="vertical")
         plt.xticks(ticks, rotation="vertical")
         #plt.xlim((0, 170000))
-        plot.ax.xaxis.set_ticklabels([REVERSE_SALARY_THRESHOLDS[sal] for sal in ticks])
+        x_labels = [REVERSE_SALARY_THRESHOLDS[sal] for sal in ticks]
+        #wrapped_x_labels = ['\n'.join(wrap(l, 7)) for l in x_labels]
+        wrapped_x_labels = [label.replace("-", "-\n") for label in x_labels]
+        plot.ax.xaxis.set_ticklabels(wrapped_x_labels)
+        #plot.ax.xaxis.set_ticklabels([REVERSE_SALARY_THRESHOLDS[sal] for sal in ticks])
         plot.ax.grid(axis="x")
         #plot.despine()
         plot.ax.set_axisbelow(True)
@@ -153,3 +158,5 @@ def sns_plot_salary_medians(
                 xytext=(4, 0),
                 textcoords="offset points"
             )
+        plt.setp(plot.ax.get_xticklabels(), rotation=30, horizontalalignment='center')
+        plt.xticks(fontsize=12)
