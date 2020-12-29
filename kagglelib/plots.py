@@ -69,24 +69,66 @@ def get_mpl_rc(rc: Dict[str, Any]) -> Dict[str, Any]:
     return mpl_rc
 
 
+# adapted from: https://stackoverflow.com/questions/39444665/add-data-labels-to-seaborn-factor-plot
+def _annotate_bar(bar, ax, fmt) -> None:
+    h = bar.get_height()
+    w = bar.get_width()
+    x = bar.get_x()
+    ax.annotate(
+        text=fmt.format(h),
+        xy=(x + w / 2, h),
+        xycoords="data",
+        ha='center',
+        va='center_baseline',
+        # offset text 8pts to the top
+        xytext=(0, 8),
+        textcoords="offset points"
+    )
+
+
+def _annotate_vertical_bar(bar, ax, fmt) -> None:
+    h = bar.get_height()
+    w = bar.get_width()
+    y = bar.get_y()
+    ax.annotate(
+        text=fmt.format(w),
+        xy=(w, y + h / 2),
+        xycoords="data",
+        ha='left',
+        va='center_baseline',
+        # offset text 8pts to the top
+        xytext=(3, 0),
+        textcoords="offset points"
+    )
+
+
 def sns_plot_value_count_comparison(
     df: pd.DataFrame,
     title: Optional[str] = None,
     order: Optional[list] = None,
     fmt: Optional[str] = None,
     rc: Optional[Dict[str, Any]] = None,
+    orientation: str = "vertical",
 ) -> None:
     check_df_is_stacked(df)
     if fmt is None:
         fmt = "{:.1f}" if df.dtypes[-1] == 'float64' else "{:.0f}"
     if title is None:
         title = df.columns[0]
+    if orientation not in {"horizontal", "vertical", "h", "v"}:
+        raise ValueError(f"Orientation must be one of {'horizontal', 'vertical'}, not: {orientation}")
+    x = df.columns[0]
+    y = df.columns[-1]
+    annotate_func = _annotate_bar
+    if orientation in {"horizontal", "h"}:
+        x, y = y, x
+        annotate_func = _annotate_vertical_bar
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
         plot = sns.catplot(
             data=df,
             kind="bar",
-            x=df.columns[0],
-            y=df.columns[-1],
+            x=x,
+            y=y,
             hue=df.columns[1],
             order=order,
             palette="dark",
@@ -100,21 +142,8 @@ def sns_plot_value_count_comparison(
         plot.ax.set_ylabel('')
         plot.ax.legend(loc="best", title="Source")
         plot.ax.set_title(title)
-        # adapted from: https://stackoverflow.com/questions/39444665/add-data-labels-to-seaborn-factor-plot
-        for i, bar in enumerate(plot.ax.patches):
-            h = bar.get_height()
-            w = bar.get_width()
-            x = bar.get_x()
-            plot.ax.annotate(
-                text=fmt.format(h),
-                xy=(x + w / 2, h),
-                xycoords="data",
-                ha='center',
-                va='center_baseline',
-                # offset text 8pts to the top
-                xytext=(0, 8),
-                textcoords="offset points"
-             )
+        for bar in plot.ax.patches:
+            annotate_func(bar, plot.ax, fmt)
 
 
 def sns_plot_salary_medians(
