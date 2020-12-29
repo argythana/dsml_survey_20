@@ -37,6 +37,20 @@ SALARY_THRESHOLDS = {
 }
 REVERSE_SALARY_THRESHOLDS = {v: k for (k, v) in SALARY_THRESHOLDS.items()}
 
+CODE_EXP_LEVELS={
+    'minimum': ['0', '< 1'],
+    'basic': ['2-3', '3-5'],
+    'intermediate': ['5-10'],
+    'advanced': ['10-20', '20+']
+}
+
+ML_EXP_LEVELS={
+    'minimum': ['0', '< 1'],
+    'basic': ['2-3'],
+    'intermediate': ['3-4', '4-5'],
+    'advanced': ['5-10', '10-20', '20+']
+}
+
 _KAGGLE_ROLES = set(
     [
         "Business Analyst",
