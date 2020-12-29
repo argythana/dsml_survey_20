@@ -117,12 +117,16 @@ def sns_plot_value_count_comparison(
         title = df.columns[0]
     if orientation not in {"horizontal", "vertical", "h", "v"}:
         raise ValueError(f"Orientation must be one of {'horizontal', 'vertical'}, not: {orientation}")
-    x = df.columns[0]
-    y = df.columns[-1]
-    annotate_func = _annotate_bar
     if orientation in {"horizontal", "h"}:
-        x, y = y, x
+        x = df.columns[-1]
+        y = df.columns[0]
         annotate_func = _annotate_horizontal_bar
+        order = natsort.natsorted(df[y].unique())
+    else:
+        x = df.columns[0]
+        y = df.columns[-1]
+        annotate_func = _annotate_bar
+        order = natsort.natsorted(df[x].unique())
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
         plot = sns.catplot(
             data=df,
