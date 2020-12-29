@@ -4,6 +4,7 @@ import pandas as pd
 
 from .paths import DATA
 from .third_party import load_mean_salary_comparison_df
+from .utils import stack_value_count_df
 
 from typing import List
 
@@ -338,4 +339,15 @@ def load_salary_medians_df(
         func = lambda v: get_threshold(v, offset=0)
         df.loc[nan_labels, "salary"] = df.loc[nan_labels, "salary"].apply(func)
         df.loc[nan_labels, "label"] = df.loc[nan_labels, "salary"].map(REVERSE_SALARY_THRESHOLDS)
+    return df
+
+
+def load_participants_per_country_df(original: pd.DataFrame, filtered: pd.DataFrame, min_no_participants: int):
+    original_value_count = (original.country.value_counts(True) * 100).rename_axis("country").reset_index(name="original")
+    filtered_value_count = (filtered.country.value_counts(True) * 100).rename_axis("country").reset_index(name="filtered")
+    countries = original_value_count[original_value_count.original > min_no_participants].country
+    df = pd.merge(original_value_count, filtered_value_count, how="left", on="country")
+    df = df[df.country.isin(countries)]
+    df = df.fillna(0)  # nan should present themselves if a country is "eliminated" in the filtered dataset
+    df = stack_value_count_df(df, y_label="No. Participants")
     return df
