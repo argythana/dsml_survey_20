@@ -68,14 +68,14 @@ SALARY_AGGREGATE_BINS = {
 }
 
 CODE_EXP_LEVELS={
-    'minimum': ['0', '< 1'],
+    'minimum': ['0', '0-1'],
     'basic': ['2-3', '3-5'],
     'intermediate': ['5-10'],
     'advanced': ['10-20', '20+']
 }
 
 ML_EXP_LEVELS={
-    'minimum': ['0', '< 1'],
+    'minimum': ['0', '0-1'],
     'basic': ['2-3'],
     'intermediate': ['3-4', '4-5'],
     'advanced': ['5-10', '10-20', '20+']
@@ -189,9 +189,9 @@ def load_udf() -> pd.DataFrame:
     # Modify format to be similar and DNRY
     # This way, we minimize errors that may be caused by human typing,
     # e.g. in the executive summary p. 10, machine learning experience class from 10-20 years is referenced as 10-15 years
-    df.code_exp = df.code_exp.replace({"< 1 year": "< 1", "I have never written code": "0"}).str.replace(" years", "")
+    df.code_exp = df.code_exp.replace({"< 1 years": "0-1", "I have never written code": "0"}).str.replace(" years", "")
     df.ml_exp = df.ml_exp.replace(
-        {"Under 1 year": "< 1", "20 or more years": "20+", "I do not use machine learning methods": "0"}
+        {"Under 1 year": "0-1", "20 or more years": "20+", "I do not use machine learning methods": "0"}
     ).str.replace(" years", "")
 
     # Refine Company employment size values
@@ -243,7 +243,7 @@ def filter_df(df: pd.DataFrame, print_filters=False) -> pd.DataFrame:
     temp_df = df.iloc[:, 7:-5]
     only_answer_demographic = ((temp_df == "None") | temp_df.isnull()).all(axis=1)
     # Basic conditions
-    low_exp_bins = ["0", "< 1", "1-2"]
+    low_exp_bins = ["0", "0-1", "1-2"]
     is_low_exp = df.code_exp.isin(low_exp_bins) & (df.ml_exp.isin(low_exp_bins) | df.ml_exp.isna())
     high_exp_bins = ["10-20", "20+"]
     is_high_exp = df.code_exp.isin(high_exp_bins) | df.ml_exp.isin(high_exp_bins)
