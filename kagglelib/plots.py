@@ -94,6 +94,8 @@ def sns_plot_value_count_comparison(
             legend=False,
         )
         # plot.despine(left=True)
+        plot.ax.set_xlabel('')
+        plot.ax.set_ylabel('')
         plot.ax.legend(loc="best", title="Source")
         plot.ax.set_title(title)
         # plot.set_axis_labels(x_label, y_label)
@@ -104,9 +106,9 @@ def sns_plot_value_count_comparison(
             plot.ax.text(
                 x=bar.get_x() + bar.get_width() / 2,
                 y=h + 0.35,
-                s=f"{h:.1f}",  # the label
+                s=f"{h:.1f}" if df.dtypes[-1]=='float64' else f"{h:.0f}",
                 ha="center",
-                va="center",
+                va="center" if df.dtypes[-1]=='float64' else "bottom",
                 # fontweight='bold',
             )
 
