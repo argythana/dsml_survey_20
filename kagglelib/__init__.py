@@ -34,5 +34,7 @@ from .third_party import load_oecd_df
 from .third_party import load_numbeo_df
 from .third_party import load_ilo_df
 from .third_party import load_mean_salary_comparison_df
+from .utils import get_value_count_df
+from .utils import stack_value_count_df
 
 
