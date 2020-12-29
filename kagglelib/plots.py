@@ -32,6 +32,8 @@ MPL_RC = {
 
 
 def check_df_is_stacked(df: pd.DataFrame) -> None:
+    if len(df.columns) < 3:
+        raise ValueError(f"The stacked dataframes need at least 3 columns: {df.columns}")
     if len(df) > 50:
         raise ValueError(f"You probably don't want to create a Bar plot with 50+ bins: {len(df)}")
 
