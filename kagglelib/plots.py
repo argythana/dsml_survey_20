@@ -1,5 +1,6 @@
 import holoviews as hv
 import matplotlib.pyplot as plt
+import natsort
 import seaborn as sns
 import pandas as pd
 
