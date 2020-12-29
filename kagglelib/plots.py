@@ -72,7 +72,7 @@ def get_mpl_rc(rc: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def sns_plot_value_count_comparison(
-    df: pd.DataFrame, title: Optional[str] = None, rc: Optional[Dict[str, Any]] = None
+    df: pd.DataFrame, title: Optional[str] = None, order: Optional[list] = None, rc: Optional[Dict[str, Any]] = None
 ) -> None:
     check_df_is_stacked(df)
     column = df.columns[0]
@@ -83,6 +83,8 @@ def sns_plot_value_count_comparison(
             data=df,
             kind="bar",
             x=df.columns[0],
+            order=order,
+            #order=["0", "1-2", "3-5", "5-10", "10-20", "20+"], #eg for code_exp
             y=df.columns[-1],
             hue=df.columns[1],
             palette="dark",
