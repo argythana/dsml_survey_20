@@ -73,31 +73,27 @@ def sns_plot_value_count_comparison(
     df: pd.DataFrame, title: Optional[str] = None, order: Optional[list] = None, rc: Optional[Dict[str, Any]] = None
 ) -> None:
     check_df_is_stacked(df)
-    column = df.columns[0]
     if title is None:
-        title = column
+        title = df.columns[0]
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
         plot = sns.catplot(
             data=df,
             kind="bar",
             x=df.columns[0],
-            order=order,
-            #order=["0", "1-2", "3-5", "5-10", "10-20", "20+"], #eg for code_exp
             y=df.columns[-1],
             hue=df.columns[1],
+            order=order,
             palette="dark",
             alpha=0.6,
             height=8,
             aspect=2.0,
             legend=False,
         )
-        # plot.despine(left=True)
+        # Remove Labels from X and Y axes (we should have the relevant info on the title)
         plot.ax.set_xlabel('')
         plot.ax.set_ylabel('')
         plot.ax.legend(loc="best", title="Source")
         plot.ax.set_title(title)
-        # plot.set_axis_labels(x_label, y_label)
-
         # adapted from: https://stackoverflow.com/questions/39444665/add-data-labels-to-seaborn-factor-plot
         for i, bar in enumerate(plot.ax.patches):
             h = bar.get_height()
