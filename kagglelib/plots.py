@@ -70,9 +70,15 @@ def get_mpl_rc(rc: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def sns_plot_value_count_comparison(
-    df: pd.DataFrame, title: Optional[str] = None, order: Optional[list] = None, rc: Optional[Dict[str, Any]] = None
+    df: pd.DataFrame,
+    title: Optional[str] = None,
+    order: Optional[list] = None,
+    fmt: Optional[str] = None,
+    rc: Optional[Dict[str, Any]] = None,
 ) -> None:
     check_df_is_stacked(df)
+    if fmt is None:
+        fmt = "{:.1f}" if df.dtypes[-1] == 'float64' else "{:.0f}"
     if title is None:
         title = df.columns[0]
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
@@ -97,14 +103,18 @@ def sns_plot_value_count_comparison(
         # adapted from: https://stackoverflow.com/questions/39444665/add-data-labels-to-seaborn-factor-plot
         for i, bar in enumerate(plot.ax.patches):
             h = bar.get_height()
-            plot.ax.text(
-                x=bar.get_x() + bar.get_width() / 2,
-                y=h + 0.35,
-                s=f"{h:.1f}" if df.dtypes[-1]=='float64' else f"{h:.0f}",
-                ha="center",
-                va="center" if df.dtypes[-1]=='float64' else "bottom",
-                # fontweight='bold',
-            )
+            w = bar.get_width()
+            x = bar.get_x()
+            plot.ax.annotate(
+                text=fmt.format(h),
+                xy=(x + w / 2, h),
+                xycoords="data",
+                ha='center',
+                va='center_baseline',
+                # offset text 8pts to the top
+                xytext=(0, 8),
+                textcoords="offset points"
+             )
 
 
 def sns_plot_salary_medians(
