@@ -68,25 +68,25 @@ SALARY_AGGREGATE_BINS = {
 }
 
 CODE_EXP_LEVELS={
-    "0": "low",
-    "0-1": "low",
-    "1-2": "low",
-    "3-5": "intermediate",
-    "5-10": "intermediate",
-    "10-20": "advanced",
-    "20+": "advanced",
+    "0": "0. no XP",
+    "0-1": "0. no XP",
+    "1-2": "1. low XP",
+    "3-5": "2. med XP",
+    "5-10": "2. med XP",
+    "10-20": "3. high XP",
+    "20+": "3. high XP",
 }
 
 ML_EXP_LEVELS={
-    "0": "low",
-    "0-1": "low",
-    "1-2": "low",
-    "2-3": "low",
-    "3-4": "intermediate",
-    "4-5": "intermediate",
-    "5-10": "intermediate",
-    "10-20": "advanced",
-    "20+": "advanced",
+    "0": "0. no XP",
+    "0-1": "0. no XP",
+    "1-2": "1. low XP",
+    "2-3": "1. low XP",
+    "3-4": "2. med XP",
+    "4-5": "2. med XP",
+    "5-10": "3. high XP",
+    "10-20": "3. high XP",
+    "20+": "3. high XP",
 }
 
 _KAGGLE_ROLES = set(
