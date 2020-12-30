@@ -68,17 +68,25 @@ SALARY_AGGREGATE_BINS = {
 }
 
 CODE_EXP_LEVELS={
-    'minimum': ['0', '0-1'],
-    'basic': ['2-3', '3-5'],
-    'intermediate': ['5-10'],
-    'advanced': ['10-20', '20+']
+    "0": "low",
+    "0-1": "low",
+    "1-2": "low",
+    "3-5": "intermediate",
+    "5-10": "intermediate",
+    "10-20": "advanced",
+    "20+": "advanced",
 }
 
 ML_EXP_LEVELS={
-    'minimum': ['0', '0-1'],
-    'basic': ['2-3'],
-    'intermediate': ['3-4', '4-5'],
-    'advanced': ['5-10', '10-20', '20+']
+    "0": "low",
+    "0-1": "low",
+    "1-2": "low",
+    "2-3": "low",
+    "3-4": "intermediate",
+    "4-5": "intermediate",
+    "5-10": "intermediate",
+    "10-20": "advanced",
+    "20+": "advanced",
 }
 
 _KAGGLE_ROLES = set(
@@ -193,6 +201,11 @@ def load_udf() -> pd.DataFrame:
     df.ml_exp = df.ml_exp.replace(
         {"Under 1 year": "0-1", "20 or more years": "20+", "I do not use machine learning methods": "0"}
     ).str.replace(" years", "")
+    # Add code_level and ml_level columns
+    df = df.assign(
+        code_level=df.code_exp.map(CODE_EXP_LEVELS),
+        ml_level=df.ml_exp.map(ML_EXP_LEVELS),
+    )
 
     # Refine Company employment size values
     df.employees = (
