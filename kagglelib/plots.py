@@ -113,6 +113,7 @@ def sns_plot_value_count_comparison(
     rc: Optional[Dict[str, Any]] = None,
     orientation: str = "vertical",
     legend_location: str = "best",
+    x_ticklabels_rotation: int = 0,
 ) -> None:
     check_df_is_stacked(df)
     if fmt is None:
@@ -148,6 +149,8 @@ def sns_plot_value_count_comparison(
         # Remove Labels from X and Y axes (we should have the relevant info on the title)
         plot.ax.set_xlabel('')
         plot.ax.set_ylabel('')
+        if x_ticklabels_rotation != 0:
+            plot.ax.set_xticklabels(plot.ax.get_xticklabels(), rotation=x_ticklabels_rotation)
         plot.ax.legend(loc=legend_location, title="Source")
         plot.ax.set_title(title)
         for bar in plot.ax.patches:
