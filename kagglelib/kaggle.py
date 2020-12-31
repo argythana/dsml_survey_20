@@ -253,7 +253,7 @@ def filter_df(df: pd.DataFrame, print_filters=False) -> pd.DataFrame:
     # Remove those who only answered "demographic" questions
     # Q7 is the first non-demographic question
     # While 5 are the "threshold" columns which were appended at the end
-    temp_df = df.iloc[:, 7:-5]
+    temp_df = df.iloc[:, 7:-8]
     only_answer_demographic = ((temp_df == "None") | temp_df.isnull()).all(axis=1)
     # Basic conditions
     low_exp_bins = ["0", "0-1", "1-2"]
