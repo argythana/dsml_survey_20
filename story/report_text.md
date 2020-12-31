@@ -16,32 +16,29 @@
 
 ## Overview
 
-The Kaggle DS & ML Survey is an open online survey receiving thousands of responses from all over the world.
-In its uniqueness if offers valuable insights to all interested parties.
+The Kaggle DS & ML Survey is an open online survey receiving thousands of responses from all over the world, offering unique insights.
 
-Being a global online survey it is affected by a factor that Machine Learning is famous for mitigating: spam, and user error. According to the "Kaggle Survey Methodology", "spam" has been excluded from the results.
+Being a global online survey it is affected by a factor that Machine Learning is famous for mitigating: spam, and user error. According to the Survey Methodology, "spam" has been excluded from the data.
 
-Using Exploratory Data Analysis (EDA) we find that a large part of the data can be classified either as spam or as abnormal, irregular values, without dropping any observations that may be outliers.
+Using Exploratory Data Analysis (EDA) we find that without dropping possible outliers, a large part of the data should be excluded as spam or as having abnormal, irregular values.
 
-We identify ... of such observations and after filtering them we get significantly different results than the "Executive Summary" and any other EDA, that does not filter out the data.
+We identify ... of such observations and after filtering them we get significantly different results than the "Executive Summary" and any other EDA, that does not filter the data.
 
-We explore the data by taking into account the wide global diversity by grouping countries according to the World Bank "Income Groups" definition. 
+Then, focusing on the issue of compensation, we explore the data accounting for the wide global diversity by grouping countries according to the World Bank "Income Groups" definition.
 
-We reconstruct the various classes (bins) in which the data are provided, accounting for their width.
+We also reconstruct the various classes (bins) in which the data are provided, accounting for their width and their underlying properties.
 
 Since the weight of observations from the USA is disproportional, we exclude the USA from the global aggregates, offering a different view on the pronounced symmetric difference.
 
-Combining these four features, our results diverge by many degrees from the "Executive Summary" ones, especially with regard to the issue of DS & ML compensation levels.
+Combining these four features, our results diverge by many degrees from the "Executive Summary" ones, especially with regard to the issue of compensation levels.
 
-To get a clearer view on the issue of compensation, we examine all other occupations as well.
+Our findings add to the understanding of the data, providing information to students, professionals and interested companies in order to optimize their strategical behavior.
 
-Our findings add to the understanding of the data, providing information to students, professionals and interested companies in order to optimize their strategical behaviour.
-
-To assist interested parties with reproducing our methodology we have created a dedicated python "Survey library".
-We created dedicated functions, which may be parameterized and reused, in order to set various spam filtering thresholds and select different subsets of the data.
+To assist with reproducing our methodology we have created a dedicated python "library" with functions, which may be parameterized and reused, in order to set various spam filtering thresholds and select different subsets of the data.
 
 In Appendix A we explain out methodology in detail and in Appendix B, we provide another result of our analysis;
-a comprehensive set of suggestions for future Kaggle online surveys.
+a comprehensive set of suggestions for future surveys.
+
 
 
 ## 1. Key differences in Methodology
@@ -50,24 +47,44 @@ a comprehensive set of suggestions for future Kaggle online surveys.
 
 A key difference of our analysis is that the first part of our data exploration is dedicated to exploring abnormal/invalid observation values that have not be flagged as spam by the survey system, but should be excluded from the data nevertheless.
 
-The number or observation errors, their values and the criteria that had to be established, highlight the complexity and the paramount importance of exploring the data for invalid values and cleaning them before embarking on any other kind of analysis.
+The number of observation unacceptable values and the criteria that had to be set, highlight the complexity and the paramount importance of exploring the data for invalid values and cleaning them before embarking on any other kind of analysis.
 
-The criteria to clean the data that we use are:
+The criteria we use to clean the data are:
 
-+ Participants who did not actually complete the survey but stopped after answering the first set of general demographic questions and no other relevant information that would add any value concerning the DS & ML Survey. We decided to drop these observations as they offer no information whatsoever about any other in questions, as spam or irrelevant. A large part of these observations "completed" the Survey in less that 30 seconds.
++ Participants who did not actually complete the survey but stopped after answering the first set of general demographic questions and no other relevant information that adds any value concerning DS & ML. We drop these irrelevant observations values as they offer no information whatsoever about any other in questions. A large part of these observations "completed" the Survey in less that 30 seconds.
+
+```python  
+
+code here
+```
 
 + Participants that are too young for their experience (in Programming or Machine Learning). Obviously, it is impossible to be 24 years old or less and have 20+ years of experience.
 
-+ Participants whose salary, experience, age and country of residence are mutually exclusive. These criteria are adjusted for differences in country salary levels. Using official sources, we create an "average salary" threshold for each country. Then, to avoid excluding outliers, we set the "lower than average" threshold to be one level below the average one or two levels for lower income countries. Accordingly, we exclude observations with salary lower than one third of the threshold that lies one or two levels below the average one.
+```python  
 
-As mentioned above, our classification rules are intentionally too lenient and should most probably be much stricter.
+code here
+```
 
-This can be done in the spot, by setting a different parameter in the relevant dedicated filtering function. Nevertheless, even with minimum strictness we get significantly different results than any other EDA that uses the data as is.
-For a detailed review of the various third party datasets and the methodology applied, please review the code submitted or read Appendix A.
++ Participants whose salary, experience, age and country of residence are mutually exclusive. These criteria are adjusted for differences in country salary levels, using official data where available. As an example, it is impossible to be less than 21 with no experience whatsoever and earn above 500,000 usd, in any country in the world. Likewise, it is impossible to reside in the US, have more than 10 years experience in Programming and earn less than 1000 usd per year.
 
-The significance of these observations depends on the overall size of the subset they belong to and the metric that is calculated and they have a substantial impact on Survey results. For example, a salary of $500,000 outweighs 100 observations of salary of $5000. Similarly, dropping 10 observations from a range of 15 observations, means that the size of this category is only one third of its initial unfiltered size.
+```python  
+
+code here
+```
+
+As mentioned above, our classification rules are intentionally too lenient and could most probably be much stricter. This can be done in the spot, by setting a different parameter in the relevant dedicated filtering function. Nevertheless, even with minimum strictness we get significantly different results than any other EDA that uses the data as is.
+
+For a detailed review of the various third party data sets and the methodology applied, please review the code submitted or read Appendix A.
+
+The significance of these observations depends on the overall size of the subset they belong to and the metric that is calculated and they have a substantial impact on Survey results. For example, a salary of $500,000 outweighs 100 observations of salary of $5000. Similarly, dropping 10 observations from a range of 15 observations, means that the size of the category is one third of its initial unfiltered size.
 
 In total, we drop ... observations and the new data set contains .... rows.
+
+```python  
+
+code here
+```
+
 
 
 ### b) Adjusting for cross-country economic differences
@@ -76,18 +93,26 @@ The importance of meaningful information on compensation levels cannot be unders
 
 This allows us in turn to explore the difference that experience levels have on salary in each countries income group.
 
+```python
+
+code here
+
+```
+
 
 ### c) Reconstruction of data aggregated bins (classes)
 
+Using different classes width for aggregating observation can be convenient and informative, but comes with a trade-off. A large amount of information is lost. This may lead to over or under representation of aggregated data depending on the relative width difference and the number of observations. This may lead to distortion of summarized information and optical "illusions" in visual representations
 
+We reconstruct bins using various ways where we find this phenomenon to exist in the data and we gain new and different information.
 
 
 
 ### d) Explore the USA versus the Rest of the World symmetric differences
 
+When comparing the aggregate metrics of a subset of the data with the overall aggregates we examine whether the subset in question influences heavily the aggregated values. For a subset with a low number of observations, it is informative for the subset to compare it to the total and find what how it measures against it.
 
-
-
+For a subset with substantial weight this information is distorted by the fact that the subset defines the total to a significant degree. In this case, comparing the symmetric difference can add valuable information for both sides. Therefore, when comparing the USA, we exclude it from the total.
 
 
 
@@ -139,7 +164,10 @@ Also, there are hundreds of observations in the US stating high experience with 
 
 Many of these invalid values are in the same submission row, a fact that adds support to the decision to exclude them from the data. As a result, the number of observations that are dropped using each category of spam depends on the order of dropping it.
 
-A characteristic example is:   
+A characteristic example is:
+
+
+Using official sources, we create an "average salary" threshold for each country. Then, to avoid excluding outliers, we set the "lower than average" threshold to be one level below the average level and two levels for lower income countries. using the lower than average thresholds, we exclude observations with salary lower than one third of the defined threshold, only for participants with experience more than 10 years. 
   
 The significance of these observations depends on the overall size of the subset they belong to and the metric that is calculated.
 For example, the average salary of someone with 500000$ outweighs 100 observations of salary of $ 5000.
