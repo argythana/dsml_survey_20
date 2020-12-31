@@ -153,15 +153,16 @@ def get_threshold(value: float, offset: int = 1):
 @functools.lru_cache(maxsize=1)
 def load_thresholds_df(
     low_salary_percentage: float = 0.33,
-    low_salary_high_exp_offset: int = 2,
+    threshold_offset: int = 2,
     high_salary_low_exp_threshold: int = 500000,
 ) -> pd.DataFrame:
     df = load_mean_salary_comparison_df()
     df = df[["country", "income_group", "country_avg_salary"]]
     df = df.append(dict(country="Other", country_avg_salary=3500), ignore_index=True)
     df = df.assign(
-        too_low_salary=(low_salary_percentage * df.country_avg_salary).apply(get_threshold),
-        low_salary_high_exp=df.country_avg_salary.apply(lambda x: get_threshold(x, low_salary_high_exp_offset)),
+        #too_low_salary=(low_salary_percentage * df.country_avg_salary).apply(get_threshold),
+        too_low_salary=(low_salary_percentage * df.country_avg_salary).apply(lambda x: get_threshold(x, threshold_offset)),
+        low_salary_high_exp=df.country_avg_salary.apply(lambda x: get_threshold(x, threshold_offset)),
         high_salary_low_exp=high_salary_low_exp_threshold,
     )
     return df
