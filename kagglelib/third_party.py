@@ -100,6 +100,6 @@ def load_mean_salary_comparison_df():
     numbeo = load_numbeo_df()
     df = pd.concat([income_group.income_group, eurostat.eurostat, oecd.oecd, ilo.ilo, numbeo.numbeo], axis="columns")
     df.index.name = "country"
-    df = df.assign(avg_salary=df.bfill(axis=1).iloc[:, 1])
+    df = df.assign(country_avg_salry=df.bfill(axis=1).iloc[:, 1])
     df = df.reset_index(drop=False)
     return df
