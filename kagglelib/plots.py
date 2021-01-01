@@ -112,18 +112,10 @@ def _set_bar_width(bar, width: float) -> None:
     bar.set_x(bar.get_x() + diff / 2)  # we recenter the bar
 
 
-def _get_fig_and_ax(width: Optional[float], height: Optional[float]):
-    if width and height:
-        fig, ax = plt.subplots(figsize=(width, height))
-    else:
-        fig, ax = plt.subplots()
-    return fig, ax
-
-
 def sns_plot_value_count_comparison(
     df: pd.DataFrame,
-    width: Optional[float] = None,
-    height: Optional[float] = None,
+    width: float,
+    height: float,
     ax: Optional[mpl.axes.Axes] = None,
     title: Optional[str] = None,
     order_by_labels: bool = True,
@@ -153,7 +145,7 @@ def sns_plot_value_count_comparison(
         order = natsort.natsorted(df[x].unique())
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
         if ax is None:
-            fig, ax = _get_fig_and_ax(width=width, height=height)
+            fig, ax = plt.subplots(figsize=(width, height))
         sns.barplot(
             data=df,
             ax=ax,
