@@ -243,9 +243,12 @@ def load_udf() -> pd.DataFrame:
         }
     )
 
-    # Merge df with the threshold values
+    # Merge df with the threshold values and keep the same index
     thresholds = load_thresholds_df()
-    df = pd.merge(df, thresholds, how="inner", on="country")
+    df = pd.merge(df, thresholds, how="left", on="country")
+    assert len(df) == 20036, f"The length of df is not 20036: {len(df)}"
+    assert list(df.country.tail(3)) == list(orig.Q3.tail(3)), set(df.country.tail(3)) - set(orig.Q3.tail(3))
+    assert df.country_avg_salary.isna().sum() == 0, "There are misspelled countries"
 
     return df
 
