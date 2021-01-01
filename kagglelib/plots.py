@@ -106,6 +106,12 @@ def _annotate_horizontal_bar(bar, ax, fmt) -> None:
     )
 
 
+def _set_bar_width(bar, width: float) -> None:
+    diff = bar.get_width() - width
+    bar.set_width(width)  # we change the bar width
+    bar.set_x(bar.get_x() + diff / 2)  # we recenter the bar
+
+
 def _get_fig_and_ax(width: Optional[float], height: Optional[float]):
     if width and height:
         fig, ax = plt.subplots(figsize=(width, height))
@@ -126,6 +132,7 @@ def sns_plot_value_count_comparison(
     orientation: str = "vertical",
     legend_location: str = "best",
     x_ticklabels_rotation: int = 0,
+    bar_width: Optional[float] = None,
 ) -> None:
     if orientation not in {"horizontal", "vertical", "h", "v"}:
         raise ValueError(f"Orientation must be one of {'horizontal', 'vertical'}, not: {orientation}")
@@ -166,6 +173,8 @@ def sns_plot_value_count_comparison(
         ax.set_title(title)
         for bar in ax.patches:
             annotate_func(bar, ax, fmt)
+            if bar_width:
+                _set_bar_width(bar, width=bar_width)
 
 
 def sns_plot_salary_medians(
