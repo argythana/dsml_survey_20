@@ -7,6 +7,8 @@ from .third_party import load_mean_salary_comparison_df
 from .utils import stack_value_count_df
 
 from typing import List
+from typing import Optional
+from typing import Union
 
 
 SALARY_THRESHOLDS = {
@@ -370,4 +372,49 @@ def load_participants_per_country_df(original: pd.DataFrame, filtered: pd.DataFr
     df = df[df.country.isin(countries)]
     df = df.fillna(0)  # nan should present themselves if a country is "eliminated" in the filtered dataset
     df = stack_value_count_df(df, y_label="No. Participants")
+    return df
+
+
+def load_median_salary_per_income_group_per_XP_level_df(
+    dataset: pd.DataFrame,
+    xp_type: str,
+    income_group: Optional[str] = None,
+) -> None:
+    """
+    ## Examples
+
+    kglib.load_median_salary_per_income_group_per_XP_level_df(uds, xp_type="code", income_group="3")
+    kglib.load_median_salary_per_income_group_per_XP_level_df(uds, xp_type="ml", income_group="3")
+    kglib.load_median_salary_per_income_group_per_XP_level_df(uds, xp_type="ml")
+    """
+    assert xp_type in ("code", "ml"), "xp_type should be in {'code_level', 'ml_level'}, not: %s" % xp_type
+    variable = "code_level" if xp_type == "code" else "ml_level"
+    if income_group:
+        dataset = dataset[~dataset.salary.isna() & dataset.income_group.str.startswith(income_group)]
+    df = dataset.groupby([variable, "income_group"]).salary_threshold.median().reset_index()
+    df = df.sort_values(by=[variable, "income_group"])
+    return df
+
+
+def load_median_salary_comparison_df(
+    dataset1: pd.DataFrame,
+    dataset2: pd.DataFrame,
+    xp_type: str,
+    income_group: str,
+) -> pd.DataFrame:
+    """
+    ## Examples
+
+        df = kglib.load_median_salary_comparison_df(uds, fds, xp_type="code", income_group="3")
+        kglib.sns_plot_value_count_comparison(
+            df, height=8, width=18, bar_width=0.35, title_wrap_length=80,
+            title="Data Scientists: Median salary per Code XP level in High Income countries Filtered vs Unfiltered datasets"
+        )
+    """
+    df1 = load_median_salary_per_income_group_per_XP_level_df(dataset=dataset1, xp_type=xp_type, income_group=income_group)
+    df2 = load_median_salary_per_income_group_per_XP_level_df(dataset=dataset2, xp_type=xp_type, income_group=income_group)
+    df = pd.merge(df1, df2, on=["code_level", "income_group"])
+    df = df.drop(columns="income_group")
+    df.columns = ["code_level", "filtered", "unfiltered"]
+    df = stack_value_count_df(df, "salary_threshold")
     return df
