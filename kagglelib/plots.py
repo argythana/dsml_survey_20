@@ -134,13 +134,13 @@ def sns_plot_value_count_comparison(
     x_ticklabels_rotation: int = 0,
     bar_width: Optional[float] = None,
 ) -> None:
-    if orientation not in {"horizontal", "vertical", "h", "v"}:
-        raise ValueError(f"Orientation must be one of {'horizontal', 'vertical'}, not: {orientation}")
     check_df_is_stacked(df)
     if fmt is None:
         fmt = "{:.1f}" if df.dtypes[-1] == 'float64' else "{:.0f}"
     if title is None:
         title = df.columns[0]
+    if orientation not in {"horizontal", "vertical", "h", "v"}:
+        raise ValueError(f"Orientation must be one of {'horizontal', 'vertical'}, not: {orientation}")
     if orientation in {"horizontal", "h"}:
         x = df.columns[-1]
         y = df.columns[0]
