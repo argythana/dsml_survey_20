@@ -1,4 +1,5 @@
 import holoviews as hv
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import natsort
 import seaborn as sns
@@ -105,8 +106,19 @@ def _annotate_horizontal_bar(bar, ax, fmt) -> None:
     )
 
 
+def _get_fig_and_ax(width: Optional[float], height: Optional[float]):
+    if width and height:
+        fig, ax = plt.subplots(figsize=(width, height))
+    else:
+        fig, ax = plt.subplots()
+    return fig, ax
+
+
 def sns_plot_value_count_comparison(
     df: pd.DataFrame,
+    width: Optional[float] = None,
+    height: Optional[float] = None,
+    ax: Optional[mpl.axes.Axes] = None,
     title: Optional[str] = None,
     order_by_labels: bool = True,
     fmt: Optional[str] = None,
@@ -133,28 +145,27 @@ def sns_plot_value_count_comparison(
         annotate_func = _annotate_bar
         order = natsort.natsorted(df[x].unique())
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
-        plot = sns.catplot(
+        if ax is None:
+            fig, ax = _get_fig_and_ax(width=width, height=height)
+        sns.barplot(
             data=df,
-            kind="bar",
+            ax=ax,
             x=x,
             y=y,
             hue=df.columns[1],
             order=order if order_by_labels else None,
             palette="dark",
             alpha=0.6,
-            height=8,
-            aspect=2.0,
-            legend=False,
         )
         # Remove Labels from X and Y axes (we should have the relevant info on the title)
-        plot.ax.set_xlabel('')
-        plot.ax.set_ylabel('')
+        ax.set_xlabel('')
+        ax.set_ylabel('')
         if x_ticklabels_rotation != 0:
-            plot.ax.set_xticklabels(plot.ax.get_xticklabels(), rotation=x_ticklabels_rotation)
-        plot.ax.legend(loc=legend_location, title="Source")
-        plot.ax.set_title(title)
-        for bar in plot.ax.patches:
-            annotate_func(bar, plot.ax, fmt)
+            ax.set_xticklabels(ax.get_xticklabels(), rotation=x_ticklabels_rotation)
+        ax.legend(loc=legend_location, title="Source")
+        ax.set_title(title)
+        for bar in ax.patches:
+            annotate_func(bar, ax, fmt)
 
 
 def sns_plot_salary_medians(
