@@ -13,6 +13,7 @@ import seaborn as sns
 from holoviews import opts as hv_opts
 
 from .kaggle import SALARY_THRESHOLDS
+from .kaggle import REVERSE_SALARY_THRESHOLDS
 from .kaggle import load_orig_kaggle_df
 from .kaggle import load_questions_df
 from .kaggle import get_threshold
