@@ -1,5 +1,5 @@
 Economy,Income group
-Afghanistan,0. Lowincome
+Afghanistan,0. Low income
 Albania,2. Upper middle income
 Algeria,1. Lower middle income
 American Samoa,2. Upper middle income
@@ -29,21 +29,21 @@ Brazil,2. Upper middle income
 British Virgin Islands,3. High income
 Brunei Darussalam,3. High income
 Bulgaria,2. Upper middle income
-Burkina Faso,0. Lowincome
-Burundi,0. Lowincome
+Burkina Faso,0. Low income
+Burundi,0. Low income
 Cabo Verde,1. Lower middle income
 Cambodia,1. Lower middle income
 Cameroon,1. Lower middle income
 Canada,3. High income
 Cayman Islands,3. High income
-Central African Republic,0. Lowincome
-Chad,0. Lowincome
+Central African Republic,0. Low income
+Chad,0. Low income
 Channel Islands,3. High income
 Chile,3. High income
 China,2. Upper middle income
 Colombia,2. Upper middle income
 Comoros,1. Lower middle income
-"Congo, Dem. Rep.",0. Lowincome
+"Congo, Dem. Rep.",0. Low income
 "Congo, Rep.",1. Lower middle income
 Costa Rica,2. Upper middle income
 Côte d'Ivoire,1. Lower middle income
@@ -60,17 +60,17 @@ Ecuador,2. Upper middle income
 Egypt,1. Lower middle income
 El Salvador,1. Lower middle income
 Equatorial Guinea,2. Upper middle income
-Eritrea,0. Lowincome
+Eritrea,0. Low income
 Estonia,3. High income
 Eswatini,1. Lower middle income
-Ethiopia,0. Lowincome
+Ethiopia,0. Low income
 Faroe Islands,3. High income
 Fiji,2. Upper middle income
 Finland,3. High income
 France,3. High income
 French Polynesia,3. High income
 Gabon,2. Upper middle income
-"Gambia, The",0. Lowincome
+"Gambia, The",0. Low income
 Georgia,2. Upper middle income
 Germany,3. High income
 Ghana,1. Lower middle income
@@ -80,10 +80,10 @@ Greenland,3. High income
 Grenada,2. Upper middle income
 Guam,3. High income
 Guatemala,2. Upper middle income
-Guinea,0. Lowincome
-Guinea-Bissau,0. Lowincome
+Guinea,0. Low income
+Guinea-Bissau,0. Low income
 Guyana,2. Upper middle income
-Haiti,0. Lowincome
+Haiti,0. Low income
 Honduras,1. Lower middle income
 "Hong Kong SAR, China",3. High income
 Hungary,3. High income
@@ -102,7 +102,7 @@ Jordan,2. Upper middle income
 Kazakhstan,2. Upper middle income
 Kenya,1. Lower middle income
 Kiribati,1. Lower middle income
-"Korea, Dem. People's Rep.",0. Lowincome
+"Korea, Dem. People's Rep.",0. Low income
 "Korea, Republic of",3. High income
 Kosovo,2. Upper middle income
 Kuwait,3. High income
@@ -111,17 +111,17 @@ Lao PDR,1. Lower middle income
 Latvia,3. High income
 Lebanon,2. Upper middle income
 Lesotho,1. Lower middle income
-Liberia,0. Lowincome
+Liberia,0. Low income
 Libya,2. Upper middle income
 Liechtenstein,3. High income
 Lithuania,3. High income
 Luxembourg,3. High income
 "Macao SAR, China",3. High income
-Madagascar,0. Lowincome
-Malawi,0. Lowincome
+Madagascar,0. Low income
+Malawi,0. Low income
 Malaysia,2. Upper middle income
 Maldives,2. Upper middle income
-Mali,0. Lowincome
+Mali,0. Low income
 Malta,3. High income
 Marshall Islands,2. Upper middle income
 Mauritania,1. Lower middle income
@@ -133,7 +133,7 @@ Monaco,3. High income
 Mongolia,1. Lower middle income
 Montenegro,2. Upper middle income
 Morocco,1. Lower middle income
-Mozambique,0. Lowincome
+Mozambique,0. Low income
 Myanmar,1. Lower middle income
 Namibia,2. Upper middle income
 Nauru,3. High income
@@ -142,7 +142,7 @@ Netherlands,3. High income
 New Caledonia,3. High income
 New Zealand,3. High income
 Nicaragua,1. Lower middle income
-Niger,0. Lowincome
+Niger,0. Low income
 Nigeria,1. Lower middle income
 North Macedonia,2. Upper middle income
 Northern Mariana Islands,3. High income
@@ -161,7 +161,7 @@ Puerto Rico,3. High income
 Qatar,3. High income
 Romania,3. High income
 Russia,2. Upper middle income
-Rwanda,0. Lowincome
+Rwanda,0. Low income
 Samoa,2. Upper middle income
 San Marino,3. High income
 São Tomé and Principe,1. Lower middle income
@@ -169,32 +169,32 @@ Saudi Arabia,3. High income
 Senegal,1. Lower middle income
 Serbia,2. Upper middle income
 Seychelles,3. High income
-Sierra Leone,0. Lowincome
+Sierra Leone,0. Low income
 Singapore,3. High income
 Sint Maarten (Dutch part),3. High income
 Slovak Republic,3. High income
 Slovenia,3. High income
 Solomon Islands,1. Lower middle income
-Somalia,0. Lowincome
+Somalia,0. Low income
 South Africa,2. Upper middle income
-South Sudan,0. Lowincome
+South Sudan,0. Low income
 Spain,3. High income
 Sri Lanka,1. Lower middle income
 St. Kitts and Nevis,3. High income
 St. Lucia,2. Upper middle income
 St. Martin (French part),3. High income
 St. Vincent and the Grenadines,2. Upper middle income
-Sudan,0. Lowincome
+Sudan,0. Low income
 Suriname,2. Upper middle income
 Sweden,3. High income
 Switzerland,3. High income
-Syrian Arab Republic,0. Lowincome
+Syrian Arab Republic,0. Low income
 Taiwan,3. High income
-Tajikistan,0. Lowincome
+Tajikistan,0. Low income
 Tanzania,1. Lower middle income
 Thailand,2. Upper middle income
 Timor-Leste,1. Lower middle income
-Togo,0. Lowincome
+Togo,0. Low income
 Tonga,2. Upper middle income
 Trinidad and Tobago,3. High income
 Tunisia,1. Lower middle income
@@ -202,7 +202,7 @@ Turkey,2. Upper middle income
 Turkmenistan,2. Upper middle income
 Turks and Caicos Islands,3. High income
 Tuvalu,2. Upper middle income
-Uganda,0. Lowincome
+Uganda,0. Low income
 Ukraine,1. Lower middle income
 United Arab Emirates,3. High income
 UK,3. High income
@@ -214,6 +214,6 @@ Vanuatu,1. Lower middle income
 Viet Nam,1. Lower middle income
 Virgin Islands (U.S.),3. High income
 West Bank and Gaza,1. Lower middle income
-"Yemen, Rep.",0. Lowincome
+"Yemen, Rep.",0. Low income
 Zambia,1. Lower middle income
 Zimbabwe,1. Lower middle income
