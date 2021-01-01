@@ -254,10 +254,13 @@ def load_udf() -> pd.DataFrame:
 
 
 def filter_df(df: pd.DataFrame, print_filters=False) -> pd.DataFrame:
-    # Remove those who only answered "demographic" questions
+    # Remove participants who only answered "demographic" questions
     # Q7 is the first non-demographic question
-    # While 5 are the "threshold" columns which were appended at the end
-    temp_df = df.iloc[:, 7:-8]
+    # We use the "original" dataframe instead of `df` because we add a bunch of extra
+    # columns in `df` (e.g. `salary_threshold`) and we would need to be updating
+    # the index on iloc each time a new column was added.
+    orig = load_orig_kaggle_df()
+    temp_df = orig.iloc[1:, 7:].reset_index(drop=True)
     only_answer_demographic = ((temp_df == "None") | temp_df.isnull()).all(axis=1)
     # Basic conditions
     low_exp_bins = ["0", "0-1", "1-2"]
