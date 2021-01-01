@@ -125,6 +125,7 @@ def sns_plot_value_count_comparison(
     legend_location: str = "best",
     x_ticklabels_rotation: int = 0,
     bar_width: Optional[float] = None,
+    title_wrap_length: Optional[int] = None,
 ) -> None:
     if orientation not in {"horizontal", "vertical", "h", "v"}:
         raise ValueError(f"Orientation must be one of {'horizontal', 'vertical'}, not: {orientation}")
@@ -133,6 +134,8 @@ def sns_plot_value_count_comparison(
         fmt = "{:.1f}" if df.dtypes[-1] == 'float64' else "{:.0f}"
     if title is None:
         title = df.columns[0]
+    if title_wrap_length:
+        title = "\n".join(wrap(title, title_wrap_length))
     if orientation in {"horizontal", "h"}:
         x = df.columns[-1]
         y = df.columns[0]
