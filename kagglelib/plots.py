@@ -143,11 +143,14 @@ def sns_plot_value_count_comparison(
         y = df.columns[0]
         annotate_func = _annotate_horizontal_bar
         order = natsort.natsorted(df[y].unique())
+        sns.despine(bottom=True)
+
     else:
         x = df.columns[0]
         y = df.columns[-1]
         annotate_func = _annotate_bar
         order = natsort.natsorted(df[x].unique())
+
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
         if ax is None:
             fig, ax = plt.subplots(figsize=(width, height))
@@ -161,6 +164,14 @@ def sns_plot_value_count_comparison(
             palette="dark",
             alpha=0.6,
         )
+        if orientation in {"horizontal", "h"}:
+            sns.despine(bottom=True)
+            ax.tick_params(left=True, bottom=False)
+            ax.xaxis.set_ticklabels("")
+        else:
+            sns.despine(left=True)
+            ax.tick_params(left=False, bottom=True)
+            ax.yaxis.set_ticklabels("")
         # Remove Labels from X and Y axes (we should have the relevant info on the title)
         ax.set_xlabel('')
         ax.set_ylabel('')
@@ -191,8 +202,7 @@ def sns_plot_salary_medians(
             aspect=2.8,
             legend=False,
             order = ["USA", "Germany", "Japan", "France", "Russia", "Brazil", "India"],
-            row_order=["Filtered", "Unfiltered"],
-            col_order = ["Filtered", "Unfiltered"]
+            hue_order=["Filtered", "Unfiltered"]
         )
 
         #ticks = sorted(df.salary.unique(), reverse=True)
