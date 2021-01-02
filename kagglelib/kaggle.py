@@ -413,9 +413,10 @@ def load_median_salary_comparison_df(
             title="Data Scientists: Median salary per Code XP level in High Income countries Filtered vs Unfiltered datasets"
         )
     """
+    level_variable = "code_level" if xp_type == "code" else "ml_level"
     df1 = load_median_salary_per_income_group_per_XP_level_df(dataset=dataset1, xp_type=xp_type, income_group=income_group)
     df2 = load_median_salary_per_income_group_per_XP_level_df(dataset=dataset2, xp_type=xp_type, income_group=income_group)
-    df = pd.merge(df1, df2, on=["code_level", "income_group"])
+    df = pd.merge(df1, df2, on=[level_variable, "income_group"])
     df = df.drop(columns="income_group")
     df.columns = ["code_level", label1, label2]
     df = stack_value_count_df(df, "salary_threshold")
