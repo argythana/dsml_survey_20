@@ -17,10 +17,10 @@ from .kaggle import REVERSE_SALARY_THRESHOLDS
 from .kaggle import fix_age_bin_distribution
 
 
-SMALL_FONT = 12
-MEDIUM_FONT = 14
-BIG_FONT = 18
-HUGE_FONT = 26
+SMALL_FONT = 11
+MEDIUM_FONT = 12
+BIG_FONT = 14
+HUGE_FONT = 18
 
 
 MPL_RC = {
@@ -190,19 +190,29 @@ def sns_plot_salary_medians(
             height=8,
             aspect=2.8,
             legend=False,
+            order = ["USA", "Germany", "Japan", "France", "Russia", "Brazil", "India"],
+            row_order=["Filtered", "Unfiltered"],
+            col_order = ["Filtered", "Unfiltered"]
         )
-        ticks = sorted(df.salary.unique(), reverse=True)
-        #plot.ax.xticks(ticks, rotation="vertical")
-        plt.xticks(ticks, rotation="vertical")
-        #plt.xlim((0, 170000))
-        x_labels = [REVERSE_SALARY_THRESHOLDS[sal] for sal in ticks]
+
+        #ticks = sorted(df.salary.unique(), reverse=True)
+        # plot.ax.xticks(ticks, rotation="vertical")
+        #plt.xticks(ticks, rotation="vertical")
+        #plt.xlim((0, 150000))
+        #x_labels = [REVERSE_SALARY_THRESHOLDS[sal] for sal in ticks]
         #wrapped_x_labels = ['\n'.join(wrap(l, 7)) for l in x_labels]
-        wrapped_x_labels = [label.replace("-", "-\n") for label in x_labels]
-        plot.ax.xaxis.set_ticklabels(wrapped_x_labels)
+        #wrapped_x_labels = [label.replace("-", "-\n") for label in x_labels]
+        #plot.ax.xaxis.set_ticklabels(wrapped_x_labels)
         #plot.ax.xaxis.set_ticklabels([REVERSE_SALARY_THRESHOLDS[sal] for sal in ticks])
-        plot.ax.grid(axis="x")
-        #plot.despine()
-        plot.ax.set_axisbelow(True)
+        plot.ax.xaxis.set_ticklabels("")
+        plot.ax.tick_params(left=True, bottom=False)
+        #plot.ax.grid(axis="x")
+        plot.despine(bottom=True)
+        # Remove Labels from X and Y axes (we should have the relevant info on the title)
+        plot.ax.set_xlabel('')
+        plot.ax.set_ylabel('')
+        # plot.set(xticklabels=[])
+        #plot.ax.set_axisbelow(True)
         plot.ax.set_box_aspect(12/len(plot.ax.patches))
         plot.ax.legend(loc="center left", title="", bbox_to_anchor=(1.04,0.5))
         plot.ax.legend(loc="best", title="")
@@ -223,8 +233,8 @@ def sns_plot_salary_medians(
                 xytext=(4, 0),
                 textcoords="offset points"
             )
-        plt.setp(plot.ax.get_xticklabels(), rotation=30, horizontalalignment='center')
-        plt.xticks(fontsize=12)
+        #plt.setp(plot.ax.get_xticklabels(), rotation=30, horizontalalignment='center')
+        #plt.xticks(fontsize=SMALL_FONT)
 
 
 def sns_plot_age_distribution(
