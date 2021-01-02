@@ -96,14 +96,20 @@ def _annotate_horizontal_bar(bar, ax, fmt) -> None:
     h = bar.get_height()
     w = bar.get_width()
     y = bar.get_y()
+    if w < 2:
+        ha = "left"
+        xytext = (3, 0)
+    else:
+        ha = "right"
+        xytext = (-3, 0)
     ax.annotate(
-        text=fmt.format(w),
+        text=fmt.format(abs(w)),
         xy=(w, y + h / 2),
         xycoords="data",
-        ha='left',
-        va='center_baseline',
-        # offset text 8pts to the top
-        xytext=(3, 0),
+        ha=ha,
+        va='center',
+        # offset text to the left or right
+        xytext=xytext,
         textcoords="offset points"
     )
 
