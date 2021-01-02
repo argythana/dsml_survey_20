@@ -128,6 +128,7 @@ def sns_plot_value_count_comparison(
     x_ticklabels_rotation: int = 0,
     bar_width: Optional[float] = None,
     title_wrap_length: Optional[int] = None,
+    palette: Optional[str] = None
 ) -> None:
     if orientation not in {"horizontal", "vertical", "h", "v"}:
         raise ValueError(f"Orientation must be one of {'horizontal', 'vertical'}, not: {orientation}")
@@ -151,6 +152,7 @@ def sns_plot_value_count_comparison(
         order = natsort.natsorted(df[x].unique())
 
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
+        sns.set_style("dark", {'axes.linewidth': 0.5})
         if ax is None:
             fig, ax = plt.subplots(figsize=(width, height))
         sns.barplot(
@@ -160,7 +162,8 @@ def sns_plot_value_count_comparison(
             y=y,
             hue=df.columns[1],
             order=order if order_by_labels else None,
-            palette="dark",
+            #palette="colorblind",
+            palette=palette if palette else [sns.desaturate("orange", 0.75), "darkblue", "C5"],
             alpha=0.6,
         )
         if orientation in {"horizontal", "h"}:

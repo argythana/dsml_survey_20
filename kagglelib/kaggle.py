@@ -209,6 +209,7 @@ def load_udf() -> pd.DataFrame:
             "South Korea": "Korea, Republic of",
         }
     )
+
     df.education = df.education.replace(
         {
             "Some college/university study without earning a bachelor’s degree": "Studies without a degree",
@@ -216,6 +217,13 @@ def load_udf() -> pd.DataFrame:
             "I prefer not to answer": "No answer"
         }
     ).str.replace(" degree", "")
+
+    df.gender = df.gender.replace(
+        {
+            "Prefer to self-describe": "Self-describe",
+            "Prefer not to say": "No answer"
+        }
+    )
 
     # Columns about experience have different ranges and different format.
     # Modify format to be similar and DNRY
