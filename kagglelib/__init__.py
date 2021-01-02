@@ -30,6 +30,8 @@ from .kaggle import get_age_bin_distribution_comparison
 from .paths import DATA
 from .plots import hv_plot_value_count_comparison
 from .plots import sns_plot_value_count_comparison
+from .plots import PALETTE_ORIGINAL_VS_FILTERED
+from .plots import PALETTE_USA_VS_ROW
 from .plots import sns_plot_salary_medians
 from .plots import sns_plot_age_distribution
 from .plots import sns_plot_global_salary_distribution_comparison

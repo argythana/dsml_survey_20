@@ -17,6 +17,10 @@ from .kaggle import REVERSE_SALARY_THRESHOLDS
 from .kaggle import fix_age_bin_distribution
 
 
+PALETTE_USA_VS_ROW = [sns.desaturate("green", 0.75), "peru"]
+PALETTE_ORIGINAL_VS_FILTERED = [sns.desaturate("darkred", 0.90), "darkblue"]
+
+
 SMALL_FONT = 11
 MEDIUM_FONT = 12
 BIG_FONT = 14
@@ -169,7 +173,7 @@ def sns_plot_value_count_comparison(
             hue=df.columns[1],
             order=order if order_by_labels else None,
             #palette="colorblind",
-            palette=palette if palette else [sns.desaturate("darkred", 0.99), "darkblue"],
+            palette=palette if palette else [sns.desaturate("darkred", 0.90), "darkblue"],
             alpha=0.6,
         )
         if orientation in {"horizontal", "h"}:
