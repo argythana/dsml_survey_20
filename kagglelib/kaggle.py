@@ -5,11 +5,25 @@ import pandas as pd
 from .paths import DATA
 from .third_party import load_mean_salary_comparison_df
 from .utils import stack_value_count_df
+from .utils import stack_value_count_comparison
 
 from typing import List
 from typing import Optional
 from typing import Union
 
+NO_YEARS_PER_BIN = {
+    "18-21": 4,
+    "22-24": 3,
+    "25-29": 5,
+    "30-34": 5,
+    "35-39": 5,
+    "40-44": 5,
+    "45-49": 5,
+    "50-54": 5,
+    "55-59": 5,
+    "60-69": 10,
+    "70+": 10
+}
 
 SALARY_THRESHOLDS = {
     "$0-999": 1000,
@@ -427,4 +441,30 @@ def load_median_salary_comparison_df(
     df = df.drop(columns="income_group")
     df.columns = ["code_level", label1, label2]
     df = stack_value_count_df(df, "salary_threshold")
+    return df
+
+
+def fix_age_bin_distribution(df: pd.DataFrame, rename_index: bool = True) -> pd.Series:
+    age_bins = df.age.value_counts(True).sort_index() * 100
+    value = age_bins.at["18-21"]
+    age_bins.at["18-21"] = value / 2
+    age_bins.at["22-24"] += value / 2
+    if rename_index:
+        age_bins = age_bins.rename(index={"18-21": "18-19", "22-24": "20-24"})
+    return age_bins
+
+
+def get_age_bin_distribution_comparison(
+    dataset1: pd.DataFrame,
+    dataset2: pd.DataFrame,
+    rename_index: bool,
+    label1: str = "original",
+    label2="filtered",
+) -> pd.DataFrame:
+    df = pd.DataFrame({
+        label1: fix_age_bin_distribution(dataset1, rename_index=rename_index),
+        label2: fix_age_bin_distribution(dataset2, rename_index=rename_index),
+    })
+    df = df.rename_axis("age").reset_index().round(2)
+    df = stack_value_count_comparison(df, "participants (%)")
     return df

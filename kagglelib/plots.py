@@ -10,9 +10,11 @@ from textwrap import wrap
 from typing import Any
 from typing import Dict
 from typing import Optional
+from typing import Tuple
 
 from .paths import DATA
 from .kaggle import REVERSE_SALARY_THRESHOLDS
+from .kaggle import fix_age_bin_distribution
 
 
 SMALL_FONT = 12
@@ -223,3 +225,44 @@ def sns_plot_salary_medians(
             )
         plt.setp(plot.ax.get_xticklabels(), rotation=30, horizontalalignment='center')
         plt.xticks(fontsize=12)
+
+
+def sns_plot_age_distribution(
+    df: pd.DataFrame,
+    width: float,
+    height: float,
+    title: str = "Age distribution",
+    fmt: str = "{:.1f}",
+    rc: Optional[Dict[str, Any]] = None,
+    orientation: str = "vertical",
+    legend_location: str = "best",
+    bar_width: Optional[float] = None,
+    title_wrap_length: Optional[int] = None,
+) -> None:
+    if title_wrap_length:
+        title = "\n".join(wrap(title, title_wrap_length))
+    default_distribution = (df.age.value_counts(True) * 100).sort_index().round(2)
+    proposed_distribution = fix_age_bin_distribution(df, rename_index=True)
+    with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
+        fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=False, figsize=(14, 8))
+        sns.barplot(
+            x=default_distribution.index,
+            y=default_distribution,
+            ax=ax1,
+        )
+        sns.barplot(
+            x=proposed_distribution.index,
+            y=proposed_distribution,
+            ax=ax2,
+        )
+        ax1.set_title(title)
+        ax1.set_ylabel("Default")
+        ax2.set_ylabel("Proposed")
+        for ax in (ax1, ax2):
+            ax.set_ylim((0, 30))
+            ax.set_xlabel('')
+            #ax.set_ylabel('')
+            for bar in ax.patches:
+                _annotate_bar(bar, ax, fmt)
+                if bar_width:
+                    _set_bar_width(bar, width=bar_width)

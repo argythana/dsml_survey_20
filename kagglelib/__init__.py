@@ -25,10 +25,13 @@ from .kaggle import keep_demo_cols
 from .kaggle import load_salary_medians_df
 from .kaggle import load_median_salary_per_income_group_per_XP_level_df
 from .kaggle import load_median_salary_comparison_df
+from .kaggle import fix_age_bin_distribution
+from .kaggle import get_age_bin_distribution_comparison
 from .paths import DATA
 from .plots import hv_plot_value_count_comparison
 from .plots import sns_plot_value_count_comparison
 from .plots import sns_plot_salary_medians
+from .plots import sns_plot_age_distribution
 from .third_party import load_eurostat_df
 from .third_party import get_usd_eur_rate
 from .third_party import load_world_bank_groups
