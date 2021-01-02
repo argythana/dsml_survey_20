@@ -1,5 +1,6 @@
 from typing import List
 from typing import Optional
+from typing import Tuple
 
 import pandas as pd
 
@@ -83,3 +84,9 @@ def get_stacked_value_count_comparison(
     )
     stacked_df = stack_value_count_comparison(value_count_df, stack_label=stack_label)
     return stacked_df
+
+
+def get_complimentary_datasets(df: pd.DataFrame, filter: pd.Series) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    df1 = df[filter]
+    df2 = df[~filter]
+    return df1, df2
