@@ -401,6 +401,8 @@ def load_median_salary_comparison_df(
     dataset2: pd.DataFrame,
     xp_type: str,
     income_group: str,
+    label1: str = "filtered",
+    label2: str = "unfiltered",
 ) -> pd.DataFrame:
     """
     ## Examples
@@ -415,6 +417,6 @@ def load_median_salary_comparison_df(
     df2 = load_median_salary_per_income_group_per_XP_level_df(dataset=dataset2, xp_type=xp_type, income_group=income_group)
     df = pd.merge(df1, df2, on=["code_level", "income_group"])
     df = df.drop(columns="income_group")
-    df.columns = ["code_level", "filtered", "unfiltered"]
+    df.columns = ["code_level", label1, label2]
     df = stack_value_count_df(df, "salary_threshold")
     return df
