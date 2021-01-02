@@ -388,11 +388,11 @@ def load_median_salary_per_income_group_per_XP_level_df(
     kglib.load_median_salary_per_income_group_per_XP_level_df(uds, xp_type="ml")
     """
     assert xp_type in ("code", "ml"), "xp_type should be in {'code_level', 'ml_level'}, not: %s" % xp_type
-    variable = "code_level" if xp_type == "code" else "ml_level"
+    level_variable = "code_level" if xp_type == "code" else "ml_level"
     if income_group:
         dataset = dataset[~dataset.salary.isna() & dataset.income_group.str.startswith(income_group)]
-    df = dataset.groupby([variable, "income_group"]).salary_threshold.median().reset_index()
-    df = df.sort_values(by=[variable, "income_group"])
+    df = dataset.groupby([level_variable, "income_group"]).salary_threshold.median().reset_index()
+    df = df.sort_values(by=[level_variable, "income_group"])
     return df
 
 
