@@ -172,7 +172,6 @@ def sns_plot_value_count_comparison(
             y=y,
             hue=df.columns[1],
             order=order if order_by_labels else None,
-            #palette="colorblind",
             palette=palette,
             alpha=0.6,
         )
@@ -255,8 +254,6 @@ def sns_plot_salary_medians(
                 xytext=(4, 0),
                 textcoords="offset points"
             )
-        #plt.setp(plot.ax.get_xticklabels(), rotation=30, horizontalalignment='center')
-        #plt.xticks(fontsize=SMALL_FONT)
 
 
 def sns_plot_age_distribution(
@@ -327,35 +324,43 @@ def sns_plot_global_salary_distribution_comparison(
     vc1 = (df1.salary.value_counts(True) * 100).round(2).sort_index().reset_index().rename(columns={"salary": "percentage", "index": "salary"})
     vc2 = (df2.salary.value_counts(True) * 100).round(2).sort_index().reset_index().rename(columns={"salary": "percentage", "index": "salary"})
     order = natsort.natsorted(vc1.salary.unique())
+
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
-        fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharex=False, figsize=(width, height), sharey=True, squeeze=True)
-        sns.barplot(
-            x=vc1.percentage,
-            y=vc1.salary,
-            ax=ax1,
-            order=order,
-        )
-        sns.barplot(
-            x=vc2.percentage,
-            y=vc2.salary,
-            ax=ax2,
-            order=order,
-        )
-        ax1.set_title(label1)
-        ax2.set_title(label2)
-        ax1.xaxis.set_ticklabels("")
-        ax2.xaxis.set_ticklabels("")
-        ax1.set_ylabel("Salary ($)")
-        ax2.set_ylabel("")
-        ax1.set_xlabel("")
-        ax2.set_xlabel("")
-        ax1.set_xlim((0, 20))
-        ax2.set_xlim((0, 20))
-        ax1.tick_params(left=True, bottom=False)
-        ax2.tick_params(left=False, bottom=False)
-        plt.tight_layout()
-        for ax in (ax1, ax2):
-            for i, bar in enumerate(ax.patches):
-                _annotate_horizontal_bar(bar, ax, fmt)
-                if bar_width:
-                    _set_bar_width(bar, width=bar_width)
+        with sns.axes_style("dark", {'axes.linewidth': 0.5}):
+            fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharex=False, figsize=(width, height), sharey=True, squeeze=True)
+            sns.barplot(
+                x=vc1.percentage,
+                y=vc1.salary,
+                ax=ax1,
+                order=order,
+                palette=[sns.desaturate("red", 0.4)]
+            )
+            sns.barplot(
+                x=vc2.percentage,
+                y=vc2.salary,
+                ax=ax2,
+                order=order,
+                palette=[sns.desaturate("cornflowerblue", 0.75)]
+            )
+
+            ax1.set_title(label1)
+            ax2.set_title(label2)
+            ax1.xaxis.set_ticklabels("")
+            ax2.xaxis.set_ticklabels("")
+            ax1.set_ylabel("Salary ($)")
+            ax2.set_ylabel("")
+            ax1.set_xlabel("")
+            ax2.set_xlabel("")
+            ax1.set_xlim((0, 20))
+            ax2.set_xlim((0, 14))
+            ax1.tick_params(left=False, bottom=False)
+            ax2.tick_params(left=False, bottom=False)
+            ax2.yaxis.set_tick_params(labeltop='on')
+            fig.suptitle('Globar Salary distribution of Data Scientists', size=HUGE_FONT)
+
+            plt.tight_layout()
+            for ax in (ax1, ax2):
+                for i, bar in enumerate(ax.patches):
+                    _annotate_horizontal_bar(bar, ax, fmt)
+                    if bar_width:
+                        _set_bar_width(bar, width=bar_width)
