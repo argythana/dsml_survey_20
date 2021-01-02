@@ -10,8 +10,8 @@ def get_value_count_df(
     df2: pd.DataFrame,
     column: str,
     perc: bool = True,
-    label1: str = "original",
-    label2: str = "filtered",
+    label1: str = "Original",
+    label2: str = "Filtered"
 ):
     multiplier = 100 if perc else 1
     vc1 = df1[column].value_counts(perc) * multiplier
@@ -40,8 +40,8 @@ def get_value_count_comparison(
     sr1: pd.Series,
     sr2: pd.Series,
     as_percentage: bool,
-    label1: str = "original",
-    label2: str = "filtered",
+    label1: str = "Original",
+    label2: str = "Filtered",
     order: Optional[List[str]] = None,
 ):
     multiplier = 100 if as_percentage else 1
@@ -75,8 +75,8 @@ def get_stacked_value_count_comparison(
     sr2: pd.Series,
     stack_label: str,
     as_percentage: bool,
-    label1: str = "original",
-    label2: str = "filtered",
+    label1: str = "Original",
+    label2: str = "Filtered",
     order: Optional[List[str]] = None,
 ) -> pd.DataFrame:
     value_count_df = get_value_count_comparison(
