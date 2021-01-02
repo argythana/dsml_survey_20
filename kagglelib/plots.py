@@ -143,7 +143,6 @@ def sns_plot_value_count_comparison(
         y = df.columns[0]
         annotate_func = _annotate_horizontal_bar
         order = natsort.natsorted(df[y].unique())
-        sns.despine(bottom=True)
 
     else:
         x = df.columns[0]
@@ -166,11 +165,11 @@ def sns_plot_value_count_comparison(
         )
         if orientation in {"horizontal", "h"}:
             sns.despine(bottom=True)
-            ax.tick_params(left=True, bottom=False)
+            ax.tick_params(left=False, bottom=False)
             ax.xaxis.set_ticklabels("")
         else:
             sns.despine(left=True)
-            ax.tick_params(left=False, bottom=True)
+            ax.tick_params(left=False, bottom=False)
             ax.yaxis.set_ticklabels("")
         # Remove Labels from X and Y axes (we should have the relevant info on the title)
         ax.set_xlabel('')
@@ -215,7 +214,7 @@ def sns_plot_salary_medians(
         #plot.ax.xaxis.set_ticklabels(wrapped_x_labels)
         #plot.ax.xaxis.set_ticklabels([REVERSE_SALARY_THRESHOLDS[sal] for sal in ticks])
         plot.ax.xaxis.set_ticklabels("")
-        plot.ax.tick_params(left=True, bottom=False)
+        plot.ax.tick_params(left=False, bottom=False)
         #plot.ax.grid(axis="x")
         plot.despine(bottom=True)
         # Remove Labels from X and Y axes (we should have the relevant info on the title)
@@ -275,9 +274,16 @@ def sns_plot_age_distribution(
             y=proposed_distribution,
             ax=ax2,
         )
+
+        ax1.yaxis.set_ticklabels("")
+        ax2.yaxis.set_ticklabels("")
+        sns.despine(ax=ax1, left=True, bottom=True)
+        sns.despine(ax=ax2, left=True, bottom=True)
+        ax1.tick_params(left=False, bottom=False)
+        ax2.tick_params(left=False, bottom=False)
         ax1.set_title(title)
         ax1.set_ylabel("Default")
-        ax2.set_ylabel("Proposed")
+        ax2.set_ylabel("Adjusted")
         for ax in (ax1, ax2):
             ax.set_ylim((0, 30))
             ax.set_xlabel('')
