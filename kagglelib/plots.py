@@ -323,7 +323,7 @@ def sns_plot_global_salary_distribution_comparison(
         title = "\n".join(wrap(title, title_wrap_length))
     vc1 = (df1.salary.value_counts(True) * 100).round(2).sort_index().reset_index().rename(columns={"salary": "percentage", "index": "salary"})
     vc2 = (df2.salary.value_counts(True) * 100).round(2).sort_index().reset_index().rename(columns={"salary": "percentage", "index": "salary"})
-    order = natsort.natsorted(vc1.salary.unique())
+    order = natsort.natsorted(vc1.salary.unique(), reverse=True)
 
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
         with sns.axes_style("dark", {'axes.linewidth': 0.5}):
@@ -352,7 +352,7 @@ def sns_plot_global_salary_distribution_comparison(
             ax1.set_xlabel("")
             ax2.set_xlabel("")
             ax1.set_xlim((0, 20))
-            ax2.set_xlim((0, 14))
+            ax2.set_xlim((0, 13))
             ax1.tick_params(left=False, bottom=False)
             ax2.tick_params(left=False, bottom=False)
             ax2.yaxis.set_tick_params(labeltop='on')
