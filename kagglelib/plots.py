@@ -301,3 +301,55 @@ def sns_plot_age_distribution(
                 _annotate_bar(bar, ax, fmt)
                 if bar_width:
                     _set_bar_width(bar, width=bar_width)
+
+
+def sns_plot_global_salary_distribution_comparison(
+    df1: pd.DataFrame,
+    df2: pd.DataFrame,
+    width: float,
+    height: float,
+    title: str = "Age distribution",
+    fmt: str = "{:.1f}",
+    rc: Optional[Dict[str, Any]] = None,
+    orientation: str = "vertical",
+    legend_location: str = "best",
+    bar_width: Optional[float] = None,
+    title_wrap_length: Optional[int] = None,
+    label1: str = "Unfiltered",
+    label2: str = "Filtered",
+) -> None:
+    if title_wrap_length:
+        title = "\n".join(wrap(title, title_wrap_length))
+    vc1 = (df1.salary.value_counts(True) * 100).round(2).sort_index().reset_index().rename(columns={"salary": "percentage", "index": "salary"})
+    vc2 = (df2.salary.value_counts(True) * 100).round(2).sort_index().reset_index().rename(columns={"salary": "percentage", "index": "salary"})
+    order = natsort.natsorted(vc1.salary.unique())
+    with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
+        fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharex=False, figsize=(18, 14), sharey=True, squeeze=True)
+        sns.barplot(
+            x=vc1.percentage,
+            y=vc1.salary,
+            ax=ax1,
+            order=order,
+        )
+        sns.barplot(
+            x=vc2.percentage,
+            y=vc2.salary,
+            ax=ax2,
+            order=order,
+        )
+        ax1.set_title(label1)
+        ax2.set_title(label2)
+        ax1.set_ylabel("Salary ($)")
+        ax2.set_ylabel("")
+        ax1.set_xlabel("")
+        ax2.set_xlabel("")
+        ax1.set_xlim((0, 20))
+        ax2.set_xlim((0, 20))
+        ax1.tick_params(left=True, bottom=False)
+        ax2.tick_params(left=False, bottom=False)
+        plt.tight_layout()
+        for ax in (ax1, ax2):
+            for i, bar in enumerate(ax.patches):
+                _annotate_horizontal_bar(bar, ax, fmt)
+                if bar_width:
+                    _set_bar_width(bar, width=bar_width)
