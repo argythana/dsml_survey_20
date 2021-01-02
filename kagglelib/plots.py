@@ -21,8 +21,8 @@ PALETTE_USA_VS_ROW = [sns.desaturate("green", 0.75), "peru"]
 PALETTE_ORIGINAL_VS_FILTERED = [sns.desaturate("darkred", 0.90), "darkblue"]
 
 
-SMALL_FONT = 11
-MEDIUM_FONT = 12
+SMALL_FONT = 12
+MEDIUM_FONT = 13
 BIG_FONT = 14
 HUGE_FONT = 18
 
