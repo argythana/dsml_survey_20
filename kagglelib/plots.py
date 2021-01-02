@@ -309,7 +309,9 @@ def sns_plot_global_salary_distribution_comparison(
     df2: pd.DataFrame,
     width: float,
     height: float,
-    title: str = "Age distribution",
+    x1_limit: Optional[Tuple[float, float]] = (0, 20),
+    x2_limit: Optional[Tuple[float, float]] = (0, 12),
+    title: str = "Salary Distribution, $",
     fmt: str = "{:.1f}",
     rc: Optional[Dict[str, Any]] = None,
     orientation: str = "vertical",
@@ -347,16 +349,18 @@ def sns_plot_global_salary_distribution_comparison(
             ax2.set_title(label2)
             ax1.xaxis.set_ticklabels("")
             ax2.xaxis.set_ticklabels("")
-            ax1.set_ylabel("Salary ($)")
+            #ax1.set_ylabel("Salary ($)")
+            ax1.set_ylabel("")
             ax2.set_ylabel("")
             ax1.set_xlabel("")
             ax2.set_xlabel("")
-            ax1.set_xlim((0, 20))
-            ax2.set_xlim((0, 13))
+            ax1.set_xlim((x1_limit))
+            ax2.set_xlim((x2_limit))
             ax1.tick_params(left=False, bottom=False)
             ax2.tick_params(left=False, bottom=False)
             ax2.yaxis.set_tick_params(labeltop='on')
-            fig.suptitle('Globar Salary distribution of Data Scientists', size=HUGE_FONT)
+
+            fig.suptitle(title, size=HUGE_FONT)
 
             plt.tight_layout()
             for ax in (ax1, ax2):
