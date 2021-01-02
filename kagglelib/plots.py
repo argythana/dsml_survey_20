@@ -169,7 +169,7 @@ def sns_plot_value_count_comparison(
             hue=df.columns[1],
             order=order if order_by_labels else None,
             #palette="colorblind",
-            palette=palette if palette else [sns.desaturate("orange", 0.75), "darkblue", "C5"],
+            palette=palette if palette else [sns.desaturate("darkred", 0.99), "darkblue"],
             alpha=0.6,
         )
         if orientation in {"horizontal", "h"}:
@@ -339,6 +339,8 @@ def sns_plot_global_salary_distribution_comparison(
         )
         ax1.set_title(label1)
         ax2.set_title(label2)
+        ax1.xaxis.set_ticklabels("")
+        ax2.xaxis.set_ticklabels("")
         ax1.set_ylabel("Salary ($)")
         ax2.set_ylabel("")
         ax1.set_xlabel("")
