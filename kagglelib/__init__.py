@@ -32,6 +32,7 @@ from .plots import hv_plot_value_count_comparison
 from .plots import sns_plot_value_count_comparison
 from .plots import sns_plot_salary_medians
 from .plots import sns_plot_age_distribution
+from .plots import sns_plot_global_salary_distribution_comparison
 from .third_party import load_eurostat_df
 from .third_party import get_usd_eur_rate
 from .third_party import load_world_bank_groups
