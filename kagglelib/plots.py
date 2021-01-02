@@ -138,7 +138,7 @@ def sns_plot_value_count_comparison(
     x_ticklabels_rotation: int = 0,
     bar_width: Optional[float] = None,
     title_wrap_length: Optional[int] = None,
-    palette: Optional[str] = None
+    palette: [str] = PALETTE_ORIGINAL_VS_FILTERED
 ) -> None:
     if orientation not in {"horizontal", "vertical", "h", "v"}:
         raise ValueError(f"Orientation must be one of {'horizontal', 'vertical'}, not: {orientation}")
@@ -173,7 +173,7 @@ def sns_plot_value_count_comparison(
             hue=df.columns[1],
             order=order if order_by_labels else None,
             #palette="colorblind",
-            palette=palette if palette else [sns.desaturate("darkred", 0.90), "darkblue"],
+            palette=palette,
             alpha=0.6,
         )
         if orientation in {"horizontal", "h"}:
