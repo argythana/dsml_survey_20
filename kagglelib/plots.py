@@ -324,7 +324,7 @@ def sns_plot_global_salary_distribution_comparison(
     vc2 = (df2.salary.value_counts(True) * 100).round(2).sort_index().reset_index().rename(columns={"salary": "percentage", "index": "salary"})
     order = natsort.natsorted(vc1.salary.unique())
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
-        fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharex=False, figsize=(18, 14), sharey=True, squeeze=True)
+        fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharex=False, figsize=(width, height), sharey=True, squeeze=True)
         sns.barplot(
             x=vc1.percentage,
             y=vc1.salary,
