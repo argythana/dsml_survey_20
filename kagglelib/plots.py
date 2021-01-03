@@ -354,8 +354,8 @@ def sns_plot_global_salary_distribution_comparison(
     df2: pd.DataFrame,
     width: float,
     height: float,
-    x1_limit: Optional[Tuple[float, float]] = (0, 20),
-    x2_limit: Optional[Tuple[float, float]] = (0, 12),
+    x1_limit: Optional[Tuple[float, float]] = (0, 19),
+    x2_limit: Optional[Tuple[float, float]] = (0, 19),
     title: str = "Salary Distribution, $",
     fmt: str = "{:.1f}",
     rc: Optional[Dict[str, Any]] = None,
@@ -404,7 +404,6 @@ def sns_plot_global_salary_distribution_comparison(
             ax1.tick_params(left=False, bottom=False)
             ax2.tick_params(left=False, bottom=False)
             ax2.yaxis.set_tick_params(labeltop='on')
-
             fig.suptitle(title, size=HUGE_FONT)
 
             plt.tight_layout()
