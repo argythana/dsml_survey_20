@@ -299,20 +299,24 @@ def sns_plot_age_distribution(
     avg_bin_distribution = calc_avg_age_distribution(df, rename_index=True)
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
         fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=False, figsize=(width, height))
+        color = sns.desaturate("darkred", 0.59)
         sns.barplot(
             x=default_distribution.index,
             y=default_distribution,
             ax=ax1,
+            color=color,
         )
         sns.barplot(
             x=proposed_distribution.index,
             y=proposed_distribution,
             ax=ax2,
+            color=color,
         )
         sns.barplot(
             x=avg_bin_distribution.index,
             y=avg_bin_distribution,
             ax=ax3,
+            color=color,
         )
         ax1.yaxis.set_ticklabels("")
         ax2.yaxis.set_ticklabels("")
@@ -337,6 +341,12 @@ def sns_plot_age_distribution(
                 _annotate_bar(bar, ax, fmt)
                 if bar_width:
                     _set_bar_width(bar, width=bar_width)
+        for ax in (ax1, ax2, ax3):
+            for i, bar in enumerate(ax.patches):
+                if i >= 2:
+                    break
+                bar.set_color("darkcyan")
+
 
 
 def sns_plot_global_salary_distribution_comparison(
