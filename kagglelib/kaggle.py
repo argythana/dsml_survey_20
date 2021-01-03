@@ -157,7 +157,7 @@ def load_questions_df() -> pd.DataFrame:
     return questions_df
 
 
-def get_threshold(value: float, offset: int = 1):
+def get_threshold(value: float, offset: int):
     thresholds = list(SALARY_THRESHOLDS.values())
     for i, threshold in enumerate(thresholds):
         if value <= threshold:
@@ -176,7 +176,6 @@ def load_thresholds_df(
     df = df[["country", "income_group", "country_avg_salary"]]
     df = df.append(dict(country="Other", country_avg_salary=3500), ignore_index=True)
     df = df.assign(
-        #too_low_salary=(low_salary_percentage * df.country_avg_salary).apply(get_threshold),
         too_low_salary=(low_salary_percentage * df.country_avg_salary).apply(lambda x: get_threshold(x, threshold_offset)),
         low_salary_high_exp=df.country_avg_salary.apply(lambda x: get_threshold(x, threshold_offset)),
         high_salary_low_exp=high_salary_low_exp_threshold,
