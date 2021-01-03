@@ -94,7 +94,8 @@ def _annotate_bar(bar, ax, fmt) -> None:
         va='center_baseline',
         # offset text 8pts to the top
         xytext=(0, 8),
-        textcoords="offset points"
+        textcoords="offset points",
+        fontweight="bold",
     )
 
 
