@@ -27,6 +27,7 @@ from .kaggle import load_median_salary_per_income_group_per_XP_level_df
 from .kaggle import load_median_salary_comparison_df
 from .kaggle import fix_age_bin_distribution
 from .kaggle import get_age_bin_distribution_comparison
+from .kaggle import calc_avg_age_distribution
 from .paths import DATA
 from .plots import hv_plot_value_count_comparison
 from .plots import sns_plot_value_count_comparison

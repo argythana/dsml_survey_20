@@ -15,6 +15,7 @@ from typing import Tuple
 from .paths import DATA
 from .kaggle import REVERSE_SALARY_THRESHOLDS
 from .kaggle import fix_age_bin_distribution
+from .kaggle import calc_avg_age_distribution
 
 
 PALETTE_USA_VS_ROW = [sns.desaturate("green", 0.75), "peru"]
@@ -272,8 +273,9 @@ def sns_plot_age_distribution(
         title = "\n".join(wrap(title, title_wrap_length))
     default_distribution = (df.age.value_counts(True) * 100).sort_index().round(2)
     proposed_distribution = fix_age_bin_distribution(df, rename_index=True)
+    avg_bin_distribution = calc_avg_age_distribution(df, rename_index=True)
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
-        fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=False, figsize=(14, 8))
+        fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=False, figsize=(14, 13))
         sns.barplot(
             x=default_distribution.index,
             y=default_distribution,
@@ -284,18 +286,28 @@ def sns_plot_age_distribution(
             y=proposed_distribution,
             ax=ax2,
         )
-
+        sns.barplot(
+            x=avg_bin_distribution.index,
+            y=avg_bin_distribution,
+            ax=ax3,
+        )
         ax1.yaxis.set_ticklabels("")
         ax2.yaxis.set_ticklabels("")
+        ax3.yaxis.set_ticklabels("")
         sns.despine(ax=ax1, left=True, bottom=True)
         sns.despine(ax=ax2, left=True, bottom=True)
+        sns.despine(ax=ax3, left=True, bottom=True)
         ax1.tick_params(left=False, bottom=False)
         ax2.tick_params(left=False, bottom=False)
+        ax3.tick_params(left=False, bottom=False)
         ax1.set_title(title)
-        ax1.set_ylabel("Default")
-        ax2.set_ylabel("Adjusted")
-        for ax in (ax1, ax2):
-            ax.set_ylim((0, 30))
+        ax1.set_ylabel("Default, %")
+        ax2.set_ylabel("Adjusted, %")
+        ax3.set_ylabel("Average, N")
+        for ax in (ax1, ax2, ax3):
+            ax1.set_ylim((0, 31))
+            ax2.set_ylim((0, 31))
+            ax3.set_ylim((0, 1100))
             ax.set_xlabel('')
             #ax.set_ylabel('')
             for bar in ax.patches:
