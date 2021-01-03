@@ -1,3 +1,9 @@
+from textwrap import wrap
+from typing import Any
+from typing import Dict
+from typing import Optional
+from typing import Tuple
+
 import holoviews as hv
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -5,12 +11,6 @@ import natsort
 import seaborn as sns
 import pandas as pd
 
-from textwrap import wrap
-
-from typing import Any
-from typing import Dict
-from typing import Optional
-from typing import Tuple
 
 from .paths import DATA
 from .kaggle import REVERSE_SALARY_THRESHOLDS
