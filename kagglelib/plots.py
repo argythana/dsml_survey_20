@@ -82,7 +82,7 @@ def get_mpl_rc(rc: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # adapted from: https://stackoverflow.com/questions/39444665/add-data-labels-to-seaborn-factor-plot
-def _annotate_bar(bar, ax, fmt) -> None:
+def _annotate_vertical_bar(bar, ax, fmt) -> None:
     h = bar.get_height()
     w = bar.get_width()
     x = bar.get_x()
@@ -179,7 +179,7 @@ def sns_plot_value_count_comparison(
     else:
         x = df.columns[0]
         y = df.columns[-1]
-        annotate_func = _annotate_bar
+        annotate_func = _annotate_vertical_bar
         order = natsort.natsorted(df[x].unique())
 
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
@@ -338,7 +338,7 @@ def sns_plot_age_distribution(
             ax.set_xlabel('')
             #ax.set_ylabel('')
             for bar in ax.patches:
-                _annotate_bar(bar, ax, fmt)
+                _annotate_vertical_bar(bar, ax, fmt)
                 if bar_width:
                     _set_bar_width(bar, width=bar_width)
         for ax in (ax1, ax2, ax3):
