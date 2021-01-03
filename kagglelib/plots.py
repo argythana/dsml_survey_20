@@ -259,8 +259,8 @@ def sns_plot_salary_medians(
 
 def sns_plot_age_distribution(
     df: pd.DataFrame,
-    width: float,
-    height: float,
+    width: float = 14,
+    height: float = 10,
     title: str = "Age distribution",
     fmt: str = "{:.1f}",
     rc: Optional[Dict[str, Any]] = None,
@@ -275,7 +275,7 @@ def sns_plot_age_distribution(
     proposed_distribution = fix_age_bin_distribution(df, rename_index=True)
     avg_bin_distribution = calc_avg_age_distribution(df, rename_index=True)
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
-        fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=False, figsize=(14, 13))
+        fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=False, figsize=(width, height))
         sns.barplot(
             x=default_distribution.index,
             y=default_distribution,
@@ -305,9 +305,9 @@ def sns_plot_age_distribution(
         ax2.set_ylabel("Adjusted, %")
         ax3.set_ylabel("Average, N")
         for ax in (ax1, ax2, ax3):
-            ax1.set_ylim((0, 31))
-            ax2.set_ylim((0, 31))
-            ax3.set_ylim((0, 1100))
+            ax1.set_ylim((0, 32))
+            ax2.set_ylim((0, 32))
+            ax3.set_ylim((0, 1150))
             ax.set_xlabel('')
             #ax.set_ylabel('')
             for bar in ax.patches:
