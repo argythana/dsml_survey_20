@@ -11,6 +11,7 @@ import natsort
 import seaborn as sns
 import pandas as pd
 
+from matplotlib.transforms import Bbox
 
 from .paths import DATA
 from .kaggle import REVERSE_SALARY_THRESHOLDS
@@ -97,16 +98,32 @@ def _annotate_bar(bar, ax, fmt) -> None:
     )
 
 
+def get_text_width(text: str) -> float:
+    ax = plt.gca()
+    renderer = ax.figure.canvas.get_renderer()
+    text_artist = mpl.text.Text(text=text, figure=ax.figure)
+    bbox = text_artist.get_window_extent(renderer=renderer)
+    # transform bounding box to data coordinates
+    bbox = Bbox(ax.transData.inverted().transform(bbox))
+    return bbox.width
+
+
 def _annotate_horizontal_bar(bar, ax, fmt) -> None:
+    offset = 3 # pts
     h = bar.get_height()
     w = bar.get_width()
     y = bar.get_y()
-    if w < 2:
-        ha = "left"
-        xytext = (3, 0)
-    else:
+    annotation_width = get_text_width(fmt.format(w))
+    if 1.1 * (annotation_width + offset * SMALL_FONT / 72) <= w:
+        # annotation is short enough, put it inside the bar
         ha = "right"
-        xytext = (-3, 0)
+        xytext = (-offset, 0)
+        color = "white"
+    else:
+        # annotation too long, put it outside of the bar
+        ha = "left"
+        xytext = (offset, 0)
+        color = "black"
     ax.annotate(
         text=fmt.format(abs(w)),
         xy=(w, y + h / 2),
@@ -115,7 +132,9 @@ def _annotate_horizontal_bar(bar, ax, fmt) -> None:
         va='center',
         # offset text to the left or right
         xytext=xytext,
-        textcoords="offset points"
+        textcoords="offset points",
+        fontweight="bold",
+        color=color,
     )
 
 
