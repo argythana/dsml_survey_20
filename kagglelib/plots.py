@@ -18,7 +18,7 @@ from .kaggle import REVERSE_SALARY_THRESHOLDS
 from .kaggle import fix_age_bin_distribution
 from .kaggle import calc_avg_age_distribution
 
-
+PALETTE_INCOME_GROUP = sns.cubehelix_palette(10, rot=-.25, light=.7)
 PALETTE_USA_VS_ROW = [sns.desaturate("green", 0.75), "peru"]
 PALETTE_ORIGINAL_VS_FILTERED = [sns.desaturate("darkred", 0.90), "darkblue"]
 
@@ -412,3 +412,118 @@ def sns_plot_global_salary_distribution_comparison(
                     _annotate_horizontal_bar(bar, ax, fmt)
                     if bar_width:
                         _set_bar_width(bar, width=bar_width)
+
+
+# Define and use a simple function to label the plot in axes coordinates
+def _label(x, color, label):
+    ax = plt.gca()
+    ax.text(
+        x=0,
+        y=.5,
+        s=label,
+        fontweight="bold",
+        fontsize=BIG_FONT,
+        color=color,
+        ha="left",
+        va="center",
+        transform=ax.transAxes
+    )
+
+
+def sns_plot_salary_pde_comparison_per_income_group(
+    dataset: pd.DataFrame,
+    width: float = 18,
+    height: float = 10,
+    title: str = "Salary PDE per WB income groups (log scale)",
+    title_wrap_length: Optional[int] = None,
+    bandwidth_adjust: Optional[Tuple[float, float, float, float, float]] = None,
+    log_scale: bool = True,
+    rc: Optional[Dict[str, Any]] = None,
+    palette: sns.palettes._ColorPalette = PALETTE_INCOME_GROUP,
+) -> None:
+    if title_wrap_length:
+        title = "\n".join(wrap(title, title_wrap_length))
+    if bandwidth_adjust is None:
+        bandwidth_adjust = [0.8, 0.6, 0.5, 0.5, 0.4]
+    dataset = dataset[~dataset.salary.isna() & ~(dataset.country == "Other")]
+    # global_ = dataset.salary.reset_index(drop=True)
+    india = dataset[(dataset.country == "India")].salary_threshold.reset_index(drop=True).rename("India")
+    lower_middle = dataset[dataset.income_group.str.startswith("1") & (dataset.country != "India")].salary_threshold.reset_index(drop=True).rename("Lower Middle")
+    upper_middle = dataset[dataset.income_group.str.startswith("2")].salary_threshold.reset_index(drop=True).rename("Upper Middle")
+    high = dataset[dataset.income_group.str.startswith("3") & (dataset.country != "USA")].salary_threshold.reset_index(drop=True).rename("High")
+    usa = dataset[(dataset.country == "USA")].salary_threshold.reset_index(drop=True).rename("USA")
+    series = (usa, high, upper_middle, india, lower_middle)
+    with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
+        sns.set_style("dark")
+        fig, axes = plt.subplots(nrows=5, ncols=1, sharex=True, figsize=(width, height))
+        kdeplot_common = functools.partial(
+            sns.kdeplot,
+            log_scale=log_scale,
+            clip_on=False,
+            common_norm=False,
+            palette=palette,
+        )
+        kdeplot = functools.partial(
+            kdeplot_common,
+            fill=True,
+            alpha=1,
+            linewidth=1.5,
+        )
+        kdeplot_line = functools.partial(
+            kdeplot_common,
+            color="w",
+            linewidth=2.5,
+        )
+        for ax, sr, bw_adjust in zip(axes, series, bandwidth_adjust):
+            kdeplot(ax=ax, data=sr, bw_adjust=bw_adjust)
+            kdeplot_line(ax=ax, data=sr, bw_adjust=bw_adjust)
+            ax.set_ylabel(sr.name, rotation=0, ha="right", va="center_baseline")
+            ax.yaxis.set_ticklabels("")
+            sns.despine(ax=ax, left=True, bottom=True)
+            ax.tick_params(left=False, bottom=False)
+        ax.set_xlabel("Salary ($)")
+        fig.suptitle(title, size=HUGE_FONT)
+        plt.tight_layout()
+
+
+def sns_plot_salary_pde_comparison_per_income_group2(
+    dataset: pd.DataFrame,
+    bw_adjust: float = 0.6,
+    aspect: float = 5,
+    height: float = 3,
+    log_scale: bool = True,
+    rc: Optional[Dict[str, Any]] = None,
+    palette: sns.palettes._ColorPalette = PALETTE_INCOME_GROUP,
+) -> None:
+    dataset = dataset[~dataset.salary.isna() & ~(dataset.country == "Other")]
+    # global_ = dataset.salary_threshold.reset_index(drop=True)
+    india = dataset[(dataset.country == "India")].salary_threshold.reset_index(drop=True)
+    lower_middle = dataset[dataset.income_group.str.startswith("1") & (dataset.country != "India")].salary_threshold.reset_index(drop=True)
+    upper_middle = dataset[dataset.income_group.str.startswith("2")].salary_threshold.reset_index(drop=True)
+    high = dataset[dataset.income_group.str.startswith("3") & (dataset.country != "USA")].salary_threshold.reset_index(drop=True)
+    usa = dataset[(dataset.country == "USA")].salary_threshold.reset_index(drop=True)
+    df = pd.DataFrame({
+        "1. USA": usa,
+        "2. High":  high,
+        "3. Upper Middle":  upper_middle,
+        "4. India": india,
+        "5. Lower Middle":  lower_middle,
+        # "6. Global": global_,
+    })
+    df = df.stack().rename("salary").rename_axis(('asdf', 'country')).reset_index(level=1).reset_index(drop=True)
+    assert df.salary.isna().sum() == 0
+    with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
+        sns.set_style("dark")
+        grid = sns.FacetGrid(df, row="country", hue="country", aspect=5, height=3, palette=palette)
+        # Draw the densities in a few steps
+        grid.map(sns.kdeplot, "salary", bw_adjust=bw_adjust, clip_on=False, fill=True, alpha=1, linewidth=1.5, common_norm=False, log_scale=log_scale)
+        grid.map(sns.kdeplot, "salary",  bw_adjust=bw_adjust, clip_on=False, color="w", linewidth=2, common_norm=False, log_scale=log_scale)
+        grid.map(plt.axhline, y=0, linewidth=2, clip_on=False)
+        # Add A label to each Axes
+        grid.map(_label, "salary")
+        # Set the subplots to overlap
+        grid.fig.subplots_adjust(hspace=.15)
+        # Remove axes details that don't play well with overlap
+        grid.set_titles("")
+        grid.set(yticks=[])
+        grid.set(xticks=[])

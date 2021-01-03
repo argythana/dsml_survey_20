@@ -31,11 +31,14 @@ from .kaggle import calc_avg_age_distribution
 from .paths import DATA
 from .plots import hv_plot_value_count_comparison
 from .plots import sns_plot_value_count_comparison
+from .plots import PALETTE_INCOME_GROUP
 from .plots import PALETTE_ORIGINAL_VS_FILTERED
 from .plots import PALETTE_USA_VS_ROW
 from .plots import sns_plot_salary_medians
 from .plots import sns_plot_age_distribution
 from .plots import sns_plot_global_salary_distribution_comparison
+from .plots import sns_plot_salary_pde_comparison_per_income_group
+from .plots import sns_plot_salary_pde_comparison_per_income_group2
 from .third_party import load_eurostat_df
 from .third_party import get_usd_eur_rate
 from .third_party import load_world_bank_groups
