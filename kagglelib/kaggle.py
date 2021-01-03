@@ -11,7 +11,7 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-NO_YEARS_PER_BIN = {
+YEARS_PER_BIN = {
     "18-21": 4,
     "22-24": 3,
     "25-29": 5,
@@ -476,3 +476,13 @@ def get_age_bin_distribution_comparison(
     df = df.rename_axis("age").reset_index().round(2)
     df = stack_value_count_comparison(df, "participants (%)")
     return df
+
+
+def calc_avg_age_distribution(df: pd.DataFrame, rename_index: bool = True) -> pd.Series:
+    df = df.groupby(["age"]).size()
+    df = df.reset_index(name="participants")
+    df = df.assign(years_per_bin = df.age.map(YEARS_PER_BIN))
+    df = df.assign(avg_participants = df.participants / df.years_per_bin)
+    df = df.drop(["participants", "years_per_bin"], axis=1).set_index("age")
+    series = pd.Series(df.avg_participants, index=df.index)
+    return series
