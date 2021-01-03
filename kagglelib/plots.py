@@ -154,7 +154,7 @@ def sns_plot_value_count_comparison(
     fmt: Optional[str] = None,
     rc: Optional[Dict[str, Any]] = None,
     orientation: str = "vertical",
-    legend_location: str = "best",
+    legend_location: Optional[str] = "best",
     x_ticklabels_rotation: int = 0,
     bar_width: Optional[float] = None,
     title_wrap_length: Optional[int] = None,
@@ -208,7 +208,10 @@ def sns_plot_value_count_comparison(
         ax.set_ylabel('')
         if x_ticklabels_rotation != 0:
             ax.set_xticklabels(ax.get_xticklabels(), rotation=x_ticklabels_rotation)
-        ax.legend(loc=legend_location, title="Source")
+        if legend_location is None:
+            ax.get_legend().remove()
+        else:
+            ax.legend(loc=legend_location, title="Source")
         ax.set_title(title)
         for bar in ax.patches:
             annotate_func(bar, ax, fmt)
