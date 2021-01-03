@@ -527,3 +527,68 @@ def sns_plot_salary_pde_comparison_per_income_group2(
         grid.set_titles("")
         grid.set(yticks=[])
         grid.set(xticks=[])
+
+
+def sns_plot_salary_pde_comparison_per_role(
+    dataset: pd.DataFrame,
+    country: str,
+    width: float = 18,
+    height: float = 14,
+    title: str = "Salary PDE per role (log scale)",
+    title_wrap_length: Optional[int] = None,
+    bandwidth_adjust: float = 0.5,
+    log_scale: bool = True,
+    rc: Optional[Dict[str, Any]] = None,
+    palette: sns.palettes._ColorPalette = PALETTE_INCOME_GROUP,
+) -> None:
+    if title_wrap_length:
+        title = "\n".join(wrap(title, title_wrap_length))
+    dataset = dataset[~dataset.salary.isna() & ~(dataset.country == "Other")]
+    dataset = dataset[dataset.country == country]
+    # global_ = dataset.salary.reset_index(drop=True)
+    roles = [
+        "Business Analyst",
+        "DBA/Database Engineer",
+        "Data Analyst",
+        "Data Engineer",
+        "Data Scientist",
+        "Machine Learning Engineer",
+        "Research Scientist",
+        "Software Engineer",
+        "Product/Project Manager",
+        "Statistician",
+        "Other",
+    ]
+    series = map(lambda role: dataset[dataset.role == role].salary_threshold.reset_index(drop=True).rename(role), roles)
+    with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
+        sns.set_style("dark")
+        fig, axes = plt.subplots(nrows=len(roles), ncols=1, sharex=True, figsize=(width, height))
+        kdeplot_common = functools.partial(
+            sns.kdeplot,
+            log_scale=log_scale,
+            bw_adjust=bandwidth_adjust,
+            clip_on=False,
+            common_norm=False,
+            palette=palette,
+        )
+        kdeplot = functools.partial(
+            kdeplot_common,
+            fill=True,
+            alpha=1,
+            linewidth=1.5,
+        )
+        kdeplot_line = functools.partial(
+            kdeplot_common,
+            color="w",
+            linewidth=2.5,
+        )
+        for ax, sr in zip(axes, series):
+            kdeplot(ax=ax, data=sr)
+            kdeplot_line(ax=ax, data=sr)
+            ax.set_ylabel(sr.name, rotation=0, ha="right", va="center_baseline")
+            ax.yaxis.set_ticklabels("")
+            sns.despine(ax=ax, left=True, bottom=True)
+            ax.tick_params(left=False, bottom=False)
+        ax.set_xlabel("Salary ($)")
+        fig.suptitle(title, size=HUGE_FONT)
+        plt.tight_layout()
