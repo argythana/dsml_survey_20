@@ -238,7 +238,7 @@ def sns_plot_salary_medians(
             height=8,
             aspect=2.8,
             legend=False,
-            order = ["USA", "Germany", "Japan", "France", "Russia", "Brazil", "India"],
+            order = reversed(df.country.unique()),
             hue_order=["Filtered", "Unfiltered"]
         )
 
@@ -545,6 +545,6 @@ def sns_plot_salary_pde_comparison_per_role(
             ax.yaxis.set_ticklabels("")
             sns.despine(ax=ax, left=True, bottom=True)
             ax.tick_params(left=False, bottom=False)
-        ax.set_xlabel("Salary ($)")
+        ax.set_xlabel("")
         fig.suptitle(title, size=HUGE_FONT)
         plt.tight_layout()
