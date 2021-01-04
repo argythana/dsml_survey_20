@@ -1,3 +1,4 @@
+import functools
 from textwrap import wrap
 from typing import Any
 from typing import Dict
