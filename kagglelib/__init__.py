@@ -6,11 +6,8 @@ import math
 from typing import Optional
 from typing import Union
 
-import holoviews as hv
 import pandas as pd
 import seaborn as sns
-
-from holoviews import opts as hv_opts
 
 from .kaggle import SALARY_THRESHOLDS
 from .kaggle import REVERSE_SALARY_THRESHOLDS
@@ -29,7 +26,6 @@ from .kaggle import fix_age_bin_distribution
 from .kaggle import get_age_bin_distribution_comparison
 from .kaggle import calc_avg_age_distribution
 from .paths import DATA
-from .plots import hv_plot_value_count_comparison
 from .plots import sns_plot_value_count_comparison
 from .plots import PALETTE_INCOME_GROUP
 from .plots import PALETTE_ORIGINAL_VS_FILTERED

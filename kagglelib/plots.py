@@ -6,7 +6,6 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-import holoviews as hv
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import natsort
@@ -47,33 +46,6 @@ def check_df_is_stacked(df: pd.DataFrame) -> None:
         raise ValueError(f"The stacked dataframes need at least 3 columns: {df.columns}")
     if len(df) > 50:
         raise ValueError(f"You probably don't want to create a Bar plot with 50+ bins: {len(df)}")
-
-
-def hv_plot_value_count_comparison(
-    df: pd.DataFrame,
-    title: Optional[str] = None,
-) -> hv.Layout:
-    check_df_is_stacked(df)
-    column = df.columns[0]
-    if title is None:
-        title = column
-    source1, source2 = df["source"].unique()
-    # Stack dataframe for Bars plot
-    plot = hv.Bars(data=df, kdims=[column, "source"], vdims=[df.columns[-1]], label=title)
-    plot = plot.opts(
-        width=900,
-        height=600,
-        fontsize=12,
-        fontscale=1.0,
-        xrotation=90,
-        xlabel=f"{source1.capitalize()} VS {source2.capitalize()}",
-        show_grid=True,
-        show_legend=True,
-        show_title=True,
-        tools=["hover"],
-    )
-    layout = plot
-    return layout
 
 
 def get_mpl_rc(rc: Dict[str, Any]) -> Dict[str, Any]:
