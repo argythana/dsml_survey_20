@@ -38,7 +38,7 @@ from .plots import sns_plot_salary_medians
 from .plots import sns_plot_age_distribution
 from .plots import sns_plot_global_salary_distribution_comparison
 from .plots import sns_plot_salary_pde_comparison_per_income_group
-from .plots import sns_plot_salary_pde_comparison_per_income_group2
+#from .plots import sns_plot_salary_pde_comparison_per_income_group2
 from .plots import sns_plot_salary_pde_comparison_per_role
 from .third_party import load_eurostat_df
 from .third_party import get_usd_eur_rate
