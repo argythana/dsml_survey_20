@@ -4,6 +4,7 @@ from typing import Any
 from typing import Dict
 from typing import Optional
 from typing import Tuple
+from typing import Union
 
 import holoviews as hv
 import matplotlib as mpl
@@ -434,15 +435,15 @@ def sns_plot_salary_pde_comparison_per_income_group(
     height: float = 10,
     title: str = "Salary PDE per WB income groups (log scale)",
     title_wrap_length: Optional[int] = None,
-    bandwidth_adjust: Optional[Tuple[float, float, float, float, float]] = None,
+    bandwidth_adjust: Optional[Union[float, Tuple[float, float, float, float, float]]] = (0.8, 0.6, 0.5, 0.5, 0.4),
     log_scale: bool = True,
     rc: Optional[Dict[str, Any]] = None,
     palette: sns.palettes._ColorPalette = PALETTE_INCOME_GROUP,
 ) -> None:
     if title_wrap_length:
         title = "\n".join(wrap(title, title_wrap_length))
-    if bandwidth_adjust is None:
-        bandwidth_adjust = [0.8, 0.6, 0.5, 0.5, 0.4]
+    if type(bandwidth_adjust) is float:
+        bandwidth_adjust = [bandwidth_adjust] *  5
     dataset = dataset[~dataset.salary.isna() & ~(dataset.country == "Other")]
     # global_ = dataset.salary.reset_index(drop=True)
     india = dataset[(dataset.country == "India")].salary_threshold.reset_index(drop=True).rename("India")
