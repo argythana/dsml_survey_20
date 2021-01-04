@@ -215,14 +215,13 @@ def sns_plot_value_count_comparison(
         if legend_location is None:
             ax.get_legend().remove()
         else:
-            ax.legend(loc=legend_location, title="Source")
+            ax.legend(loc=legend_location, title="")
         ax.set_title(title)
         for bar in ax.patches:
             annotate_func(bar, ax, fmt)
             if bar_width:
                 _set_bar_width(bar, width=bar_width)
 
-        ax.legend().set_title(None)
 
 
 def sns_plot_salary_medians(
