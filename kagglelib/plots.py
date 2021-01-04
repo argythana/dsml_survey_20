@@ -84,12 +84,16 @@ def get_mpl_rc(rc: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # adapted from: https://stackoverflow.com/questions/39444665/add-data-labels-to-seaborn-factor-plot
-def _annotate_vertical_bar(bar, ax, fmt) -> None:
+def _annotate_vertical_bar(bar, ax, fmt, annotation_mapping: Optional[Dict[Any, str]] = None):
     h = bar.get_height()
     w = bar.get_width()
     x = bar.get_x()
+    if annotation_mapping:
+        text = annotation_mapping[h]
+    else:
+        text = fmt.format(h)
     ax.annotate(
-        text=fmt.format(h),
+        text=text,
         xy=(x + w / 2, h),
         xycoords="data",
         ha='center',
@@ -111,12 +115,16 @@ def get_text_width(text: str) -> float:
     return bbox.width
 
 
-def _annotate_horizontal_bar(bar, ax, fmt) -> None:
-    offset = 3 # pts
+def _annotate_horizontal_bar(bar, ax, fmt, annotation_mapping: Optional[Dict[Any, str]] = None) -> None:
+    offset = 3  # pts
     h = bar.get_height()
     w = bar.get_width()
     y = bar.get_y()
-    annotation_width = get_text_width(fmt.format(w))
+    if annotation_mapping:
+        text = annotation_mapping[w]
+    else:
+        text = fmt.format(w)
+    annotation_width = get_text_width(text)
     if 1.1 * (annotation_width + offset * SMALL_FONT / 72) <= w:
         # annotation is short enough, put it inside the bar
         ha = "right"
@@ -128,7 +136,7 @@ def _annotate_horizontal_bar(bar, ax, fmt) -> None:
         xytext = (offset, 0)
         color = "black"
     ax.annotate(
-        text=fmt.format(abs(w)),
+        text=text,
         xy=(w, y + h / 2),
         xycoords="data",
         ha=ha,
@@ -161,7 +169,8 @@ def sns_plot_value_count_comparison(
     x_ticklabels_rotation: int = 0,
     bar_width: Optional[float] = None,
     title_wrap_length: Optional[int] = None,
-    palette: sns.palettes._ColorPalette  = PALETTE_ORIGINAL_VS_FILTERED
+    palette: sns.palettes._ColorPalette  = PALETTE_ORIGINAL_VS_FILTERED,
+    annotation_mapping: Optional[Dict[Any, str]] = None,
 ) -> None:
     if orientation not in {"horizontal", "vertical", "h", "v"}:
         raise ValueError(f"Orientation must be one of {'horizontal', 'vertical'}, not: {orientation}")
@@ -177,13 +186,11 @@ def sns_plot_value_count_comparison(
         y = df.columns[0]
         annotate_func = _annotate_horizontal_bar
         order = natsort.natsorted(df[y].unique())
-
     else:
         x = df.columns[0]
         y = df.columns[-1]
         annotate_func = _annotate_vertical_bar
         order = natsort.natsorted(df[x].unique())
-
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
         sns.set_style("dark", {'axes.linewidth': 0.5})
         if ax is None:
@@ -218,7 +225,7 @@ def sns_plot_value_count_comparison(
             ax.legend(loc=legend_location, title="")
         ax.set_title(title)
         for bar in ax.patches:
-            annotate_func(bar, ax, fmt)
+            annotate_func(bar=bar, ax=ax, fmt=fmt, annotation_mapping=annotation_mapping)
             if bar_width:
                 _set_bar_width(bar, width=bar_width)
 
