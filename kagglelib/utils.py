@@ -70,6 +70,28 @@ def stack_value_count_comparison(df: pd.DataFrame, stack_label: str):
     return df
 
 
+def stack_dataframe(
+    df: pd.DataFrame,
+    key_column: str,
+    values_column: str = "values",
+    source_column: str = "source",
+    order: Optional[List[str]] = None,
+) -> pd.DataFrame:
+    if order and (len(df) != df[key_column].nunique()):
+        raise ValueError("DataFrame columns with duplicate keys are not orderable")
+    df = (
+        df.set_index(key_column)
+          .stack()
+          .rename(values_column)
+          .rename_axis([key_column, source_column])
+          .reset_index()
+    )
+    if order:
+        index = [key_column, source_column]
+        df = df.set_index(index).reindex(order, level=0).reset_index(drop=False)
+    return df
+
+
 def get_stacked_value_count_comparison(
     sr1: pd.Series,
     sr2: pd.Series,
