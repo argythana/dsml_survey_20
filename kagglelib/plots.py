@@ -160,7 +160,7 @@ def sns_plot_value_count_comparison(
     x_ticklabels_rotation: int = 0,
     bar_width: Optional[float] = None,
     title_wrap_length: Optional[int] = None,
-    palette: [str] = PALETTE_ORIGINAL_VS_FILTERED
+    palette: sns.palettes._ColorPalette  = PALETTE_ORIGINAL_VS_FILTERED
 ) -> None:
     if orientation not in {"horizontal", "vertical", "h", "v"}:
         raise ValueError(f"Orientation must be one of {'horizontal', 'vertical'}, not: {orientation}")
