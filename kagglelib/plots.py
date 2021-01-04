@@ -289,7 +289,6 @@ def sns_plot_age_distribution(
     fmt: str = "{:.1f}",
     rc: Optional[Dict[str, Any]] = None,
     orientation: str = "vertical",
-    legend_location: str = "best",
     bar_width: Optional[float] = None,
     title_wrap_length: Optional[int] = None,
 ) -> None:
@@ -349,7 +348,6 @@ def sns_plot_age_distribution(
                 bar.set_color("darkcyan")
 
 
-
 def sns_plot_global_salary_distribution_comparison(
     df1: pd.DataFrame,
     df2: pd.DataFrame,
@@ -361,7 +359,6 @@ def sns_plot_global_salary_distribution_comparison(
     fmt: str = "{:.1f}",
     rc: Optional[Dict[str, Any]] = None,
     orientation: str = "vertical",
-    legend_location: str = "best",
     bar_width: Optional[float] = None,
     title_wrap_length: Optional[int] = None,
     label1: str = "Unfiltered",
