@@ -1,4 +1,5 @@
 import functools
+import textwrap
 
 import pandas as pd
 
@@ -303,19 +304,6 @@ def filter_df(df: pd.DataFrame, print_filters=False) -> pd.DataFrame:
     is_too_young_for_salary = (df.age <= "24") & (df.salary_threshold >= df.high_salary_low_exp)
     is_low_salary_high_exp = is_high_exp & (df.salary_threshold < df.low_salary_high_exp)
     is_high_salary_low_exp = is_low_exp & (df.salary_threshold >= df.high_salary_low_exp)
-
-    if print_filters:
-        print(
-            f"""
-        Too young for experience   : {is_too_young_for_experience.sum()}
-        Too young for salary       : {is_too_young_for_salary.sum()}
-        Too low salary             : {is_too_low_salary.sum()}
-        Too low salary high exp    : {is_low_salary_high_exp.sum()}
-        Too high salary low exp    : {is_high_salary_low_exp.sum()}
-        only_answered_demographics : {only_answer_demographic.sum()}
-        """
-        )
-
     # Create dataframe
     conditions = (
         ~is_too_young_for_experience
@@ -325,6 +313,22 @@ def filter_df(df: pd.DataFrame, print_filters=False) -> pd.DataFrame:
         & ~is_high_salary_low_exp
         & ~only_answer_demographic
     )
+    # print summary
+    if print_filters:
+        print(
+            textwrap.dedent(
+                f"""
+                Too young for experience   : {is_too_young_for_experience.sum()}
+                Too young for salary       : {is_too_young_for_salary.sum()}
+                Too low salary             : {is_too_low_salary.sum()}
+                Too low salary high exp    : {is_low_salary_high_exp.sum()}
+                Too high salary low exp    : {is_high_salary_low_exp.sum()}
+                Only answered demographics : {only_answer_demographic.sum()}
+                ---------------------------------
+                All conditions combined    : {len(df) - conditions.sum()}
+                """
+            )
+        )
     df = df[conditions]
     return df
 
