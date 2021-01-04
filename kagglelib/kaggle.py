@@ -5,6 +5,7 @@ import pandas as pd
 
 from .paths import DATA
 from .third_party import load_mean_salary_comparison_df
+from .utils import stack_dataframe
 from .utils import stack_value_count_df
 from .utils import stack_value_count_comparison
 
@@ -346,52 +347,23 @@ def keep_demo_cols(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def load_salary_medians_df(
-    unfiltered: pd.DataFrame,
-    filtered: pd.DataFrame,
+    dataset1: pd.DataFrame,
+    dataset2: pd.DataFrame,
     countries: List[str],
-    label1: str = "Filtered",
-    label2: str = "Unfiltered",
+    label1: str = "Unfiltered",
+    label2: str = "Filtered",
 ) -> pd.DataFrame:
-    df = pd.concat(
-        objs=[
-            (
-                unfiltered[unfiltered.country.isin(countries)]
-                .groupby("country")
-                .salary_threshold.median()
-                .to_frame()
-                .rename(columns={"salary_threshold": "unfiltered_threshold"})
-            ),
-            (
-                filtered[filtered.country.isin(countries)]
-                .groupby("country")
-                .salary_threshold.median()
-                .to_frame()
-                .rename(columns={"salary_threshold": "filtered_threshold"})
-            ),
-        ],
-        axis="columns",
-    )
-    df = df.assign(
-        unfiltered=df.unfiltered_threshold.map(REVERSE_SALARY_THRESHOLDS),
-        filtered=df.filtered_threshold.map(REVERSE_SALARY_THRESHOLDS),
-    )
-    # melt dataframe and add the respective labels
-    df = (
-        df.reset_index()[["country", "unfiltered_threshold", "filtered_threshold"]]
-        .melt(id_vars="country")
-        .rename(columns={"value": "salary"})
-        .replace({"unfiltered_threshold": label1, "filtered_threshold": label2})
-    )
-    df = df.assign(label=df.salary.map(REVERSE_SALARY_THRESHOLDS))
-    df = df.sort_values("salary", ascending=True)
+    df = pd.DataFrame({
+        label1: dataset1[dataset1.country.isin(countries)].groupby("country").salary_threshold.median(),
+        label2: dataset2[dataset2.country.isin(countries)].groupby("country").salary_threshold.median(),
+    }).reset_index().reindex(columns=["country", label2, label1])
+    df = stack_dataframe(df, key_column="country", values_column="salary", order=countries)
     # Some countries, e.g. Russia, have an even number of partcipatnts,
     # Therefore the median is e.g. 22500 while we only have 20000 and 25000 in `SALARY_THRESHODLS`
     # Therefore we round up these values to the next threshold
-    nan_labels = df.label.isna()
+    nan_labels = ~df.salary.isin(SALARY_THRESHOLDS.values())
     if nan_labels.any():
-        func = lambda v: get_threshold(v, offset=0)
-        df.loc[nan_labels, "salary"] = df.loc[nan_labels, "salary"].apply(func)
-        df.loc[nan_labels, "label"] = df.loc[nan_labels, "salary"].map(REVERSE_SALARY_THRESHOLDS)
+        df.loc[nan_labels, "salary"] = df.loc[nan_labels, "salary"].apply(lambda v: get_threshold(v, offset=0))
     return df
 
 
