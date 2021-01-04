@@ -188,7 +188,7 @@ def sns_plot_value_count_comparison(
         sns.set_style("dark", {'axes.linewidth': 0.5})
         if ax is None:
             fig, ax = plt.subplots(figsize=(width, height))
-        sns.barplot(
+            sns.barplot(
             data=df,
             ax=ax,
             x=x,
@@ -209,6 +209,7 @@ def sns_plot_value_count_comparison(
         # Remove Labels from X and Y axes (we should have the relevant info on the title)
         ax.set_xlabel('')
         ax.set_ylabel('')
+
         if x_ticklabels_rotation != 0:
             ax.set_xticklabels(ax.get_xticklabels(), rotation=x_ticklabels_rotation)
         if legend_location is None:
@@ -220,6 +221,8 @@ def sns_plot_value_count_comparison(
             annotate_func(bar, ax, fmt)
             if bar_width:
                 _set_bar_width(bar, width=bar_width)
+
+        ax.legend().set_title(None)
 
 
 def sns_plot_salary_medians(
