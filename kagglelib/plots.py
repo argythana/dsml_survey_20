@@ -483,6 +483,7 @@ def sns_plot_salary_pde_comparison_per_income_group(
             ax.yaxis.set_ticklabels("")
             sns.despine(ax=ax, left=True, bottom=True)
             ax.tick_params(left=False, bottom=False)
+            ax.grid(True)
         ax.set_xlabel("Salary ($)")
         fig.suptitle(title, size=HUGE_FONT)
         plt.tight_layout()
@@ -490,7 +491,6 @@ def sns_plot_salary_pde_comparison_per_income_group(
 
 def sns_plot_salary_pde_comparison_per_role(
     dataset: pd.DataFrame,
-    #country: str,
     width: float = 18,
     height: float = 14,
     title: str = "Salary PDE per role (log scale)",
@@ -503,8 +503,6 @@ def sns_plot_salary_pde_comparison_per_role(
     if title_wrap_length:
         title = "\n".join(wrap(title, title_wrap_length))
     dataset = dataset[~dataset.salary.isna() & ~(dataset.country == "Other")]
-    #dataset = dataset[dataset.country == country]
-    # global_ = dataset.salary.reset_index(drop=True)
     roles = [
         "Business Analyst",
         "DBA/Database Engineer",
@@ -548,6 +546,7 @@ def sns_plot_salary_pde_comparison_per_role(
             ax.yaxis.set_ticklabels("")
             sns.despine(ax=ax, left=True, bottom=True)
             ax.tick_params(left=False, bottom=False)
+            ax.grid(True)
         ax.set_xlabel("")
         fig.suptitle(title, size=HUGE_FONT)
         plt.tight_layout()
