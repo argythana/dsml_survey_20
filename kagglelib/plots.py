@@ -279,7 +279,7 @@ def sns_plot_age_distribution(
     avg_bin_distribution = calc_avg_age_distribution(df, rename_index=True)
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
         fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=False, figsize=(width, height))
-        color = sns.desaturate("darkred", 0.59)
+        color = sns.desaturate("darkred", 0.55)
         sns.barplot(
             x=default_distribution.index,
             y=default_distribution,
@@ -414,7 +414,7 @@ def sns_plot_salary_pde_comparison_per_income_group(
     height: float = 10,
     title: str = "Salary PDE per WB income groups (log scale)",
     title_wrap_length: Optional[int] = None,
-    bandwidth_adjust: Union[Union[int, float], Tuple[float, float, float, float, float]] = (0.8, 0.6, 0.5, 0.5, 0.4),
+    bandwidth_adjust: Union[Union[int, float], Tuple[float, float, float, float, float]] = (0.8, 0.6, 0.5, 0.5, 0.5),
     log_scale: bool = True,
     rc: Optional[Dict[str, Any]] = None,
     palette: sns.palettes._ColorPalette = PALETTE_INCOME_GROUP,
@@ -459,8 +459,9 @@ def sns_plot_salary_pde_comparison_per_income_group(
             ax.yaxis.set_ticklabels("")
             sns.despine(ax=ax, left=True, bottom=True)
             ax.tick_params(left=False, bottom=False)
-            ax.grid(True)
-        ax.set_xlabel("Salary ($)")
+            ax.xaxis.grid(True)
+        ax.set_xlabel("")
+        ax.xaxis.set_ticklabels("")
         fig.suptitle(title, size=HUGE_FONT)
         plt.tight_layout()
 
