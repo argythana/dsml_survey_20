@@ -484,49 +484,6 @@ def sns_plot_salary_pde_comparison_per_income_group(
         plt.tight_layout()
 
 
-def sns_plot_salary_pde_comparison_per_income_group2(
-    dataset: pd.DataFrame,
-    bw_adjust: float = 0.6,
-    aspect: float = 5,
-    height: float = 3,
-    log_scale: bool = True,
-    rc: Optional[Dict[str, Any]] = None,
-    palette: sns.palettes._ColorPalette = PALETTE_INCOME_GROUP,
-) -> None:
-    dataset = dataset[~dataset.salary.isna() & ~(dataset.country == "Other")]
-    # global_ = dataset.salary_threshold.reset_index(drop=True)
-    india = dataset[(dataset.country == "India")].salary_threshold.reset_index(drop=True)
-    lower_middle = dataset[dataset.income_group.str.startswith("1") & (dataset.country != "India")].salary_threshold.reset_index(drop=True)
-    upper_middle = dataset[dataset.income_group.str.startswith("2")].salary_threshold.reset_index(drop=True)
-    high = dataset[dataset.income_group.str.startswith("3") & (dataset.country != "USA")].salary_threshold.reset_index(drop=True)
-    usa = dataset[(dataset.country == "USA")].salary_threshold.reset_index(drop=True)
-    df = pd.DataFrame({
-        "1. USA": usa,
-        "2. High":  high,
-        "3. Upper Middle":  upper_middle,
-        "4. India": india,
-        "5. Lower Middle":  lower_middle,
-        # "6. Global": global_,
-    })
-    df = df.stack().rename("salary").rename_axis(('asdf', 'country')).reset_index(level=1).reset_index(drop=True)
-    assert df.salary.isna().sum() == 0
-    with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
-        sns.set_style("dark")
-        grid = sns.FacetGrid(df, row="country", hue="country", aspect=5, height=3, palette=palette)
-        # Draw the densities in a few steps
-        grid.map(sns.kdeplot, "salary", bw_adjust=bw_adjust, clip_on=False, fill=True, alpha=1, linewidth=1.5, common_norm=False, log_scale=log_scale)
-        grid.map(sns.kdeplot, "salary",  bw_adjust=bw_adjust, clip_on=False, color="w", linewidth=2, common_norm=False, log_scale=log_scale)
-        grid.map(plt.axhline, y=0, linewidth=2, clip_on=False)
-        # Add A label to each Axes
-        grid.map(_label, "salary")
-        # Set the subplots to overlap
-        grid.fig.subplots_adjust(hspace=.15)
-        # Remove axes details that don't play well with overlap
-        grid.set_titles("")
-        grid.set(yticks=[])
-        grid.set(xticks=[])
-
-
 def sns_plot_salary_pde_comparison_per_role(
     dataset: pd.DataFrame,
     #country: str,
