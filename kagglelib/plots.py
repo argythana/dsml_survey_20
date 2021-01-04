@@ -223,7 +223,6 @@ def sns_plot_value_count_comparison(
                 _set_bar_width(bar, width=bar_width)
 
 
-
 def sns_plot_salary_medians(
     df: pd.DataFrame, title: Optional[str] = None, rc: Optional[Dict[str, Any]] = None
 ) -> None:
@@ -263,7 +262,6 @@ def sns_plot_salary_medians(
         # plot.set(xticklabels=[])
         #plot.ax.set_axisbelow(True)
         plot.ax.set_box_aspect(12/len(plot.ax.patches))
-        plot.ax.legend(loc="center left", title="", bbox_to_anchor=(1.04,0.5))
         plot.ax.legend(loc="best", title="")
         plot.ax.set_title(title)
 

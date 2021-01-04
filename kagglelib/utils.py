@@ -23,7 +23,7 @@ def get_value_count_df(
             "% diff": ((vc2 - vc1) / vc1 * 100).round(2),
         }
     )
-    df = df.reset_index(drop=False).rename(columns={"index": column})
+    df = df.rename_axis(column).reset_index(drop=False)
     return df
 
 
