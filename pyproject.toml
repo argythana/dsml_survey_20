@@ -8,23 +8,17 @@ packages= [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
+pip = "*"
+setuptools = "*"
 pandas = "^1.1.5"
 jupyterlab = "^2.2.9"
 numpy = "^1.19.4"
 matplotlib = "^3.3.3"
 seaborn = "^0.11.0"
-bokeh = "^2.2.3"
-holoviews = "^1.14.0"
-bqplot = "^0.12.19"
 ipympl = "^0.5.8"
 statsmodels = "^0.12.1"
-scikit-learn = "^0.23.2"
-xarray = "^0.16.2"
-pyarrow = "^2.0.0"
 data-science-types = "^0.2.22"
-plotly = "^4.14.1"
-ipywidgets = "7.5"
 natsort = "^7.1.0"
 
 [tool.poetry.dev-dependencies]
