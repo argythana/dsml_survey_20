@@ -2,6 +2,7 @@ import functools
 from textwrap import wrap
 from typing import Any
 from typing import Dict
+from typing import List
 from typing import Optional
 from typing import Tuple
 from typing import Union
@@ -9,14 +10,16 @@ from typing import Union
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import natsort
-import seaborn as sns
+import numpy as np
 import pandas as pd
+import seaborn as sns
+import sklearn.neighbors
 
 from importlib_metadata import version
 from matplotlib.transforms import Bbox
 
 from .paths import DATA
-from .kaggle import REVERSE_SALARY_THRESHOLDS
+from .kaggle import SALARY_THRESHOLDS
 from .kaggle import fix_age_bin_distribution
 from .kaggle import calc_avg_age_distribution
 
@@ -498,6 +501,45 @@ def sns_plot_salary_pde_comparison_per_income_group(
             ax.xaxis.grid(True)
         ax.set_xlabel("")
         ax.xaxis.set_ticklabels("")
+        fig.suptitle(title, size=HUGE_FONT)
+        plt.tight_layout()
+
+
+def sns_plot_pde_comparison(
+    series: Union[pd.Series, List[pd.Series]],
+    width: float = 18,
+    height: float = 14,
+    title: str = "Salary PDE per role (log scale)",
+    title_wrap_length: Optional[int] = None,
+    bandwidth: float = 10,
+    log_scale: bool = True,
+    rc: Optional[Dict[str, Any]] = None,
+    palette: sns.palettes._ColorPalette = PALETTE_INCOME_GROUP,
+) -> None:
+    if title_wrap_length:
+        title = "\n".join(wrap(title, title_wrap_length))
+    if isinstance(series, pd.Series):
+         series = [series]
+    if not isinstance(bandwidth, (list, tuple)):
+        bandwidth = [bandwidth] * len(series)
+    with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
+        sns.set_style("dark")
+        fig, axes = plt.subplots(nrows=len(series), ncols=1, sharex=True, sharey=True, figsize=(width, height))
+        for (sr, ax, bw) in zip(series, axes, bandwidth):
+            x_d = np.array(sorted(SALARY_THRESHOLDS.values()))
+            kde = sklearn.neighbors.KernelDensity(bandwidth=bw, kernel="gaussian")
+            kde.fit(sr.values[:, None])
+            logprob = kde.score_samples(x_d[:, None])
+            ax.plot(x_d, np.exp(logprob), color="w", linewidth=2.5)
+            ax.fill_between(x_d, np.exp(logprob), alpha=1, linewidth=1.5)
+            ax.set_ylabel(sr.name, rotation=0, ha="right", va="center_baseline")
+            sns.despine(ax=ax, left=True, bottom=True)
+            ax.tick_params(left=False, bottom=False)
+            ax.xaxis.grid(True, which="major")
+            ax.yaxis.set_ticklabels("")
+        if log_scale:
+            ax.set_xscale('log')
+        #ax.set_xlim((1, 1000000))
         fig.suptitle(title, size=HUGE_FONT)
         plt.tight_layout()
 
