@@ -12,6 +12,7 @@ import natsort
 import seaborn as sns
 import pandas as pd
 
+from importlib_metadata import version
 from matplotlib.transforms import Bbox
 
 from .paths import DATA
@@ -55,6 +56,39 @@ def get_mpl_rc(rc: Dict[str, Any]) -> Dict[str, Any]:
     return mpl_rc
 
 
+def mpl_annotate(ax: mpl.axes.Axes, text: str, **kwargs) -> None:
+    """
+    Wrapper around ax.annotate() that uses the correct arguments regardless of the matplotlib version
+
+    Matplotlib 3.0 changed the ax.annotate() function definition from:
+
+    ``` diff
+    - Axes.annotate(self, s, xy, *args, **kwargs)[source]
+    + Axes.annotate(self, text, xy, *args, **kwargs)[source]
+    ```
+
+    In Matplotlib 3.0.2 the change was reverted.
+    In Matplotlib 3.3 the change was reintroduced .
+
+    ## Relevant links
+
+    - https://matplotlib.org/3.0.0/api/_as_gen/matplotlib.axes.Axes.annotate.html
+    - https://matplotlib.org/3.0.2/api/_as_gen/matplotlib.axes.Axes.annotate.html
+    - https://matplotlib.org/3.2.0/api/_as_gen/matplotlib.axes.Axes.annotate.html
+    - https://matplotlib.org/3.3.0/api/_as_gen/matplotlib.axes.Axes.annotate.html
+    - https://github.com/matplotlib/matplotlib/issues/12325/
+    - https://github.com/matplotlib/matplotlib/pull/12383
+    """
+    matplotlib_version = version("matplotlib")
+    if matplotlib_version > "3.3":
+        kwargs.update({"text": text})
+    elif matplotlib_version <= "3.0.1":
+        kwargs.update({"text": text})
+    else:
+        kwargs.update({"s": text})
+    ax.annotate(**kwargs)
+
+
 # adapted from: https://stackoverflow.com/questions/39444665/add-data-labels-to-seaborn-factor-plot
 def _annotate_vertical_bar(bar, ax, fmt, annotation_mapping: Optional[Dict[Any, str]] = None):
     h = bar.get_height()
@@ -64,7 +98,8 @@ def _annotate_vertical_bar(bar, ax, fmt, annotation_mapping: Optional[Dict[Any, 
         text = annotation_mapping[h]
     else:
         text = fmt.format(h)
-    ax.annotate(
+    mpl_annotate(
+        ax=ax,
         text=text,
         xy=(x + w / 2, h),
         xycoords="data",
@@ -107,7 +142,8 @@ def _annotate_horizontal_bar(bar, ax, fmt, annotation_mapping: Optional[Dict[Any
         ha = "left"
         xytext = (offset, 0)
         color = "black"
-    ax.annotate(
+    mpl_annotate(
+        ax=ax,
         text=text,
         xy=(w, y + h / 2),
         xycoords="data",
