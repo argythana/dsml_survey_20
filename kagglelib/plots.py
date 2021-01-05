@@ -472,7 +472,7 @@ def sns_plot_salary_pde_comparison_per_role(
     height: float = 14,
     title: str = "Salary PDE per role (log scale)",
     title_wrap_length: Optional[int] = None,
-    bandwidth_adjust: float = 0.5,
+    bandwidth_adjust: float = 0.6,
     log_scale: bool = True,
     rc: Optional[Dict[str, Any]] = None,
     palette: sns.palettes._ColorPalette = PALETTE_INCOME_GROUP,
