@@ -170,7 +170,7 @@ def get_threshold(value: float, offset: int):
 
 @functools.lru_cache(maxsize=1)
 def load_thresholds_df(
-    low_salary_percentage: float = 0.33,
+    low_salary_percentage: float = 0.4,
     threshold_offset: int = 2,
     high_salary_low_exp_threshold: int = 500000,
 ) -> pd.DataFrame:
