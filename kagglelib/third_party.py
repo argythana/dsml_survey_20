@@ -39,6 +39,33 @@ def load_world_bank_groups() -> pd.DataFrame:
 
 
 @functools.lru_cache(maxsize=1)
+def load_world_bank_gni_pc_atlas() -> pd.DataFrame:
+    df = pd.read_csv(
+        DATA / "wb_gni_pc_atlas_filtered.csv",
+        usecols = [0, 1],
+        header=0,
+        names=["country", "wb_gni_pc_atlas"],
+        index_col="country",
+    )
+    df = df.assign(year=2019)
+    return df
+
+
+
+@functools.lru_cache(maxsize=1)
+def load_world_bank_gdp_pc() -> pd.DataFrame:
+    df = pd.read_csv(
+        DATA / "wb_gdp_pc_filtered.csv",
+        usecols = [0, 1],
+        header=0,
+        names=["country", "wb_gdp_pc"],
+        index_col="country",
+    )
+    df = df.assign(year=2019)
+    return df
+
+
+@functools.lru_cache(maxsize=1)
 def load_eurostat_df() -> pd.DataFrame:
     usd_eur = get_usd_eur_rate(2019)
     df = pd.read_csv(
@@ -56,7 +83,7 @@ def load_oecd_df() -> pd.DataFrame:
     df = pd.read_csv(
         DATA / "oecd_ann_avg_wage_2019.csv",
         header=0,
-        names=["country", "oecd"],
+        names=["country", "oecd_ppp"],
         index_col="country",
     )
     df = df.assign(year=2019)
@@ -95,10 +122,12 @@ def load_ilo_df() -> pd.DataFrame:
 def load_mean_salary_comparison_df():
     income_group = load_world_bank_groups()
     eurostat = load_eurostat_df()
-    oecd = load_oecd_df()
+    wb_gni_pc_atlas = load_world_bank_gni_pc_atlas()
+    wb_gdp_pc = load_world_bank_gdp_pc()
+    oecd_ppp = load_oecd_df()
     ilo = load_ilo_df()
     numbeo = load_numbeo_df()
-    df = pd.concat([income_group.income_group, eurostat.eurostat, oecd.oecd, ilo.ilo, numbeo.numbeo], axis="columns")
+    df = pd.concat([income_group.income_group, eurostat.eurostat, wb_gni_pc_atlas.wb_gni_pc_atlas, wb_gdp_pc.wb_gdp_pc, oecd_ppp.oecd_ppp, ilo.ilo, numbeo.numbeo], axis="columns")
     df.index.name = "country"
     df = df.assign(country_avg_salary=df.bfill(axis=1).iloc[:, 1])
     df = df.reset_index(drop=False)

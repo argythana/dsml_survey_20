@@ -39,6 +39,8 @@ from .plots import sns_plot_salary_pde_comparison_per_role
 from .third_party import load_eurostat_df
 from .third_party import get_usd_eur_rate
 from .third_party import load_world_bank_groups
+from .third_party import load_world_bank_gdp_pc
+from .third_party import load_world_bank_gni_pc_atlas
 from .third_party import load_oecd_df
 from .third_party import load_numbeo_df
 from .third_party import load_ilo_df
