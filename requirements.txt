@@ -20,7 +20,7 @@ ipympl==0.5.8
 ipython-genutils==0.2.0; python_version >= "3.7"
 ipython==7.19.0; python_version >= "3.7"
 ipywidgets==7.6.2
-jedi==0.18.0; python_version >= "3.7"
+jedi==0.18.0; python_version >= "3.6"
 jinja2==2.11.2; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
 json5==0.9.5; python_version >= "3.5"
 jsonschema==3.2.0; python_version >= "3.5"
