@@ -32,10 +32,10 @@ PALETTE_USA_VS_ROW = [sns.desaturate("lightcoral", 0.9), sns.desaturate("deepsky
 PALETTE_COMPARISON = [sns.desaturate(color, 0.4) for color in "red,magenta,cyan,blue,cornflowerblue,green".split(",")]
 PALETTE_ORIGINAL_VS_FILTERED = [sns.desaturate("red", 0.4), sns.desaturate("cornflowerblue", 0.75)]
 
-SMALL_FONT = 12
-MEDIUM_FONT = 16
-BIG_FONT = 18
-HUGE_FONT = 24
+SMALL_FONT = 14
+MEDIUM_FONT = 18
+BIG_FONT = 24
+HUGE_FONT = 30
 
 
 MPL_RC = {
