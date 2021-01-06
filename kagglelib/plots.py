@@ -422,7 +422,7 @@ def sns_plot_global_salary_distribution_comparison(
             ax2.tick_params(left=False, bottom=False)
             ax2.yaxis.set_tick_params(labeltop='on')
             fig.subplots_adjust(top=0.85)
-            
+
             for ax in (ax1, ax2):
                 for i, bar in enumerate(ax.patches):
                     _annotate_horizontal_bar(bar, ax, fmt)
