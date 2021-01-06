@@ -436,22 +436,6 @@ def sns_plot_global_salary_distribution_comparison(
             plt.tight_layout()
 
 
-# Define and use a simple function to label the plot in axes coordinates
-def _label(x, color, label):
-    ax = plt.gca()
-    ax.text(
-        x=0,
-        y=.5,
-        s=label,
-        fontweight="bold",
-        fontsize=BIG_FONT,
-        color=color,
-        ha="left",
-        va="center",
-        transform=ax.transAxes
-    )
-
-
 def sns_plot_salary_pde_comparison_per_income_group(
     dataset: pd.DataFrame,
     width: float = 18,
