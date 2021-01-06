@@ -2,6 +2,7 @@ import functools
 import textwrap
 
 import pandas as pd
+import numpy as np
 
 from .paths import DATA
 from .third_party import load_mean_salary_comparison_df
@@ -294,7 +295,7 @@ def filter_df(df: pd.DataFrame, print_filters=False) -> pd.DataFrame:
     temp_df = orig.iloc[1:, 7:].reset_index(drop=True)
     only_answer_demographic = ((temp_df == "None") | temp_df.isnull()).all(axis=1)
     # Basic conditions
-    low_exp_bins = ["0", "0-1", "1-2"]
+    low_exp_bins = ["0", "0-1", "1-2", np.nan]
     is_low_exp = df.code_exp.isin(low_exp_bins) & (df.ml_exp.isin(low_exp_bins) | df.ml_exp.isna())
     high_exp_bins = ["10-20", "20+"]
     is_high_exp = df.code_exp.isin(high_exp_bins) | df.ml_exp.isin(high_exp_bins)
