@@ -168,8 +168,8 @@ def _set_bar_width(bar, width: float) -> None:
 
 def sns_plot_value_count_comparison(
     df: pd.DataFrame,
-    width: float,
-    height: float,
+    width: Optional[float] = None,
+    height: Optional[float] = None,
     ax: Optional[mpl.axes.Axes] = None,
     title: Optional[str] = None,
     order_by_labels: bool = True,
@@ -185,6 +185,9 @@ def sns_plot_value_count_comparison(
 ) -> None:
     if orientation not in {"horizontal", "vertical", "h", "v"}:
         raise ValueError(f"Orientation must be one of {'horizontal', 'vertical'}, not: {orientation}")
+    if not ax:
+        if not (width and height):
+            raise ValueError("You must specify either an <ax> or both <width> and <height>")
     check_df_is_stacked(df)
     if fmt is None:
         fmt = "{:.1f}" if df.dtypes[-1] == 'float64' else "{:.0f}"
@@ -206,7 +209,7 @@ def sns_plot_value_count_comparison(
         sns.set_style("dark", {'axes.linewidth': 0.5})
         if ax is None:
             fig, ax = plt.subplots(figsize=(width, height))
-            sns.barplot(
+        sns.barplot(
             data=df,
             ax=ax,
             x=x,
