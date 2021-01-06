@@ -184,7 +184,7 @@ def sns_plot_value_count_comparison(
     y_ticklabels_rotation: Optional[float] = None,
     bar_width: Optional[float] = None,
     title_wrap_length: Optional[int] = None,
-    palette: sns.palettes._ColorPalette  = PALETTE_ORIGINAL_VS_FILTERED,
+    palette: sns.palettes._ColorPalette = PALETTE_ORIGINAL_VS_FILTERED,
     annotation_mapping: Optional[Dict[Any, str]] = None,
 ) -> None:
     if orientation not in {"horizontal", "vertical", "h", "v"}:

@@ -33,6 +33,7 @@ from .plots import sns_plot_participants_vs_median_salary
 from .plots import PALETTE_INCOME_GROUP
 from .plots import PALETTE_ORIGINAL_VS_FILTERED
 from .plots import PALETTE_USA_VS_ROW
+from .plots import PALETTE_COMPARISON
 from .plots import sns_plot_salary_medians
 from .plots import sns_plot_age_distribution
 from .plots import sns_plot_global_salary_distribution_comparison
