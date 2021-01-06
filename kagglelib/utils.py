@@ -1,6 +1,8 @@
+from functools import reduce
 from typing import List
 from typing import Optional
 from typing import Tuple
+from typing import Union
 
 import pandas as pd
 
@@ -112,3 +114,7 @@ def get_complimentary_datasets(df: pd.DataFrame, filter: pd.Series) -> Tuple[pd.
     df1 = df[filter]
     df2 = df[~filter]
     return df1, df2
+
+
+def multi_merge(dataframes: List[pd.DataFrame], on=Union[str, List[str]], how: str = "inner"):
+    return reduce(lambda df1, df2: pd.merge(df1, df2, on=on, how=how), dataframes)
