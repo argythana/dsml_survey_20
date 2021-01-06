@@ -421,14 +421,16 @@ def sns_plot_global_salary_distribution_comparison(
             ax1.tick_params(left=False, bottom=False)
             ax2.tick_params(left=False, bottom=False)
             ax2.yaxis.set_tick_params(labeltop='on')
-            fig.suptitle(title, size=HUGE_FONT)
-
-            plt.tight_layout()
+            fig.subplots_adjust(top=0.85)
+            
             for ax in (ax1, ax2):
                 for i, bar in enumerate(ax.patches):
                     _annotate_horizontal_bar(bar, ax, fmt)
                     if bar_width:
                         _set_bar_width(bar, width=bar_width)
+
+            fig.suptitle(title, size=HUGE_FONT, y=1.03)
+            plt.tight_layout()
 
 
 # Define and use a simple function to label the plot in axes coordinates
