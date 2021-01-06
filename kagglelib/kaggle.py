@@ -1,18 +1,19 @@
 import functools
 import textwrap
 
-import pandas as pd
+from typing import List
+from typing import Optional
+from typing import Union
+
+import natsort
 import numpy as np
+import pandas as pd
 
 from .paths import DATA
 from .third_party import load_mean_salary_comparison_df
 from .utils import stack_dataframe
 from .utils import stack_value_count_df
 from .utils import stack_value_count_comparison
-
-from typing import List
-from typing import Optional
-from typing import Union
 
 YEARS_PER_BIN = {
     "18-21": 4,
@@ -501,3 +502,10 @@ def calc_avg_age_distribution(df: pd.DataFrame, rename_index: bool = True) -> pd
     df = df.drop(["participants", "years_per_bin"], axis=1).set_index("age")
     series = pd.Series(df.avg_participants, index=df.index)
     return series
+
+
+def get_salary_distribution(dataset: pd.DataFrame, name: str = "") -> pd.DataFrame:
+    df = (dataset.salary.value_counts(True) * 100).round(2).reset_index()
+    df = df.rename(columns={"salary": name or "percentage", "index": "salary"})
+    df = df.sort_values("salary", key=natsort.natsort_key, ascending=False)
+    return df
