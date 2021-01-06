@@ -20,7 +20,7 @@ ipympl==0.5.8
 ipython-genutils==0.2.0; python_version >= "3.7"
 ipython==7.19.0; python_version >= "3.7"
 ipywidgets==7.6.2
-jedi==0.18.0; python_version >= "3.6"
+jedi==0.17.2; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.5.0")
 jinja2==2.11.2; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
 json5==0.9.5; python_version >= "3.5"
 jsonschema==3.2.0; python_version >= "3.5"
@@ -44,7 +44,7 @@ numpy==1.18.5; python_version >= "3.5"
 packaging==20.8; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
 pandas==1.1.5; python_full_version >= "3.6.1"
 pandocfilters==1.4.3; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.6"
-parso==0.8.1; python_version >= "3.7"
+parso==0.7.1; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.7"
 pexpect==4.8.0; sys_platform != "win32" and python_version >= "3.7"
 pickleshare==0.7.5; python_version >= "3.7"
 prometheus-client==0.9.0; python_version >= "3.5"
