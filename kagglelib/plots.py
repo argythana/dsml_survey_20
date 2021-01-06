@@ -278,7 +278,6 @@ def sns_plot_participants_vs_median_salary(
     plt.tight_layout()
 
 
-
 def sns_plot_salary_medians(
     df: pd.DataFrame, title: Optional[str] = None, rc: Optional[Dict[str, Any]] = None
 ) -> None:
@@ -629,3 +628,57 @@ def sns_plot_salary_pde_comparison_per_role(
         ax.set_xlabel("")
         fig.suptitle(title, size=HUGE_FONT)
         plt.tight_layout()
+
+
+def sns_plot_salary_distribution_comparison(
+    df: pd.DataFrame,
+    width: float,
+    height: float,
+    x1_limit: Optional[Tuple[float, float]] = (0, 19),
+    x2_limit: Optional[Tuple[float, float]] = (0, 19),
+    title: str = "Salary Distribution, $",
+    fmt: str = "{:.1f}",
+    rc: Optional[Dict[str, Any]] = None,
+    title_wrap_length: Optional[int] = None,
+    label1: str = "Unfiltered",
+    label2: str = "Filtered",
+) -> None:
+    """
+
+    Plots a dataframe like this one:
+
+    ```
+               Lower Middle  Upper Middle  India  High  USA
+    salary
+    5000-7499         12.91          6.46  12.98  0.13  NaN
+    4000-4999          7.24          3.38   7.45  0.13  NaN
+    3000-3999          5.00          4.04   3.91   NaN  NaN
+    2000-2999          5.90          4.85   4.27   NaN  NaN
+    1000-1999         10.41          4.55   8.41   NaN  NaN
+    ```
+
+    """
+    if title_wrap_length:
+        title = "\n".join(wrap(title, title_wrap_length))
+    series = [df[col] for col in df.columns]
+    with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
+        with sns.axes_style("dark", {'axes.linewidth': 0.5}):
+            fig, axes = plt.subplots(nrows=1, ncols=len(series), sharex=True, sharey=True, figsize=(width, height), squeeze=True)
+            for (ax, sr) in zip(axes, series):
+                sns.barplot(
+                    x=sr,
+                    y=sr.index,
+                    ax=ax,
+                    palette=[sns.desaturate("red", 0.4)]
+                )
+                ax.set_ylabel("")
+                ax.set_xlabel("")
+                ax.set_title(sr.name)
+                ax.xaxis.set_ticklabels("")
+                ax.xaxis.grid(True)
+            fig.suptitle(title, size=HUGE_FONT, y=1.03)
+            plt.tight_layout()
+            axes[-1].yaxis.set_tick_params(labeltop='on')
+            for ax in axes:
+                for i, bar in enumerate(ax.patches):
+                    _annotate_horizontal_bar(bar, ax, fmt)
