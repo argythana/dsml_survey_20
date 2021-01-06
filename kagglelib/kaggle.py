@@ -346,6 +346,16 @@ def keep_demo_cols(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def fix_median_salary_thresholds(df: pd.DataFrame, column: str = "salary_threshold") -> pd.DataFrame:
+    # Some countries, e.g. Russia, have an even number of participants,
+    # Therefore the median is e.g. 22500 while we only have 20000 and 25000 in `SALARY_THRESHOLDS`
+    # Therefore we round up these values to the next threshold
+    nan_labels = ~df[column].isin(SALARY_THRESHOLDS.values())
+    if nan_labels.any():
+        df.loc[nan_labels, column] = df.loc[nan_labels, column].apply(lambda v: get_threshold(v, offset=0))
+    return df
+
+
 def load_salary_medians_df(
     dataset1: pd.DataFrame,
     dataset2: pd.DataFrame,
@@ -357,13 +367,8 @@ def load_salary_medians_df(
         label1: dataset1[dataset1.country.isin(countries)].groupby("country").salary_threshold.median(),
         label2: dataset2[dataset2.country.isin(countries)].groupby("country").salary_threshold.median(),
     }).reset_index().reindex(columns=["country", label2, label1])
-    df = stack_dataframe(df, key_column="country", values_column="salary", order=countries)
-    # Some countries, e.g. Russia, have an even number of partcipatnts,
-    # Therefore the median is e.g. 22500 while we only have 20000 and 25000 in `SALARY_THRESHODLS`
-    # Therefore we round up these values to the next threshold
-    nan_labels = ~df.salary.isin(SALARY_THRESHOLDS.values())
-    if nan_labels.any():
-        df.loc[nan_labels, "salary"] = df.loc[nan_labels, "salary"].apply(lambda v: get_threshold(v, offset=0))
+    df = stack_dataframe(df, key_column="country", values_column="salary_threshold", order=countries)
+    df = fix_median_salary_thresholds(df, "salary_threshold")
     return df
 
 
