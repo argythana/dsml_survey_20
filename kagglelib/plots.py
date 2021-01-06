@@ -33,9 +33,9 @@ PALETTE_COMPARISON = [sns.desaturate(color, 0.4) for color in "red,magenta,cyan,
 PALETTE_ORIGINAL_VS_FILTERED = [sns.desaturate("red", 0.4), sns.desaturate("cornflowerblue", 0.75)]
 
 SMALL_FONT = 12
-MEDIUM_FONT = 13
-BIG_FONT = 14
-HUGE_FONT = 18
+MEDIUM_FONT = 16
+BIG_FONT = 18
+HUGE_FONT = 24
 
 
 MPL_RC = {
