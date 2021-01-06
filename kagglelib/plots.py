@@ -453,6 +453,8 @@ def sns_plot_global_salary_distribution_comparison(
             ax2.set_title(label2)
             ax1.xaxis.set_ticklabels("")
             ax2.xaxis.set_ticklabels("")
+            ax1.xaxis.grid(True, which="major")
+            ax2.xaxis.grid(True, which="major")
             #ax1.set_ylabel("Salary ($)")
             ax1.set_ylabel("")
             ax2.set_ylabel("")
