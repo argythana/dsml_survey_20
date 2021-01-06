@@ -383,50 +383,85 @@ def load_participants_per_country_df(original: pd.DataFrame, filtered: pd.DataFr
     return df
 
 
-def load_median_salary_per_income_group_per_XP_level_df(
+def load_aggregate_per_XP_level_df(
     dataset: pd.DataFrame,
-    xp_type: str,
+    column: str,
     income_group: Optional[str] = None,
+    countries: Optional[str] = None,
+    no_participants: bool = False
 ) -> None:
     """
-    ## Examples
+    Return median salary or no participants per XP level
 
-    kglib.load_median_salary_per_income_group_per_XP_level_df(uds, xp_type="code", income_group="3")
-    kglib.load_median_salary_per_income_group_per_XP_level_df(uds, xp_type="ml", income_group="3")
-    kglib.load_median_salary_per_income_group_per_XP_level_df(uds, xp_type="ml")
+    ```
+    # Choose XP level type
+    kglib.load_median_salary_per_XP_level_df(uds, column="code_level", income_group="3")
+    kglib.load_median_salary_per_XP_level_df(uds, column="ml_level", income_group="3")
+    # No participants
+    kglib.load_median_salary_per_XP_level_df(uds, column="ml_level", income_group="3", no_participants=True)
+    # all group incomes together
+    kglib.load_median_salary_per_XP_level_df(uds, column="ml_level", income_group="all")
+    # Single country
+    kglib.load_median_salary_per_XP_level_df(uds, column="ml_level", countries="USA")
+    # Multiple countries
+    kglib.load_median_salary_per_XP_level_df(uds, column="ml_level", countries=["USA", "India"])
+    ```
     """
-    assert xp_type in ("code", "ml"), "xp_type should be in {'code_level', 'ml_level'}, not: %s" % xp_type
-    level_variable = "code_level" if xp_type == "code" else "ml_level"
+    if column not in ("code_level", "ml_level"):
+        raise ValueError(f"column should be either <code_level> or <ml_level>, not: {column}")
+    if not (countries or income_group):
+        raise ValueError("You must specify at least one of <income_group> and <countries>")
     if income_group:
-        dataset = dataset[~dataset.salary.isna() & dataset.income_group.str.startswith(income_group)]
-    df = dataset.groupby([level_variable, "income_group"]).salary_threshold.median().reset_index()
-    df = df.sort_values(by=[level_variable, "income_group"])
+        variable = "income_group"
+        if income_group == "all":
+            condition = dataset.income_group.str.len() > 1
+        else:
+            condition = dataset.income_group.str.startswith(income_group)
+    if countries:
+        if isinstance(countries, str):  # convert to a list
+            countries = [countries]
+        variable = "country"
+        condition = (dataset.country.isin(countries))
+    dataset = dataset[~dataset.salary.isna() & condition]
+    gb = dataset.groupby([column, variable])
+    if no_participants:
+        values_column = "no_participants"
+        df = gb.size().reset_index()
+    else:
+        values_column = "salary_threshold"
+        df = gb.salary_threshold.median().reset_index()
+        df = fix_median_salary_thresholds(df, values_column)
+    df.columns = [column, "region", values_column]
+    # Fix order according to what the user specified
+    if countries:
+        df = df.set_index([column, "region"]).reindex(countries, level=1).reset_index()
     return df
 
 
 def load_median_salary_comparison_df(
     dataset1: pd.DataFrame,
     dataset2: pd.DataFrame,
-    xp_type: str,
-    income_group: str,
+    column: str,
+    income_group: Optional[str] = None,
+    countries: Optional[Union[str, List[str]]] = None,
     label1: str = "filtered",
     label2: str = "unfiltered",
 ) -> pd.DataFrame:
     """
     ## Examples
 
-        df = kglib.load_median_salary_comparison_df(uds, fds, xp_type="code", income_group="3")
+        df = kglib.load_median_salary_comparison_df(uds, fds, column="code_level", income_group="3")
         kglib.sns_plot_value_count_comparison(
             df, height=8, width=18, bar_width=0.35, title_wrap_length=80,
             title="Data Scientists: Median salary per Code XP level in High Income countries Filtered vs Unfiltered datasets"
         )
     """
-    level_variable = "code_level" if xp_type == "code" else "ml_level"
-    df1 = load_median_salary_per_income_group_per_XP_level_df(dataset=dataset1, xp_type=xp_type, income_group=income_group)
-    df2 = load_median_salary_per_income_group_per_XP_level_df(dataset=dataset2, xp_type=xp_type, income_group=income_group)
-    df = pd.merge(df1, df2, on=[level_variable, "income_group"])
-    df = df.drop(columns="income_group")
-    df.columns = ["code_level", label1, label2]
+    assert column in ("code_level", "ml_level"), "column should be in {'code_level', 'ml_level'}, not: %s" % column
+    df1 = load_aggregate_per_XP_level_df(dataset=dataset1, column=column, income_group=income_group, countries=countries)
+    df2 = load_aggregate_per_XP_level_df(dataset=dataset2, column=column, income_group=income_group, countries=countries)
+    df = pd.merge(df1, df2, on=[column, "region"])
+    df = df.drop(columns="region")
+    df.columns = [column, label1, label2]
     df = stack_value_count_df(df, "salary_threshold")
     return df
 

@@ -20,6 +20,7 @@ from matplotlib.transforms import Bbox
 
 from .paths import DATA
 from .kaggle import SALARY_THRESHOLDS
+from .kaggle import REVERSE_SALARY_THRESHOLDS
 from .kaggle import fix_age_bin_distribution
 from .kaggle import calc_avg_age_distribution
 
@@ -242,6 +243,46 @@ def sns_plot_value_count_comparison(
             annotate_func(bar=bar, ax=ax, fmt=fmt, annotation_mapping=annotation_mapping)
             if bar_width:
                 _set_bar_width(bar, width=bar_width)
+
+
+def sns_plot_participants_vs_median_salary(
+    no_participants_df: pd.DataFrame,
+    median_salary_df: pd.DataFrame,
+    width: Optional[float] = None,
+    height: Optional[float] = None,
+    title: Optional[str] = None,
+    rc: Optional[Dict[str, Any]] = None,
+    title_wrap_length: Optional[int] = None,
+    palette: sns.palettes._ColorPalette = PALETTE_ORIGINAL_VS_FILTERED,
+) -> None:
+    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharey=True, figsize=(width, height))
+    sns_plot_value_count_comparison(
+        no_participants_df,
+        ax=ax1,
+        orientation="h",
+        palette=None,
+        title="No. participants",
+        legend_location=None,
+    )
+    sns_plot_value_count_comparison(
+        median_salary_df,
+        ax=ax2,
+        orientation="h",
+        palette=None,
+        title="Median salary",
+        legend_location="best",
+        annotation_mapping=REVERSE_SALARY_THRESHOLDS
+    )
+    # fig.legend(
+        # *ax2.get_legend_handles_labels(),
+        # loc='center right',
+        # bbox_to_anchor=(1.10, 0.5),
+        # fontsize=MEDIUM_FONT
+    # )
+    fig.subplots_adjust(top=0.80)
+    fig.suptitle(title, fontsize=HUGE_FONT, y=1.04)
+    plt.tight_layout()
+
 
 
 def sns_plot_salary_medians(
