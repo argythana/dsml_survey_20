@@ -175,7 +175,8 @@ def sns_plot_value_count_comparison(
     rc: Optional[Dict[str, Any]] = None,
     orientation: str = "vertical",
     legend_location: Optional[str] = "best",
-    x_ticklabels_rotation: int = 0,
+    x_ticklabels_rotation: Optional[float] = None,
+    y_ticklabels_rotation: Optional[float] = None,
     bar_width: Optional[float] = None,
     title_wrap_length: Optional[int] = None,
     palette: sns.palettes._ColorPalette  = PALETTE_ORIGINAL_VS_FILTERED,
@@ -229,8 +230,10 @@ def sns_plot_value_count_comparison(
         ax.set_xlabel('')
         ax.set_ylabel('')
 
-        if x_ticklabels_rotation != 0:
+        if x_ticklabels_rotation:
             ax.set_xticklabels(ax.get_xticklabels(), rotation=x_ticklabels_rotation)
+        if y_ticklabels_rotation:
+            ax.set_yticklabels(ax.get_yticklabels(), rotation=y_ticklabels_rotation)
         if legend_location is None:
             ax.get_legend().remove()
         else:
