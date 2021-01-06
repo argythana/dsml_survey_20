@@ -116,10 +116,9 @@ def _annotate_vertical_bar(bar, ax, fmt, annotation_mapping: Optional[Dict[Any, 
     )
 
 
-def get_text_width(text: str) -> float:
-    ax = plt.gca()
+def get_text_width(text: str, ax: mpl.axes.Axes) -> float:
     renderer = ax.figure.canvas.get_renderer()
-    text_artist = mpl.text.Text(text=text, figure=ax.figure)
+    text_artist = mpl.text.Text(text=text, fontsize=SMALL_FONT, fontweight="bold", figure=ax.figure)
     bbox = text_artist.get_window_extent(renderer=renderer)
     # transform bounding box to data coordinates
     bbox = Bbox(ax.transData.inverted().transform(bbox))
@@ -131,12 +130,10 @@ def _annotate_horizontal_bar(bar, ax, fmt, annotation_mapping: Optional[Dict[Any
     h = bar.get_height()
     w = bar.get_width()
     y = bar.get_y()
-    if annotation_mapping:
-        text = annotation_mapping[w]
-    else:
-        text = fmt.format(w)
-    annotation_width = get_text_width(text)
-    if 1.1 * (annotation_width + offset * SMALL_FONT / 72) <= w:
+    text = annotation_mapping[w] if annotation_mapping  else fmt.format(w)
+    annotation_width = get_text_width(text, ax=ax)
+    threshold = 1.1 * (annotation_width + offset * SMALL_FONT / 72)
+    if threshold <= w:
         # annotation is short enough, put it inside the bar
         ha = "right"
         xytext = (-offset, 0)
