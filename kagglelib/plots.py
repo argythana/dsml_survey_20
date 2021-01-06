@@ -24,10 +24,13 @@ from .kaggle import REVERSE_SALARY_THRESHOLDS
 from .kaggle import fix_age_bin_distribution
 from .kaggle import calc_avg_age_distribution
 
-PALETTE_INCOME_GROUP = sns.cubehelix_palette(10, rot=-.25, light=.7)
-PALETTE_USA_VS_ROW = [sns.desaturate("green", 0.75), "peru"]
-PALETTE_ORIGINAL_VS_FILTERED = [sns.desaturate("darkred", 0.90), "darkblue"]
 
+#PALETTE_USA_VS_ROW = [sns.desaturate("green", 0.75), "peru"]
+
+PALETTE_INCOME_GROUP = sns.cubehelix_palette(10, rot=-.25, light=.7)
+PALETTE_USA_VS_ROW = [sns.desaturate("lightcoral", 0.9), sns.desaturate("deepskyblue", 0.6)]
+PALETTE_COMPARISON = [sns.desaturate(color, 0.4) for color in "red,magenta,cyan,blue,cornflowerblue,green".split(",")]
+PALETTE_ORIGINAL_VS_FILTERED = [sns.desaturate("red", 0.4), sns.desaturate("cornflowerblue", 0.75)]
 
 SMALL_FONT = 12
 MEDIUM_FONT = 13
@@ -44,6 +47,8 @@ MPL_RC = {
     "xtick.labelsize": MEDIUM_FONT,
     "ytick.labelsize": MEDIUM_FONT,
 }
+
+sns.set_style("dark", {'axes.linewidth': 0.5})
 
 
 def check_df_is_stacked(df: pd.DataFrame) -> None:
@@ -205,7 +210,6 @@ def sns_plot_value_count_comparison(
         annotate_func = _annotate_vertical_bar
         order = natsort.natsorted(df[x].unique())
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
-        sns.set_style("dark", {'axes.linewidth': 0.5})
         if ax is None:
             fig, ax = plt.subplots(figsize=(width, height))
         sns.barplot(
@@ -216,7 +220,6 @@ def sns_plot_value_count_comparison(
             hue=df.columns[1],
             order=order if order_by_labels else None,
             palette=palette,
-            alpha=0.6,
         )
         if orientation in {"horizontal", "h"}:
             sns.despine(bottom=True)
@@ -255,27 +258,30 @@ def sns_plot_participants_vs_median_salary(
     title_wrap_length: Optional[int] = None,
     palette: sns.palettes._ColorPalette = PALETTE_ORIGINAL_VS_FILTERED,
 ) -> None:
-    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharey=True, figsize=(width, height))
-    sns_plot_value_count_comparison(
-        no_participants_df,
-        ax=ax1,
-        orientation="h",
-        palette=None,
-        title="No. participants",
-        legend_location=None,
-    )
-    sns_plot_value_count_comparison(
-        median_salary_df,
-        ax=ax2,
-        orientation="h",
-        palette=None,
-        title="Median salary",
-        legend_location="best",
-        annotation_mapping=REVERSE_SALARY_THRESHOLDS
-    )
-    fig.subplots_adjust(top=0.80)
-    fig.suptitle(title, fontsize=HUGE_FONT, y=1.04)
-    plt.tight_layout()
+    with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
+        fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharey=True, figsize=(width, height), squeeze=True)
+        sns_plot_value_count_comparison(
+            median_salary_df,
+            ax=ax1,
+            orientation="h",
+            order_by_labels=False,
+            palette=PALETTE_COMPARISON,
+            title="Median salary",
+            legend_location="best",
+            annotation_mapping=REVERSE_SALARY_THRESHOLDS
+        )
+        sns_plot_value_count_comparison(
+            no_participants_df,
+            ax=ax2,
+            orientation="h",
+            order_by_labels=False,
+            palette=PALETTE_COMPARISON,
+            title="No. participants",
+            legend_location=None,
+        )
+        fig.subplots_adjust(top=0.80)
+        fig.suptitle(title, fontsize=HUGE_FONT, y=1.04)
+        plt.tight_layout()
 
 
 def sns_plot_salary_medians(
@@ -290,7 +296,6 @@ def sns_plot_salary_medians(
             hue="variable",
             orient="h",
             palette="dark",
-            alpha=0.8,
             height=8,
             aspect=2.8,
             legend=False,
@@ -355,7 +360,7 @@ def sns_plot_age_distribution(
     avg_bin_distribution = calc_avg_age_distribution(df, rename_index=True)
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
         fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=False, figsize=(width, height))
-        color = sns.desaturate("darkred", 0.55)
+        color = sns.desaturate("darkred", 0.85)
         sns.barplot(
             x=default_distribution.index,
             y=default_distribution,
@@ -427,21 +432,21 @@ def sns_plot_global_salary_distribution_comparison(
     order = natsort.natsorted(vc1.salary.unique(), reverse=True)
 
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
-        with sns.axes_style("dark", {'axes.linewidth': 0.5}):
+        #with sns.axes_style("dark", {'axes.linewidth': 0.5}):
             fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharex=False, figsize=(width, height), sharey=True, squeeze=True)
             sns.barplot(
                 x=vc1.percentage,
                 y=vc1.salary,
                 ax=ax1,
                 order=order,
-                palette=[sns.desaturate("red", 0.4)]
+                color=PALETTE_ORIGINAL_VS_FILTERED[0],
             )
             sns.barplot(
                 x=vc2.percentage,
                 y=vc2.salary,
                 ax=ax2,
                 order=order,
-                palette=[sns.desaturate("cornflowerblue", 0.75)]
+                color=PALETTE_ORIGINAL_VS_FILTERED[1],
             )
 
             ax1.set_title(label1)
@@ -494,7 +499,6 @@ def sns_plot_salary_pde_comparison_per_income_group(
     usa = dataset[(dataset.country == "USA")].salary_threshold.reset_index(drop=True).rename("USA")
     series = (usa, high, upper_middle, india, lower_middle)
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
-        sns.set_style("dark")
         fig, axes = plt.subplots(nrows=5, ncols=1, sharex=True, figsize=(width, height))
         kdeplot_common = functools.partial(
             sns.kdeplot,
@@ -546,7 +550,6 @@ def sns_plot_pde_comparison(
     if not isinstance(bandwidth, (list, tuple)):
         bandwidth = [bandwidth] * len(series)
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
-        sns.set_style("dark")
         fig, axes = plt.subplots(nrows=len(series), ncols=1, sharex=True, sharey=True, figsize=(width, height))
         for (sr, ax, bw) in zip(series, axes, bandwidth):
             x_d = np.array(sorted(SALARY_THRESHOLDS.values()))
@@ -596,7 +599,6 @@ def sns_plot_salary_pde_comparison_per_role(
     ]
     series = map(lambda role: dataset[dataset.role == role].salary_threshold.reset_index(drop=True).rename(role), roles)
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
-        sns.set_style("dark")
         fig, axes = plt.subplots(nrows=len(roles), ncols=1, sharex=True, figsize=(width, height))
         kdeplot_common = functools.partial(
             sns.kdeplot,
@@ -662,14 +664,14 @@ def sns_plot_salary_distribution_comparison(
         title = "\n".join(wrap(title, title_wrap_length))
     series = [df[col] for col in df.columns]
     with sns.plotting_context("notebook", rc=get_mpl_rc(rc)):
-        with sns.axes_style("dark", {'axes.linewidth': 0.5}):
+        #with sns.axes_style("dark", {'axes.linewidth': 0.5}):
             fig, axes = plt.subplots(nrows=1, ncols=len(series), sharex=True, sharey=True, figsize=(width, height), squeeze=True)
-            for (ax, sr) in zip(axes, series):
+            for (ax, sr, color) in zip(axes, series, PALETTE_COMPARISON):
                 sns.barplot(
                     x=sr,
                     y=sr.index,
                     ax=ax,
-                    palette=[sns.desaturate("red", 0.4)]
+                    color=color,
                 )
                 ax.set_ylabel("")
                 ax.set_xlabel("")
