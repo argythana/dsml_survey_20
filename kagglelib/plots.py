@@ -273,12 +273,6 @@ def sns_plot_participants_vs_median_salary(
         legend_location="best",
         annotation_mapping=REVERSE_SALARY_THRESHOLDS
     )
-    # fig.legend(
-        # *ax2.get_legend_handles_labels(),
-        # loc='center right',
-        # bbox_to_anchor=(1.10, 0.5),
-        # fontsize=MEDIUM_FONT
-    # )
     fig.subplots_adjust(top=0.80)
     fig.suptitle(title, fontsize=HUGE_FONT, y=1.04)
     plt.tight_layout()
